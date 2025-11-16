@@ -363,11 +363,90 @@ def demo_real_world_example():
         print("  - Image appears completely normal")
 
 
+def demo_quality_metrics():
+    """Demonstrate image quality metrics (C)."""
+    print_section("9. Quality Metrics (MSE, PSNR, SSIM)")
+
+    print("\nImage quality metrics help us measure how similar the stego image")
+    print("is to the original. Lower differences = better steganography!\n")
+
+    cover = 'test_images/medium_image.png'
+
+    # Test with different bit settings
+    test_cases = [
+        ('1-bit encoding', 'test_images/stego_1bit.png', 1),
+        ('2-bit encoding', 'test_images/stego_2bit.png', 2),
+        ('3-bit encoding', 'test_images/stego_3bit.png', 3),
+    ]
+
+    for name, stego_path, bits in test_cases:
+        if not os.path.exists(stego_path):
+            # Create it if it doesn't exist
+            image_stego.encode_lsb(
+                cover,
+                "Test message for quality metrics",
+                stego_path,
+                bits_per_pixel=bits
+            )
+
+        print(f"--- {name} ---")
+
+        # Individual metrics
+        mse = image_stego.calculate_mse(cover, stego_path)
+        psnr = image_stego.calculate_psnr(cover, stego_path)
+        ssim = image_stego.calculate_ssim(cover, stego_path)
+
+        print(f"  MSE:  {mse:.4f} (lower is better)")
+        print(f"  PSNR: {psnr:.2f} dB (higher is better)")
+        print(f"  SSIM: {ssim:.4f} (closer to 1.0 is better)")
+
+        # Overall assessment
+        if psnr > 50:
+            assessment = "Excellent ✓"
+        elif psnr > 40:
+            assessment = "Very Good"
+        else:
+            assessment = "Acceptable"
+
+        print(f"  Assessment: {assessment}")
+        print()
+
+    print("💡 Understanding the metrics:")
+    print("  MSE  (Mean Squared Error): Average squared pixel difference")
+    print("  PSNR (Peak Signal-to-Noise): Quality in decibels (dB)")
+    print("  SSIM (Structural Similarity): How similar images look to humans")
+
+
+def demo_metrics_summary():
+    """Demonstrate comprehensive metrics summary (C)."""
+    print_section("10. Comprehensive Metrics Summary")
+
+    cover = 'test_images/medium_image.png'
+    stego = 'test_images/stego_basic.png'
+
+    print(f"\nComparing:")
+    print(f"  Original: {cover}")
+    print(f"  Stego:    {stego}")
+
+    # Calculate all metrics at once
+    metrics = image_stego.calculate_metrics_summary(cover, stego)
+
+    # Print formatted report
+    image_stego.print_metrics_report(metrics)
+
+    print("This summary includes:")
+    print("  ✓ All three quality metrics (MSE, PSNR, SSIM)")
+    print("  ✓ Overall quality assessment")
+    print("  ✓ Imperceptibility rating")
+    print("  ✓ Detailed interpretations")
+    print("  ✓ Recommendations for improvement")
+
+
 def main():
     """Run all demonstrations."""
     print("\n" + "=" * 70)
     print("  LSB IMAGE STEGANOGRAPHY DEMONSTRATION")
-    print("  B1: Basic LSB + B2: Multi-bit Capacity")
+    print("  B1: Basic LSB + B2: Multi-bit Capacity + C: Quality Metrics")
     print("=" * 70)
 
     try:
@@ -383,6 +462,8 @@ def main():
         demo_header_system()
         demo_capacity_limits()
         demo_real_world_example()
+        demo_quality_metrics()
+        demo_metrics_summary()
 
         print("\n" + "=" * 70)
         print("  ALL DEMONSTRATIONS COMPLETED SUCCESSFULLY!")
