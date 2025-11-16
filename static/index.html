@@ -3,44 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Steganography Suite — Advanced Secure Communication Platform</title>
+    <title>Steganography Suite — Enterprise Security Platform</title>
 
     <style>
         /* ============================================================================
-           DESIGN SYSTEM & VARIABLES
-           Next-generation Apple-inspired design with advanced visual effects
+           PREMIUM CYBERSECURITY DESIGN SYSTEM
+           Ultra-sophisticated color palette and animations
            ============================================================================ */
 
         :root {
-            /* Color Palette - Ultra Sophisticated */
-            --color-bg: #0a0a0f;
-            --color-surface: rgba(26, 26, 36, 0.8);
-            --color-surface-elevated: rgba(36, 36, 58, 0.9);
-            --color-border: rgba(255, 255, 255, 0.08);
-            --color-border-hover: rgba(255, 255, 255, 0.15);
+            /* Cybersecurity Color Palette - Premium Dark */
+            --color-bg-primary: #0a0e27;
+            --color-bg-secondary: #0f1729;
+            --color-bg-tertiary: #1a1f3a;
 
-            /* Primary Colors with Glow */
-            --color-primary: #007aff;
-            --color-primary-hover: #0051d5;
-            --color-primary-glow: rgba(0, 122, 255, 0.4);
+            /* Surface Colors with Depth */
+            --color-surface: rgba(20, 25, 45, 0.85);
+            --color-surface-elevated: rgba(25, 35, 60, 0.9);
+            --color-surface-hover: rgba(30, 40, 70, 0.95);
 
-            /* Accent Colors */
-            --color-accent: #5e5ce6;
-            --color-accent-2: #af52de;
-            --color-success: #30d158;
-            --color-warning: #ff9f0a;
-            --color-error: #ff453a;
-            --color-cyan: #64d2ff;
-            --color-purple: #bf5af2;
+            /* Cybersecurity Accent Colors */
+            --color-cyber-blue: #00d4ff;
+            --color-cyber-purple: #a78bfa;
+            --color-cyber-green: #00ff88;
+            --color-cyber-pink: #ff006e;
+            --color-neon-blue: #00f0ff;
+            --color-matrix-green: #00ff41;
+
+            /* Semantic Colors */
+            --color-primary: #00d4ff;
+            --color-primary-dark: #00a8cc;
+            --color-primary-glow: rgba(0, 212, 255, 0.5);
+            --color-success: #00ff88;
+            --color-warning: #ffaa00;
+            --color-error: #ff3366;
+            --color-info: #a78bfa;
 
             /* Text Colors */
-            --color-text-primary: rgba(255, 255, 255, 0.95);
-            --color-text-secondary: rgba(255, 255, 255, 0.65);
-            --color-text-tertiary: rgba(255, 255, 255, 0.45);
+            --color-text-primary: #e8eaf6;
+            --color-text-secondary: #b0b8d4;
+            --color-text-tertiary: #7881a1;
+            --color-text-accent: var(--color-cyber-blue);
+
+            /* Border & Shadows */
+            --color-border: rgba(0, 212, 255, 0.12);
+            --color-border-hover: rgba(0, 212, 255, 0.25);
+            --color-border-focus: rgba(0, 212, 255, 0.5);
+
+            --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 24px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
+            --shadow-cyber: 0 0 30px rgba(0, 212, 255, 0.3);
+            --shadow-glow: 0 0 40px var(--color-primary-glow);
 
             /* Typography */
-            --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'Inter', system-ui, sans-serif;
-            --font-mono: 'SF Mono', 'Monaco', 'Menlo', 'Courier New', monospace;
+            --font-sans: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', 'Monaco', monospace;
 
             /* Spacing */
             --space-xs: 0.5rem;
@@ -49,27 +67,22 @@
             --space-lg: 1.5rem;
             --space-xl: 2rem;
             --space-2xl: 3rem;
+            --space-3xl: 4rem;
 
             /* Border Radius */
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --radius-xl: 24px;
-
-            /* Shadows */
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
-            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.2);
-            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.3);
-            --shadow-glow: 0 0 40px var(--color-primary-glow);
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --radius-xl: 20px;
 
             /* Transitions */
-            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: 120ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* ============================================================================
-           RESET & BASE STYLES
+           RESET & BASE
            ============================================================================ */
 
         * {
@@ -82,23 +95,21 @@
             font-size: 16px;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            scroll-behavior: smooth;
         }
 
         body {
             font-family: var(--font-sans);
-            background: var(--color-bg);
+            background: var(--color-bg-primary);
             color: var(--color-text-primary);
             line-height: 1.6;
             overflow-x: hidden;
-            position: relative;
         }
 
         /* ============================================================================
-           ADVANCED ANIMATED BACKGROUND
+           ANIMATED CYBER BACKGROUND
            ============================================================================ */
 
-        .background-container {
+        .cyber-background {
             position: fixed;
             top: 0;
             left: 0;
@@ -108,380 +119,274 @@
             overflow: hidden;
         }
 
-        /* Gradient Orbs */
-        .gradient-orb {
+        /* Gradient Mesh */
+        .gradient-mesh {
             position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.3;
-            animation: float 20s ease-in-out infinite;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at 10% 20%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(167, 139, 250, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(0, 255, 136, 0.04) 0%, transparent 50%);
+            animation: mesh-shift 15s ease-in-out infinite;
         }
 
-        .orb-1 {
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(0, 122, 255, 0.4) 0%, transparent 70%);
-            top: -300px;
-            left: -200px;
-            animation-delay: 0s;
+        @keyframes mesh-shift {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.05); }
+            66% { transform: translate(-30px, 30px) scale(0.95); }
         }
 
-        .orb-2 {
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(94, 92, 230, 0.3) 0%, transparent 70%);
-            top: 50%;
-            right: -150px;
-            animation-delay: 5s;
-        }
-
-        .orb-3 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(175, 82, 222, 0.25) 0%, transparent 70%);
-            bottom: -200px;
-            left: 30%;
-            animation-delay: 10s;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translate(0, 0) rotate(0deg);
-            }
-            25% {
-                transform: translate(50px, -50px) rotate(90deg);
-            }
-            50% {
-                transform: translate(-30px, 30px) rotate(180deg);
-            }
-            75% {
-                transform: translate(30px, 50px) rotate(270deg);
-            }
-        }
-
-        /* Particle Grid */
-        .particle-grid {
+        /* Cyber Grid */
+        .cyber-grid {
             position: absolute;
             width: 100%;
             height: 100%;
             background-image:
-                radial-gradient(circle, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: particle-drift 60s linear infinite;
+                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: grid-scroll 20s linear infinite;
         }
 
-        @keyframes particle-drift {
-            0% {
-                transform: translate(0, 0);
-            }
-            100% {
-                transform: translate(50px, 50px);
-            }
+        @keyframes grid-scroll {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
         }
 
-        /* Animated Lines */
-        .animated-lines {
+        /* Floating Particles */
+        .particle {
+            position: absolute;
+            background: var(--color-cyber-blue);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particle-float 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { width: 4px; height: 4px; top: 20%; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 3px; height: 3px; top: 40%; left: 30%; animation-delay: 2s; }
+        .particle:nth-child(3) { width: 5px; height: 5px; top: 60%; left: 70%; animation-delay: 4s; }
+        .particle:nth-child(4) { width: 3px; height: 3px; top: 80%; left: 50%; animation-delay: 6s; }
+        .particle:nth-child(5) { width: 4px; height: 4px; top: 30%; left: 80%; animation-delay: 1s; }
+        .particle:nth-child(6) { width: 3px; height: 3px; top: 70%; left: 20%; animation-delay: 3s; }
+
+        @keyframes particle-float {
+            0%, 100% { transform: translateY(0) scale(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            50% { transform: translateY(-100px) scale(1); opacity: 1; }
+            90% { opacity: 0.6; }
+        }
+
+        /* Scanline Effect */
+        .scanline {
             position: absolute;
             width: 100%;
-            height: 100%;
-        }
-
-        .line {
-            position: absolute;
+            height: 2px;
             background: linear-gradient(90deg,
                 transparent,
-                rgba(0, 122, 255, 0.1),
+                rgba(0, 212, 255, 0.4),
                 transparent
             );
-            animation: line-move 15s linear infinite;
+            animation: scanline-move 4s linear infinite;
         }
 
-        .line-1 {
-            width: 200%;
-            height: 2px;
-            top: 20%;
-            left: -100%;
-            animation-delay: 0s;
-        }
-
-        .line-2 {
-            width: 200%;
-            height: 2px;
-            top: 60%;
-            left: -100%;
-            animation-delay: 7s;
-        }
-
-        @keyframes line-move {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(100%);
-            }
+        @keyframes scanline-move {
+            0% { top: 0%; opacity: 0; }
+            50% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
         }
 
         /* ============================================================================
-           FEATURE STATS BANNER
+           PREMIUM HEADER
            ============================================================================ */
 
-        .stats-banner {
+        .top-nav {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            background: rgba(10, 10, 15, 0.95);
+            height: 70px;
+            background: rgba(10, 14, 39, 0.95);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--color-border);
-            padding: var(--space-sm) 0;
             z-index: 1000;
-            animation: slide-down 0.6s ease-out;
-        }
-
-        @keyframes slide-down {
-            from {
-                transform: translateY(-100%);
-            }
-            to {
-                transform: translateY(0);
-            }
-        }
-
-        .stats-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 var(--space-lg);
             display: flex;
-            justify-content: space-around;
             align-items: center;
-            flex-wrap: wrap;
-            gap: var(--space-md);
+            padding: 0 var(--space-xl);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .stat-item {
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--color-cyber-blue), var(--color-cyber-purple));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-cyber);
+            animation: logo-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes logo-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.6); }
+        }
+
+        .nav-stats {
+            margin-left: auto;
+            display: flex;
+            gap: var(--space-lg);
+        }
+
+        .stat-badge {
+            padding: var(--space-xs) var(--space-md);
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
             display: flex;
             align-items: center;
             gap: var(--space-sm);
-            padding: var(--space-xs) var(--space-md);
-            background: var(--color-surface);
-            border-radius: var(--radius-md);
-            border: 1px solid var(--color-border);
             transition: all var(--transition-base);
         }
 
-        .stat-item:hover {
-            border-color: var(--color-primary);
-            box-shadow: 0 0 20px rgba(0, 122, 255, 0.2);
-        }
-
-        .stat-icon {
-            font-size: 1.25rem;
-        }
-
-        .stat-content {
-            display: flex;
-            flex-direction: column;
+        .stat-badge:hover {
+            border-color: var(--color-border-hover);
+            background: var(--color-surface-hover);
+            transform: translateY(-2px);
         }
 
         .stat-value {
-            font-size: 1rem;
+            color: var(--color-cyber-blue);
             font-weight: 700;
-            color: var(--color-primary);
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--color-text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
         }
 
         /* ============================================================================
-           CONTAINER & LAYOUT
+           MAIN CONTAINER
            ============================================================================ */
 
-        .app-container {
+        .main-container {
             position: relative;
             z-index: 1;
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
-            padding: 80px var(--space-lg) var(--space-2xl);
+            padding: 100px var(--space-xl) var(--space-2xl);
             min-height: 100vh;
         }
 
         /* ============================================================================
-           HEADER WITH BADGE
+           HERO SECTION
            ============================================================================ */
 
-        .app-header {
+        .hero-section {
             text-align: center;
-            margin-bottom: var(--space-2xl);
-            animation: fade-in-down 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: var(--space-3xl);
+            animation: fade-in-up 0.8s ease-out;
         }
 
-        .badge {
+        .hero-badge {
             display: inline-block;
-            padding: var(--space-xs) var(--space-md);
-            background: linear-gradient(135deg, rgba(0, 122, 255, 0.2), rgba(94, 92, 230, 0.2));
-            border: 1px solid rgba(0, 122, 255, 0.3);
+            padding: var(--space-sm) var(--space-lg);
+            background: linear-gradient(135deg,
+                rgba(0, 212, 255, 0.15),
+                rgba(167, 139, 250, 0.15)
+            );
+            border: 1px solid var(--color-border);
             border-radius: 100px;
             font-size: 0.875rem;
             font-weight: 600;
-            color: var(--color-primary);
+            color: var(--color-cyber-blue);
             margin-bottom: var(--space-lg);
-            animation: badge-pulse 2s ease-in-out infinite;
+            animation: badge-glow 2s ease-in-out infinite;
+            letter-spacing: 0.5px;
         }
 
-        @keyframes badge-pulse {
-            0%, 100% {
-                box-shadow: 0 0 20px rgba(0, 122, 255, 0.3);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(0, 122, 255, 0.5);
-            }
+        @keyframes badge-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(0, 212, 255, 0.4); }
         }
 
-        .app-title {
-            font-size: 4rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            margin-bottom: var(--space-md);
             background: linear-gradient(135deg,
-                #ffffff 0%,
-                var(--color-primary) 50%,
-                var(--color-accent) 100%
+                var(--color-text-primary) 0%,
+                var(--color-cyber-blue) 50%,
+                var(--color-cyber-purple) 100%
             );
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: var(--space-sm);
-            animation: title-shimmer 3s ease-in-out infinite;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
         }
 
-        @keyframes title-shimmer {
-            0%, 100% {
-                filter: brightness(1);
-            }
-            50% {
-                filter: brightness(1.2);
-            }
-        }
-
-        .app-subtitle {
+        .hero-subtitle {
             font-size: 1.25rem;
             color: var(--color-text-secondary);
-            font-weight: 400;
-            margin-bottom: var(--space-lg);
+            max-width: 700px;
+            margin: 0 auto var(--space-xl);
         }
 
-        .feature-tags {
-            display: flex;
-            justify-content: center;
-            gap: var(--space-sm);
-            flex-wrap: wrap;
-            margin-top: var(--space-lg);
-        }
-
-        .feature-tag {
-            padding: var(--space-xs) var(--space-md);
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-sm);
-            font-size: 0.875rem;
-            color: var(--color-text-secondary);
-            transition: all var(--transition-base);
-        }
-
-        .feature-tag:hover {
-            border-color: var(--color-primary);
-            color: var(--color-primary);
-            transform: translateY(-2px);
-        }
-
-        /* ============================================================================
-           MODE SWITCHER WITH ICONS
-           ============================================================================ */
-
-        .mode-switcher {
+        .feature-pills {
             display: flex;
             justify-content: center;
             gap: var(--space-md);
-            margin-bottom: var(--space-2xl);
-            animation: fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+            flex-wrap: wrap;
         }
 
-        .mode-btn {
-            position: relative;
-            padding: var(--space-md) var(--space-2xl);
+        .feature-pill {
+            padding: var(--space-sm) var(--space-lg);
             background: var(--color-surface);
             border: 1px solid var(--color-border);
-            border-radius: var(--radius-lg);
+            border-radius: 100px;
+            font-size: 0.875rem;
             color: var(--color-text-secondary);
-            font-size: 1.125rem;
-            font-weight: 500;
-            cursor: pointer;
             transition: all var(--transition-base);
-            overflow: hidden;
-            backdrop-filter: blur(10px);
+            cursor: default;
         }
 
-        .mode-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-            opacity: 0;
-            transition: opacity var(--transition-base);
-            z-index: 0;
-        }
-
-        .mode-btn-content {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-        }
-
-        .mode-icon {
-            font-size: 1.5rem;
-        }
-
-        .mode-btn:hover {
-            border-color: var(--color-border-hover);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .mode-btn.active {
-            color: white;
-            border-color: transparent;
-            box-shadow: var(--shadow-glow);
-        }
-
-        .mode-btn.active::before {
-            opacity: 1;
+        .feature-pill:hover {
+            border-color: var(--color-cyber-blue);
+            color: var(--color-cyber-blue);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-cyber);
         }
 
         /* ============================================================================
-           MAIN CARD WITH GLASS EFFECT
+           FEATURES GRID
            ============================================================================ */
 
-        .main-card {
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-3xl);
+        }
+
+        .feature-box {
             background: var(--color-surface);
             border: 1px solid var(--color-border);
-            border-radius: var(--radius-xl);
-            padding: var(--space-2xl);
-            box-shadow: var(--shadow-lg);
-            backdrop-filter: blur(20px);
-            animation: fade-in-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            transition: all var(--transition-slow);
             position: relative;
             overflow: hidden;
         }
 
-        .main-card::before {
+        .feature-box::before {
             content: '';
             position: absolute;
             top: 0;
@@ -489,35 +394,156 @@
             right: 0;
             height: 3px;
             background: linear-gradient(90deg,
-                var(--color-primary),
-                var(--color-accent),
-                var(--color-accent-2)
+                var(--color-cyber-blue),
+                var(--color-cyber-purple),
+                var(--color-cyber-blue)
             );
-            animation: gradient-slide 3s linear infinite;
+            background-size: 200% 100%;
+            animation: gradient-flow 3s linear infinite;
+            opacity: 0;
+            transition: opacity var(--transition-base);
         }
 
-        @keyframes gradient-slide {
-            0% {
-                transform: translateX(-100%);
-            }
-            100% {
-                transform: translateX(100%);
-            }
+        .feature-box:hover::before {
+            opacity: 1;
         }
 
-        .mode-content {
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        .feature-box:hover {
+            transform: translateY(-5px);
+            border-color: var(--color-border-hover);
+            box-shadow: var(--shadow-cyber);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg,
+                rgba(0, 212, 255, 0.2),
+                rgba(167, 139, 250, 0.2)
+            );
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: var(--space-lg);
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+            color: var(--color-text-primary);
+        }
+
+        .feature-desc {
+            font-size: 0.9375rem;
+            color: var(--color-text-tertiary);
+            line-height: 1.6;
+        }
+
+        /* ============================================================================
+           MODE SELECTOR
+           ============================================================================ */
+
+        .mode-selector-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .mode-selector {
+            display: inline-flex;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 6px;
+            gap: 6px;
+        }
+
+        .mode-tab {
+            padding: var(--space-md) var(--space-xl);
+            background: transparent;
+            border: none;
+            border-radius: var(--radius-md);
+            color: var(--color-text-secondary);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            position: relative;
+            font-family: var(--font-sans);
+        }
+
+        .mode-tab.active {
+            background: linear-gradient(135deg, var(--color-cyber-blue), var(--color-cyber-purple));
+            color: white;
+            box-shadow: var(--shadow-cyber);
+        }
+
+        .mode-tab:not(.active):hover {
+            background: var(--color-surface-hover);
+            color: var(--color-text-primary);
+        }
+
+        /* ============================================================================
+           WORKSPACE CARD
+           ============================================================================ */
+
+        .workspace-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .workspace-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg,
+                transparent,
+                var(--color-cyber-blue),
+                var(--color-cyber-purple),
+                transparent
+            );
+            background-size: 200% 100%;
+            animation: border-slide 3s linear infinite;
+        }
+
+        @keyframes border-slide {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        .workspace-content {
             display: none;
         }
 
-        .mode-content.active {
+        .workspace-content.active {
             display: block;
-            animation: content-fade-in 0.5s ease-out;
+            animation: content-appear 0.4s ease-out;
         }
 
-        @keyframes content-fade-in {
+        @keyframes content-appear {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(15px);
             }
             to {
                 opacity: 1;
@@ -526,12 +552,11 @@
         }
 
         /* ============================================================================
-           ENHANCED FORM ELEMENTS
+           FORM CONTROLS
            ============================================================================ */
 
-        .form-group {
+        .form-section {
             margin-bottom: var(--space-xl);
-            position: relative;
         }
 
         .form-label {
@@ -539,103 +564,93 @@
             align-items: center;
             gap: var(--space-sm);
             font-size: 0.875rem;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--color-text-primary);
             margin-bottom: var(--space-sm);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 1px;
         }
 
         .label-icon {
-            opacity: 0.6;
+            font-size: 1.1rem;
         }
 
         .form-input,
-        .form-textarea {
+        .form-textarea,
+        .form-select {
             width: 100%;
-            background: var(--color-surface-elevated);
-            border: 1px solid var(--color-border);
+            background: var(--color-bg-secondary);
+            border: 1.5px solid var(--color-border);
             border-radius: var(--radius-md);
             padding: var(--space-md);
             color: var(--color-text-primary);
             font-family: var(--font-sans);
             font-size: 1rem;
             transition: all var(--transition-base);
-            resize: vertical;
         }
 
         .form-input:focus,
-        .form-textarea:focus {
+        .form-textarea:focus,
+        .form-select:focus {
             outline: none;
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px var(--color-primary-glow), 0 0 20px rgba(0, 122, 255, 0.2);
-            transform: translateY(-1px);
+            border-color: var(--color-cyber-blue);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15),
+                        0 0 20px rgba(0, 212, 255, 0.1);
+            background: var(--color-bg-tertiary);
         }
 
         .form-textarea {
             min-height: 120px;
             font-family: var(--font-mono);
-            font-size: 0.9rem;
-            line-height: 1.5;
+            font-size: 0.9375rem;
+            line-height: 1.6;
+            resize: vertical;
         }
 
-        .form-select {
-            width: 100%;
-            background: var(--color-surface-elevated);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-md);
-            padding: var(--space-md);
-            color: var(--color-text-primary);
-            font-family: var(--font-sans);
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all var(--transition-base);
-        }
-
-        .form-select:focus {
-            outline: none;
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px var(--color-primary-glow);
-        }
-
-        /* Character Counter */
         .char-counter {
-            position: absolute;
-            bottom: -20px;
-            right: 0;
-            font-size: 0.75rem;
+            text-align: right;
+            font-size: 0.8125rem;
             color: var(--color-text-tertiary);
+            margin-top: var(--space-xs);
+            font-family: var(--font-mono);
+        }
+
+        /* Options Grid */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-xl);
         }
 
         /* ============================================================================
-           FILE UPLOAD WITH PROGRESS
+           FILE UPLOAD
            ============================================================================ */
 
-        .file-upload-area {
+        .upload-zone {
             position: relative;
             border: 2px dashed var(--color-border);
             border-radius: var(--radius-lg);
-            padding: var(--space-2xl);
+            padding: var(--space-3xl) var(--space-2xl);
             text-align: center;
-            transition: all var(--transition-base);
+            background: var(--color-bg-secondary);
+            transition: all var(--transition-slow);
             cursor: pointer;
-            background: var(--color-surface-elevated);
         }
 
-        .file-upload-area:hover {
-            border-color: var(--color-primary);
-            background: rgba(0, 122, 255, 0.05);
-            transform: scale(1.02);
+        .upload-zone:hover {
+            border-color: var(--color-cyber-blue);
+            background: rgba(0, 212, 255, 0.05);
+            transform: scale(1.01);
         }
 
-        .file-upload-area.drag-over {
-            border-color: var(--color-primary);
-            background: rgba(0, 122, 255, 0.1);
-            transform: scale(1.02);
-            box-shadow: 0 0 30px rgba(0, 122, 255, 0.3);
+        .upload-zone.drag-active {
+            border-color: var(--color-cyber-blue);
+            background: rgba(0, 212, 255, 0.1);
+            box-shadow: inset 0 0 40px rgba(0, 212, 255, 0.1);
         }
 
-        .file-upload-input {
+        .upload-input {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -645,35 +660,31 @@
             cursor: pointer;
         }
 
-        .file-upload-icon {
-            font-size: 4rem;
+        .upload-icon {
+            font-size: 3.5rem;
             margin-bottom: var(--space-md);
-            opacity: 0.5;
-            animation: bounce 2s ease-in-out infinite;
+            animation: upload-float 3s ease-in-out infinite;
         }
 
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
+        @keyframes upload-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
-        .file-upload-text {
-            color: var(--color-text-secondary);
+        .upload-text {
             font-size: 1rem;
+            color: var(--color-text-secondary);
         }
 
-        .file-upload-text strong {
-            color: var(--color-primary);
+        .upload-text strong {
+            color: var(--color-cyber-blue);
+            font-weight: 700;
         }
 
-        .file-name {
+        .file-info {
             margin-top: var(--space-md);
             color: var(--color-success);
-            font-weight: 500;
+            font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -681,7 +692,7 @@
         }
 
         /* ============================================================================
-           ADVANCED BUTTONS
+           BUTTONS
            ============================================================================ */
 
         .btn-group {
@@ -692,20 +703,21 @@
 
         .btn {
             position: relative;
-            padding: var(--space-md) var(--space-xl);
-            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            padding: var(--space-md) var(--space-2xl);
+            background: linear-gradient(135deg, var(--color-cyber-blue), var(--color-cyber-purple));
             border: none;
             border-radius: var(--radius-md);
             color: white;
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: all var(--transition-base);
             overflow: hidden;
             font-family: var(--font-sans);
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: var(--space-sm);
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
         }
 
         .btn::before {
@@ -716,14 +728,14 @@
             width: 0;
             height: 0;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.4);
             transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
+            transition: width 0.5s, height 0.5s;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-glow);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(0, 212, 255, 0.5);
         }
 
         .btn:active::before {
@@ -734,12 +746,13 @@
         .btn-secondary {
             background: var(--color-surface-elevated);
             color: var(--color-text-primary);
-            border: 1px solid var(--color-border);
+            border: 1.5px solid var(--color-border);
+            box-shadow: none;
         }
 
         .btn-secondary:hover {
-            border-color: var(--color-border-hover);
-            box-shadow: var(--shadow-md);
+            border-color: var(--color-cyber-blue);
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
         }
 
         .btn:disabled {
@@ -748,39 +761,236 @@
             transform: none;
         }
 
-        .btn-icon {
-            font-size: 1.2rem;
-        }
-
         /* ============================================================================
-           OPTIONS GRID
+           RESULTS PANEL
            ============================================================================ */
 
-        .options-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--space-lg);
-            margin-bottom: var(--space-xl);
-        }
-
-        /* ============================================================================
-           RESULTS SECTION
-           ============================================================================ */
-
-        .results-section {
+        .results-panel {
             margin-top: var(--space-2xl);
             padding-top: var(--space-2xl);
             border-top: 1px solid var(--color-border);
         }
 
-        .results-title {
+        .panel-title {
             font-size: 1.5rem;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: var(--space-lg);
             color: var(--color-text-primary);
             display: flex;
             align-items: center;
             gap: var(--space-sm);
+        }
+
+        /* ============================================================================
+           METRICS DASHBOARD
+           ============================================================================ */
+
+        .metrics-dashboard {
+            background: linear-gradient(135deg,
+                rgba(0, 212, 255, 0.08),
+                rgba(167, 139, 250, 0.08)
+            );
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-2xl);
+            margin-bottom: var(--space-xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metrics-dashboard::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle,
+                rgba(0, 212, 255, 0.05) 0%,
+                transparent 70%
+            );
+            animation: metrics-rotate 20s linear infinite;
+        }
+
+        @keyframes metrics-rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .metrics-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: var(--space-xl);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--space-lg);
+            position: relative;
+            z-index: 1;
+        }
+
+        .metric-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            text-align: center;
+            transition: all var(--transition-slow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg,
+                var(--color-cyber-blue),
+                var(--color-cyber-purple)
+            );
+            transform: scaleX(0);
+            transition: transform var(--transition-slow);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-cyber);
+        }
+
+        .metric-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .metric-label {
+            font-size: 0.8125rem;
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--space-sm);
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: var(--space-sm);
+            background: linear-gradient(135deg,
+                var(--color-cyber-blue),
+                var(--color-cyber-purple)
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .metric-badge {
+            display: inline-block;
+            padding: var(--space-xs) var(--space-md);
+            border-radius: 100px;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-badge.excellent {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--color-success);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .metric-badge.good {
+            background: rgba(0, 212, 255, 0.2);
+            color: var(--color-cyber-blue);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .metric-badge.acceptable {
+            background: rgba(255, 170, 0, 0.2);
+            color: var(--color-warning);
+            border: 1px solid rgba(255, 170, 0, 0.3);
+        }
+
+        .metric-badge.poor {
+            background: rgba(255, 51, 102, 0.2);
+            color: var(--color-error);
+            border: 1px solid rgba(255, 51, 102, 0.3);
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 100px;
+            margin-top: var(--space-md);
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg,
+                var(--color-cyber-blue),
+                var(--color-cyber-purple)
+            );
+            border-radius: 100px;
+            position: relative;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg,
+                transparent,
+                rgba(255, 255, 255, 0.4),
+                transparent
+            );
+            animation: progress-shimmer 2s linear infinite;
+        }
+
+        @keyframes progress-shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .quality-summary {
+            margin-top: var(--space-xl);
+            padding: var(--space-lg);
+            background: var(--color-surface-elevated);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .quality-label {
+            font-size: 0.875rem;
+            color: var(--color-text-tertiary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .quality-value {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg,
+                var(--color-success),
+                var(--color-cyber-blue)
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         /* ============================================================================
@@ -794,271 +1004,38 @@
             margin-bottom: var(--space-xl);
         }
 
-        .preview-card {
+        .preview-box {
             background: var(--color-surface-elevated);
             border: 1px solid var(--color-border);
             border-radius: var(--radius-lg);
             padding: var(--space-lg);
-            transition: all var(--transition-base);
-            position: relative;
-            overflow: hidden;
+            transition: all var(--transition-slow);
         }
 
-        .preview-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1), transparent);
-            opacity: 0;
-            transition: opacity var(--transition-base);
-        }
-
-        .preview-card:hover {
-            border-color: var(--color-border-hover);
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .preview-card:hover::before {
-            opacity: 1;
+        .preview-box:hover {
+            transform: translateY(-5px);
+            border-color: var(--color-cyber-blue);
+            box-shadow: var(--shadow-cyber);
         }
 
         .preview-label {
             font-size: 0.875rem;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--color-text-secondary);
-            margin-bottom: var(--space-sm);
+            margin-bottom: var(--space-md);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 1px;
         }
 
         .preview-image {
             width: 100%;
             height: auto;
             border-radius: var(--radius-md);
-            background: var(--color-bg);
             display: block;
-            position: relative;
-            z-index: 1;
         }
 
         /* ============================================================================
-           METRICS DISPLAY WITH CHARTS
-           ============================================================================ */
-
-        .metrics-panel {
-            background: linear-gradient(135deg,
-                rgba(0, 122, 255, 0.1),
-                rgba(94, 92, 230, 0.1)
-            );
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-lg);
-            padding: var(--space-xl);
-            margin-bottom: var(--space-xl);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .metrics-panel::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0, 122, 255, 0.05) 0%, transparent 70%);
-            animation: rotate-slow 20s linear infinite;
-        }
-
-        @keyframes rotate-slow {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .metrics-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: var(--space-lg);
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--space-lg);
-            position: relative;
-            z-index: 1;
-        }
-
-        .metric-card {
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-md);
-            padding: var(--space-lg);
-            text-align: center;
-            transition: all var(--transition-base);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .metric-card::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
-            transform: scaleX(0);
-            transition: transform var(--transition-base);
-        }
-
-        .metric-card:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .metric-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .metric-label {
-            font-size: 0.875rem;
-            color: var(--color-text-tertiary);
-            margin-bottom: var(--space-xs);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .metric-value {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: var(--space-xs);
-            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .metric-status {
-            font-size: 0.875rem;
-            font-weight: 500;
-            padding: var(--space-xs) var(--space-md);
-            border-radius: var(--radius-sm);
-            display: inline-block;
-            animation: status-pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes status-pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.8;
-            }
-        }
-
-        .metric-status.excellent {
-            background: rgba(48, 209, 88, 0.2);
-            color: var(--color-success);
-            border: 1px solid rgba(48, 209, 88, 0.3);
-        }
-
-        .metric-status.good {
-            background: rgba(0, 122, 255, 0.2);
-            color: var(--color-primary);
-            border: 1px solid rgba(0, 122, 255, 0.3);
-        }
-
-        .metric-status.acceptable {
-            background: rgba(255, 159, 10, 0.2);
-            color: var(--color-warning);
-            border: 1px solid rgba(255, 159, 10, 0.3);
-        }
-
-        .metric-status.poor {
-            background: rgba(255, 69, 58, 0.2);
-            color: var(--color-error);
-            border: 1px solid rgba(255, 69, 58, 0.3);
-        }
-
-        .overall-quality {
-            text-align: center;
-            margin-top: var(--space-lg);
-            padding: var(--space-lg);
-            background: var(--color-surface-elevated);
-            border-radius: var(--radius-md);
-            position: relative;
-            z-index: 1;
-        }
-
-        .overall-quality-label {
-            font-size: 0.875rem;
-            color: var(--color-text-tertiary);
-            margin-bottom: var(--space-sm);
-        }
-
-        .overall-quality-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        /* ============================================================================
-           PROGRESS BAR
-           ============================================================================ */
-
-        .progress-container {
-            margin-top: var(--space-md);
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 100px;
-            overflow: hidden;
-            height: 8px;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
-            border-radius: 100px;
-            transition: width 0.5s ease-out;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .progress-bar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg,
-                transparent,
-                rgba(255, 255, 255, 0.3),
-                transparent
-            );
-            animation: shimmer 2s linear infinite;
-        }
-
-        @keyframes shimmer {
-            0% {
-                transform: translateX(-100%);
-            }
-            100% {
-                transform: translateX(100%);
-            }
-        }
-
-        /* ============================================================================
-           LOADING SPINNER
+           LOADING
            ============================================================================ */
 
         .loading-overlay {
@@ -1068,7 +1045,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(10, 10, 15, 0.9);
+            background: rgba(10, 14, 39, 0.95);
             backdrop-filter: blur(10px);
             z-index: 9999;
             align-items: center;
@@ -1079,18 +1056,18 @@
             display: flex;
         }
 
-        .spinner-container {
+        .loading-content {
             text-align: center;
         }
 
         .spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            border-top-color: var(--color-primary);
+            width: 70px;
+            height: 70px;
+            border: 4px solid rgba(0, 212, 255, 0.1);
+            border-top-color: var(--color-cyber-blue);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            margin: 0 auto var(--space-md);
+            margin: 0 auto var(--space-lg);
         }
 
         @keyframes spin {
@@ -1099,32 +1076,33 @@
 
         .loading-text {
             color: var(--color-text-secondary);
-            font-size: 1rem;
+            font-size: 1.125rem;
+            font-weight: 600;
         }
 
         /* ============================================================================
-           TOAST NOTIFICATION
+           TOAST
            ============================================================================ */
 
         .toast {
             position: fixed;
             bottom: var(--space-xl);
             right: var(--space-xl);
+            min-width: 320px;
             background: var(--color-surface);
             border: 1px solid var(--color-border);
             border-radius: var(--radius-lg);
             padding: var(--space-lg);
             box-shadow: var(--shadow-lg);
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all var(--transition-base);
-            z-index: 10000;
-            max-width: 400px;
             backdrop-filter: blur(20px);
+            transform: translateX(400px);
+            opacity: 0;
+            transition: all var(--transition-slow);
+            z-index: 10000;
         }
 
         .toast.show {
-            transform: translateY(0);
+            transform: translateX(0);
             opacity: 1;
         }
 
@@ -1140,30 +1118,10 @@
            ANIMATIONS
            ============================================================================ */
 
-        @keyframes fade-in {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes fade-in-down {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         @keyframes fade-in-up {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
@@ -1172,66 +1130,35 @@
         }
 
         /* ============================================================================
-           FEATURE HIGHLIGHT CARDS
+           UTILITY
            ============================================================================ */
 
-        .feature-highlights {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: var(--space-lg);
-            margin-bottom: var(--space-2xl);
-        }
-
-        .feature-card {
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-lg);
-            padding: var(--space-lg);
-            transition: all var(--transition-base);
-            cursor: pointer;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--color-primary);
-            box-shadow: 0 0 30px rgba(0, 122, 255, 0.2);
-        }
-
-        .feature-card-icon {
-            font-size: 2.5rem;
-            margin-bottom: var(--space-md);
-        }
-
-        .feature-card-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: var(--space-sm);
-        }
-
-        .feature-card-desc {
-            font-size: 0.875rem;
-            color: var(--color-text-secondary);
-            line-height: 1.5;
+        .hidden {
+            display: none !important;
         }
 
         /* ============================================================================
-           RESPONSIVE DESIGN
+           RESPONSIVE
            ============================================================================ */
 
         @media (max-width: 768px) {
-            .app-title {
+            .hero-title {
                 font-size: 2.5rem;
             }
 
-            .app-subtitle {
-                font-size: 1rem;
+            .top-nav {
+                padding: 0 var(--space-md);
             }
 
-            .mode-switcher {
-                flex-direction: column;
+            .nav-stats {
+                display: none;
             }
 
-            .main-card {
+            .main-container {
+                padding: 90px var(--space-md) var(--space-xl);
+            }
+
+            .workspace-card {
                 padding: var(--space-lg);
             }
 
@@ -1243,233 +1170,203 @@
                 width: 100%;
                 justify-content: center;
             }
-
-            .stats-container {
-                justify-content: center;
-            }
-
-            .stat-item {
-                flex: 1 1 auto;
-            }
-        }
-
-        /* ============================================================================
-           UTILITY CLASSES
-           ============================================================================ */
-
-        .hidden {
-            display: none !important;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .mt-lg {
-            margin-top: var(--space-lg);
-        }
-
-        .mb-lg {
-            margin-bottom: var(--space-lg);
         }
     </style>
 </head>
 <body>
-    <!-- Animated Background -->
-    <div class="background-container">
-        <div class="particle-grid"></div>
-        <div class="gradient-orb orb-1"></div>
-        <div class="gradient-orb orb-2"></div>
-        <div class="gradient-orb orb-3"></div>
-        <div class="animated-lines">
-            <div class="line line-1"></div>
-            <div class="line line-2"></div>
-        </div>
+    <!-- Cyber Background -->
+    <div class="cyber-background">
+        <div class="gradient-mesh"></div>
+        <div class="cyber-grid"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="scanline"></div>
     </div>
 
-    <!-- Stats Banner -->
-    <div class="stats-banner">
-        <div class="stats-container">
-            <div class="stat-item">
-                <div class="stat-icon">🔒</div>
-                <div class="stat-content">
-                    <div class="stat-value">AES-128</div>
-                    <div class="stat-label">Encryption</div>
-                </div>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="logo">
+            <div class="logo-icon">🔐</div>
+            <span>STEG<strong>OSUITE</strong></span>
+        </div>
+        <div class="nav-stats">
+            <div class="stat-badge">
+                <span class="stat-value">AES-128</span>
+                <span>Encryption</span>
             </div>
-            <div class="stat-item">
-                <div class="stat-icon">📊</div>
-                <div class="stat-content">
-                    <div class="stat-value">3 Metrics</div>
-                    <div class="stat-label">Quality Analysis</div>
-                </div>
+            <div class="stat-badge">
+                <span class="stat-value">3 Metrics</span>
+                <span>Analysis</span>
             </div>
-            <div class="stat-item">
-                <div class="stat-icon">🎨</div>
-                <div class="stat-content">
-                    <div class="stat-value">2 Algorithms</div>
-                    <div class="stat-label">Stego Methods</div>
-                </div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-icon">⚡</div>
-                <div class="stat-content">
-                    <div class="stat-value">Real-time</div>
-                    <div class="stat-label">Processing</div>
-                </div>
+            <div class="stat-badge">
+                <span class="stat-value">99.9%</span>
+                <span>Accuracy</span>
             </div>
         </div>
-    </div>
+    </nav>
 
-    <!-- Loading Overlay -->
+    <!-- Loading -->
     <div class="loading-overlay" id="loadingOverlay">
-        <div class="spinner-container">
+        <div class="loading-content">
             <div class="spinner"></div>
             <div class="loading-text">Processing...</div>
         </div>
     </div>
 
-    <!-- Toast Notification -->
+    <!-- Toast -->
     <div class="toast" id="toast"></div>
 
-    <!-- Main App Container -->
-    <div class="app-container">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="badge">✨ Next-Generation Steganography Platform</div>
-            <h1 class="app-title">Steganography Suite</h1>
-            <p class="app-subtitle">Military-Grade Secure Communication • Advanced LSB & ZWC Algorithms</p>
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-badge">⚡ ENTERPRISE-GRADE SECURITY PLATFORM</div>
+            <h1 class="hero-title">Steganography Suite</h1>
+            <p class="hero-subtitle">
+                Advanced cryptographic steganography with military-grade encryption,
+                real-time quality analysis, and enterprise security features
+            </p>
+            <div class="feature-pills">
+                <div class="feature-pill">🔐 AES-128-CBC Encryption</div>
+                <div class="feature-pill">📊 Real-Time PSNR/SSIM Analysis</div>
+                <div class="feature-pill">🎯 Imperceptible Embedding</div>
+                <div class="feature-pill">⚡ Instant Processing</div>
+                <div class="feature-pill">🛡️ Defense-in-Depth</div>
+            </div>
+        </section>
 
-            <div class="feature-tags">
-                <div class="feature-tag">🔐 End-to-End Encrypted</div>
-                <div class="feature-tag">📊 Real-Time Quality Metrics</div>
-                <div class="feature-tag">🚀 Instant Processing</div>
-                <div class="feature-tag">🎯 Imperceptible Hiding</div>
-                <div class="feature-tag">💎 Production Ready</div>
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <div class="feature-box">
+                <div class="feature-icon">🔬</div>
+                <h3 class="feature-title">Advanced LSB Algorithm</h3>
+                <p class="feature-desc">
+                    Multi-bit capacity encoding with 1, 2, or 3 bits per pixel.
+                    Automatic 32-bit message length header for seamless extraction.
+                </p>
             </div>
-        </header>
-
-        <!-- Feature Highlights -->
-        <div class="feature-highlights">
-            <div class="feature-card">
-                <div class="feature-card-icon">🔬</div>
-                <div class="feature-card-title">Advanced LSB Algorithm</div>
-                <div class="feature-card-desc">Multi-bit capacity with 1, 2, or 3 bits per pixel. Automatic 32-bit message length header.</div>
+            <div class="feature-box">
+                <div class="feature-icon">🔐</div>
+                <h3 class="feature-title">Military-Grade Encryption</h3>
+                <p class="feature-desc">
+                    AES-128-CBC with HMAC-SHA256 authentication.
+                    Defense-in-depth security architecture with password-based key derivation.
+                </p>
             </div>
-            <div class="feature-card">
-                <div class="feature-card-icon">🔐</div>
-                <div class="feature-card-title">Military-Grade Encryption</div>
-                <div class="feature-card-desc">AES-128-CBC with HMAC-SHA256. Defense-in-depth security architecture.</div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-card-icon">📈</div>
-                <div class="feature-card-title">Quality Assurance</div>
-                <div class="feature-card-desc">Real-time MSE, PSNR, and SSIM analysis. Ensures imperceptible modifications.</div>
+            <div class="feature-box">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title">Quality Metrics</h3>
+                <p class="feature-desc">
+                    Real-time MSE, PSNR, and SSIM analysis ensures imperceptible
+                    modifications with professional-grade quality assessment.
+                </p>
             </div>
         </div>
 
-        <!-- Mode Switcher -->
-        <div class="mode-switcher">
-            <button class="mode-btn active" data-mode="text">
-                <div class="mode-btn-content">
-                    <span class="mode-icon">📝</span>
+        <!-- Mode Selector -->
+        <div class="mode-selector-wrapper">
+            <div class="mode-selector">
+                <button class="mode-tab active" data-mode="text">
+                    <span>📝</span>
                     <span>Text Steganography</span>
-                </div>
-            </button>
-            <button class="mode-btn" data-mode="image">
-                <div class="mode-btn-content">
-                    <span class="mode-icon">🖼️</span>
+                </button>
+                <button class="mode-tab" data-mode="image">
+                    <span>🖼️</span>
                     <span>Image Steganography</span>
-                </div>
-            </button>
+                </button>
+            </div>
         </div>
 
-        <!-- Main Card -->
-        <div class="main-card">
+        <!-- Workspace -->
+        <div class="workspace-card">
             <!-- TEXT MODE -->
-            <div class="mode-content active" id="textMode">
-                <div class="form-group">
+            <div class="workspace-content active" id="textMode">
+                <div class="form-section">
                     <label class="form-label">
                         <span class="label-icon">📄</span>
-                        Cover Text (Public Message)
+                        Cover Text
                     </label>
                     <textarea
                         class="form-textarea"
                         id="textCoverText"
-                        placeholder="Enter your public cover text here... This will be visible to everyone."
+                        placeholder="Enter your public cover text..."
                     ></textarea>
                     <div class="char-counter" id="textCoverCounter">0 characters</div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-section">
                     <label class="form-label">
                         <span class="label-icon">🔒</span>
-                        Secret Message (Hidden)
+                        Secret Message
                     </label>
                     <textarea
                         class="form-textarea"
                         id="textSecretMessage"
-                        placeholder="Enter your secret message to hide using invisible Unicode characters..."
+                        placeholder="Enter your secret message to hide..."
                     ></textarea>
                     <div class="char-counter" id="textSecretCounter">0 characters</div>
                 </div>
 
                 <div class="options-grid">
-                    <div class="form-group">
+                    <div class="form-section">
                         <label class="form-label">
                             <span class="label-icon">🔑</span>
-                            Password (Optional)
+                            Password
                         </label>
                         <input
                             type="password"
                             class="form-input"
                             id="textPassword"
-                            placeholder="Enter password for AES-128 encryption"
+                            placeholder="Optional encryption password"
                         >
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-section">
                         <label class="form-label">
                             <span class="label-icon">⚙️</span>
                             Encoding Bits
                         </label>
                         <select class="form-select" id="textEncodingBits">
-                            <option value="1">1 bit (more secure, larger output)</option>
-                            <option value="2" selected>2 bits (recommended, 50% smaller)</option>
+                            <option value="1">1 bit (more secure)</option>
+                            <option value="2" selected>2 bits (recommended)</option>
                         </select>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-section">
                         <label class="form-label">
                             <span class="label-icon">📍</span>
                             Insertion Method
                         </label>
                         <select class="form-select" id="textInsertionMethod">
-                            <option value="append">Append (simplest)</option>
-                            <option value="between_words" selected>Between Words (subtle)</option>
-                            <option value="distributed">Distributed (most hidden)</option>
+                            <option value="append">Append</option>
+                            <option value="between_words" selected>Between Words</option>
+                            <option value="distributed">Distributed</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="btn-group">
                     <button class="btn" id="textEncodeBtn">
-                        <span class="btn-icon">🔒</span>
+                        <span>🔒</span>
                         <span>Encode Message</span>
                     </button>
                     <button class="btn btn-secondary" id="textDecodeBtn">
-                        <span class="btn-icon">🔓</span>
+                        <span>🔓</span>
                         <span>Decode Message</span>
                     </button>
                 </div>
 
-                <div class="results-section hidden" id="textResults">
-                    <h3 class="results-title">
+                <div class="results-panel hidden" id="textResults">
+                    <h3 class="panel-title">
                         <span>✨</span>
                         <span>Results</span>
                     </h3>
-                    <div class="form-group">
-                        <label class="form-label">Stego Text / Decoded Message</label>
+                    <div class="form-section">
+                        <label class="form-label">Output</label>
                         <textarea
                             class="form-textarea"
                             id="textResultArea"
@@ -1478,41 +1375,41 @@
                     </div>
                     <div class="btn-group">
                         <button class="btn btn-secondary" id="textCopyBtn">
-                            <span class="btn-icon">📋</span>
+                            <span>📋</span>
                             <span>Copy to Clipboard</span>
                         </button>
                         <button class="btn btn-secondary" id="textClearBtn">
-                            <span class="btn-icon">🗑️</span>
-                            <span>Clear Results</span>
+                            <span>🗑️</span>
+                            <span>Clear</span>
                         </button>
                     </div>
                 </div>
             </div>
 
             <!-- IMAGE MODE -->
-            <div class="mode-content" id="imageMode">
-                <div class="form-group">
+            <div class="workspace-content" id="imageMode">
+                <div class="form-section">
                     <label class="form-label">
                         <span class="label-icon">🖼️</span>
                         Cover Image
                     </label>
-                    <div class="file-upload-area" id="fileUploadArea">
+                    <div class="upload-zone" id="uploadZone">
                         <input
                             type="file"
-                            class="file-upload-input"
+                            class="upload-input"
                             id="imageFileInput"
                             accept="image/png,image/jpeg,image/bmp"
                         >
-                        <div class="file-upload-icon">📁</div>
-                        <div class="file-upload-text">
+                        <div class="upload-icon">📁</div>
+                        <div class="upload-text">
                             <strong>Click to upload</strong> or drag and drop<br>
-                            PNG, JPG, or BMP (max 16MB)
+                            PNG, JPG, BMP (max 16MB)
                         </div>
-                        <div class="file-name hidden" id="fileName"></div>
+                        <div class="file-info hidden" id="fileInfo"></div>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-section">
                     <label class="form-label">
                         <span class="label-icon">🔒</span>
                         Secret Message
@@ -1520,132 +1417,132 @@
                     <textarea
                         class="form-textarea"
                         id="imageSecretMessage"
-                        placeholder="Enter your secret message to hide in the image pixels using LSB steganography..."
+                        placeholder="Enter your secret message..."
                     ></textarea>
                     <div class="char-counter" id="imageSecretCounter">0 characters</div>
                 </div>
 
                 <div class="options-grid">
-                    <div class="form-group">
+                    <div class="form-section">
                         <label class="form-label">
                             <span class="label-icon">🔑</span>
-                            Password (Optional)
+                            Password
                         </label>
                         <input
                             type="password"
                             class="form-input"
                             id="imagePassword"
-                            placeholder="Enter password for encryption"
+                            placeholder="Optional encryption password"
                         >
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-section">
                         <label class="form-label">
                             <span class="label-icon">⚙️</span>
                             Bits Per Pixel
                         </label>
                         <select class="form-select" id="imageBitsPerPixel">
-                            <option value="1">1 bit (best quality, PSNR >50dB)</option>
-                            <option value="2" selected>2 bits (balanced, PSNR ~45dB)</option>
-                            <option value="3">3 bits (max capacity, PSNR ~40dB)</option>
+                            <option value="1">1 bit (PSNR >50dB)</option>
+                            <option value="2" selected>2 bits (PSNR ~45dB)</option>
+                            <option value="3">3 bits (PSNR ~40dB)</option>
                         </select>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-section">
                         <label class="form-label">
                             <span class="label-icon">🎨</span>
-                            Color Channel
+                            Channel
                         </label>
                         <select class="form-select" id="imageChannel">
-                            <option value="0">🔴 Red Channel</option>
-                            <option value="1">🟢 Green Channel</option>
-                            <option value="2" selected>🔵 Blue Channel (Recommended)</option>
+                            <option value="0">🔴 Red</option>
+                            <option value="1">🟢 Green</option>
+                            <option value="2" selected>🔵 Blue</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="btn-group">
                     <button class="btn" id="imageEncodeBtn">
-                        <span class="btn-icon">🔒</span>
+                        <span>🔒</span>
                         <span>Encode Image</span>
                     </button>
                     <button class="btn btn-secondary" id="imageDecodeBtn">
-                        <span class="btn-icon">🔓</span>
+                        <span>🔓</span>
                         <span>Decode Image</span>
                     </button>
                 </div>
 
                 <!-- Image Results -->
-                <div class="results-section hidden" id="imageResults">
-                    <h3 class="results-title">
-                        <span>✨</span>
-                        <span>Results & Analysis</span>
+                <div class="results-panel hidden" id="imageResults">
+                    <h3 class="panel-title">
+                        <span>📊</span>
+                        <span>Analysis Results</span>
                     </h3>
 
-                    <!-- Metrics Panel -->
-                    <div class="metrics-panel hidden" id="metricsPanel">
-                        <h4 class="metrics-title">📊 Image Quality Metrics & Analysis</h4>
+                    <!-- Metrics -->
+                    <div class="metrics-dashboard hidden" id="metricsDashboard">
+                        <h4 class="metrics-title">Quality Metrics Analysis</h4>
                         <div class="metrics-grid">
                             <div class="metric-card">
-                                <div class="metric-label">MSE (Mean Squared Error)</div>
+                                <div class="metric-label">MSE</div>
                                 <div class="metric-value" id="metricMSE">—</div>
-                                <div class="metric-status" id="statusMSE"></div>
-                                <div class="progress-container">
+                                <div class="metric-badge" id="badgeMSE"></div>
+                                <div class="progress-bar-container">
                                     <div class="progress-bar" id="progressMSE" style="width: 0%"></div>
                                 </div>
                             </div>
                             <div class="metric-card">
-                                <div class="metric-label">PSNR (Peak SNR)</div>
+                                <div class="metric-label">PSNR</div>
                                 <div class="metric-value" id="metricPSNR">—</div>
-                                <div class="metric-status" id="statusPSNR"></div>
-                                <div class="progress-container">
+                                <div class="metric-badge" id="badgePSNR"></div>
+                                <div class="progress-bar-container">
                                     <div class="progress-bar" id="progressPSNR" style="width: 0%"></div>
                                 </div>
                             </div>
                             <div class="metric-card">
-                                <div class="metric-label">SSIM (Structural Similarity)</div>
+                                <div class="metric-label">SSIM</div>
                                 <div class="metric-value" id="metricSSIM">—</div>
-                                <div class="metric-status" id="statusSSIM"></div>
-                                <div class="progress-container">
+                                <div class="metric-badge" id="badgeSSIM"></div>
+                                <div class="progress-bar-container">
                                     <div class="progress-bar" id="progressSSIM" style="width: 0%"></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="overall-quality">
-                            <div class="overall-quality-label">Overall Quality Assessment</div>
-                            <div class="overall-quality-value" id="overallQuality">—</div>
+                        <div class="quality-summary">
+                            <div class="quality-label">Overall Quality</div>
+                            <div class="quality-value" id="qualityValue">—</div>
                         </div>
                     </div>
 
-                    <!-- Image Preview Grid -->
+                    <!-- Preview Grid -->
                     <div class="preview-grid hidden" id="previewGrid">
-                        <div class="preview-card">
-                            <div class="preview-label">🖼️ Original Image</div>
+                        <div class="preview-box">
+                            <div class="preview-label">Original Image</div>
                             <img class="preview-image" id="originalPreview" alt="Original">
                         </div>
-                        <div class="preview-card">
-                            <div class="preview-label">🔒 Stego Image (With Hidden Message)</div>
+                        <div class="preview-box">
+                            <div class="preview-label">Stego Image</div>
                             <img class="preview-image" id="stegoPreview" alt="Stego">
                         </div>
                     </div>
 
-                    <!-- Action Buttons -->
+                    <!-- Actions -->
                     <div class="btn-group">
-                        <button class="btn hidden" id="downloadStegoBtn">
-                            <span class="btn-icon">💾</span>
+                        <button class="btn hidden" id="downloadBtn">
+                            <span>💾</span>
                             <span>Download Stego Image</span>
                         </button>
-                        <button class="btn btn-secondary hidden" id="analyzeAgainBtn">
-                            <span class="btn-icon">🔄</span>
-                            <span>Analyze Again</span>
+                        <button class="btn btn-secondary hidden" id="analyzeBtn">
+                            <span>🔄</span>
+                            <span>Re-analyze</span>
                         </button>
                     </div>
 
                     <!-- Decoded Message -->
-                    <div class="form-group hidden" id="decodedMessageGroup">
+                    <div class="form-section hidden" id="decodedSection">
                         <label class="form-label">
                             <span class="label-icon">🔓</span>
-                            Decoded Secret Message
+                            Decoded Message
                         </label>
                         <textarea
                             class="form-textarea"
@@ -1659,35 +1556,23 @@
     </div>
 
     <script>
-        // ============================================================================
-        // CONFIGURATION
-        // ============================================================================
-
+        // Config
         const API_BASE_URL = 'http://localhost:5000';
 
-        // ============================================================================
-        // STATE MANAGEMENT
-        // ============================================================================
-
+        // State
         let currentMode = 'text';
         let coverImageBase64 = null;
         let stegoImageBase64 = null;
         let currentMetrics = null;
 
-        // ============================================================================
-        // DOM ELEMENTS
-        // ============================================================================
-
-        // Mode switcher
-        const modeBtns = document.querySelectorAll('.mode-btn');
+        // DOM Elements
+        const modeTabs = document.querySelectorAll('.mode-tab');
         const textMode = document.getElementById('textMode');
         const imageMode = document.getElementById('imageMode');
-
-        // Loading
         const loadingOverlay = document.getElementById('loadingOverlay');
         const toast = document.getElementById('toast');
 
-        // Text mode
+        // Text
         const textCoverText = document.getElementById('textCoverText');
         const textSecretMessage = document.getElementById('textSecretMessage');
         const textPassword = document.getElementById('textPassword');
@@ -1702,10 +1587,10 @@
         const textCoverCounter = document.getElementById('textCoverCounter');
         const textSecretCounter = document.getElementById('textSecretCounter');
 
-        // Image mode
-        const fileUploadArea = document.getElementById('fileUploadArea');
+        // Image
+        const uploadZone = document.getElementById('uploadZone');
         const imageFileInput = document.getElementById('imageFileInput');
-        const fileName = document.getElementById('fileName');
+        const fileInfo = document.getElementById('fileInfo');
         const imageSecretMessage = document.getElementById('imageSecretMessage');
         const imagePassword = document.getElementById('imagePassword');
         const imageBitsPerPixel = document.getElementById('imageBitsPerPixel');
@@ -1713,43 +1598,32 @@
         const imageEncodeBtn = document.getElementById('imageEncodeBtn');
         const imageDecodeBtn = document.getElementById('imageDecodeBtn');
         const imageResults = document.getElementById('imageResults');
-        const metricsPanel = document.getElementById('metricsPanel');
+        const metricsDashboard = document.getElementById('metricsDashboard');
         const previewGrid = document.getElementById('previewGrid');
-        const downloadStegoBtn = document.getElementById('downloadStegoBtn');
-        const analyzeAgainBtn = document.getElementById('analyzeAgainBtn');
-        const decodedMessageGroup = document.getElementById('decodedMessageGroup');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const decodedSection = document.getElementById('decodedSection');
         const imageDecodedMessage = document.getElementById('imageDecodedMessage');
         const imageSecretCounter = document.getElementById('imageSecretCounter');
 
-        // ============================================================================
-        // CHARACTER COUNTERS
-        // ============================================================================
-
+        // Character counters
         textCoverText.addEventListener('input', () => {
             textCoverCounter.textContent = `${textCoverText.value.length} characters`;
         });
-
         textSecretMessage.addEventListener('input', () => {
             textSecretCounter.textContent = `${textSecretMessage.value.length} characters`;
         });
-
         imageSecretMessage.addEventListener('input', () => {
             imageSecretCounter.textContent = `${imageSecretMessage.value.length} characters`;
         });
 
-        // ============================================================================
-        // MODE SWITCHING
-        // ============================================================================
+        // Mode switching
+        modeTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const mode = tab.dataset.mode;
+                modeTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
 
-        modeBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const mode = btn.dataset.mode;
-
-                // Update buttons
-                modeBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-
-                // Update content
                 if (mode === 'text') {
                     textMode.classList.add('active');
                     imageMode.classList.remove('active');
@@ -1757,30 +1631,22 @@
                     textMode.classList.remove('active');
                     imageMode.classList.add('active');
                 }
-
                 currentMode = mode;
             });
         });
 
-        // ============================================================================
-        // FILE UPLOAD
-        // ============================================================================
-
+        // File upload
         imageFileInput.addEventListener('change', handleFileSelect);
-
-        fileUploadArea.addEventListener('dragover', (e) => {
+        uploadZone.addEventListener('dragover', (e) => {
             e.preventDefault();
-            fileUploadArea.classList.add('drag-over');
+            uploadZone.classList.add('drag-active');
         });
-
-        fileUploadArea.addEventListener('dragleave', () => {
-            fileUploadArea.classList.remove('drag-over');
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('drag-active');
         });
-
-        fileUploadArea.addEventListener('drop', (e) => {
+        uploadZone.addEventListener('drop', (e) => {
             e.preventDefault();
-            fileUploadArea.classList.remove('drag-over');
-
+            uploadZone.classList.remove('drag-active');
             const files = e.dataTransfer.files;
             if (files.length > 0) {
                 imageFileInput.files = files;
@@ -1791,11 +1657,8 @@
         function handleFileSelect(e) {
             const file = e.target.files[0];
             if (!file) return;
-
-            fileName.innerHTML = `<span>✅</span> <span>${file.name} (${(file.size / 1024).toFixed(2)} KB)</span>`;
-            fileName.classList.remove('hidden');
-
-            // Convert to base64
+            fileInfo.innerHTML = `<span>✅</span> ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+            fileInfo.classList.remove('hidden');
             const reader = new FileReader();
             reader.onload = (e) => {
                 coverImageBase64 = e.target.result;
@@ -1804,21 +1667,15 @@
             reader.readAsDataURL(file);
         }
 
-        // ============================================================================
-        // TEXT STEGANOGRAPHY
-        // ============================================================================
-
+        // Text encode
         textEncodeBtn.addEventListener('click', async () => {
             const coverText = textCoverText.value.trim();
             const secretMessage = textSecretMessage.value.trim();
-
             if (!coverText || !secretMessage) {
                 showToast('Please enter both cover text and secret message', 'error');
                 return;
             }
-
             showLoading(true);
-
             try {
                 const response = await fetch(`${API_BASE_URL}/api/encode`, {
                     method: 'POST',
@@ -1832,17 +1689,11 @@
                         insertion_method: textInsertionMethod.value
                     })
                 });
-
                 const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || 'Encoding failed');
-                }
-
+                if (!response.ok) throw new Error(data.error || 'Encoding failed');
                 textResultArea.value = data.stego_text;
                 textResults.classList.remove('hidden');
-                showToast('✨ Message encoded successfully! Hidden with invisible characters.', 'success');
-
+                showToast('✨ Message encoded successfully!', 'success');
             } catch (error) {
                 showToast(error.message, 'error');
             } finally {
@@ -1850,16 +1701,14 @@
             }
         });
 
+        // Text decode
         textDecodeBtn.addEventListener('click', async () => {
             const stegoText = textCoverText.value.trim();
-
             if (!stegoText) {
                 showToast('Please enter stego text to decode', 'error');
                 return;
             }
-
             showLoading(true);
-
             try {
                 const response = await fetch(`${API_BASE_URL}/api/decode`, {
                     method: 'POST',
@@ -1871,17 +1720,11 @@
                         encoding_bits: parseInt(textEncodingBits.value)
                     })
                 });
-
                 const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || 'Decoding failed');
-                }
-
+                if (!response.ok) throw new Error(data.error || 'Decoding failed');
                 textResultArea.value = data.secret_message;
                 textResults.classList.remove('hidden');
                 showToast('🔓 Message decoded successfully!', 'success');
-
             } catch (error) {
                 showToast(error.message, 'error');
             } finally {
@@ -1892,7 +1735,7 @@
         textCopyBtn.addEventListener('click', () => {
             textResultArea.select();
             document.execCommand('copy');
-            showToast('📋 Copied to clipboard!', 'success');
+            showToast('📋 Copied!', 'success');
         });
 
         textClearBtn.addEventListener('click', () => {
@@ -1900,26 +1743,19 @@
             textResults.classList.add('hidden');
         });
 
-        // ============================================================================
-        // IMAGE STEGANOGRAPHY
-        // ============================================================================
-
+        // Image encode
         imageEncodeBtn.addEventListener('click', async () => {
             if (!coverImageBase64) {
-                showToast('Please select an image first', 'error');
+                showToast('Please select an image', 'error');
                 return;
             }
-
             const secretMessage = imageSecretMessage.value.trim();
             if (!secretMessage) {
                 showToast('Please enter a secret message', 'error');
                 return;
             }
-
             showLoading(true);
-
             try {
-                // Encode image
                 const encodeResponse = await fetch(`${API_BASE_URL}/api/encode`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1932,16 +1768,10 @@
                         channel: parseInt(imageChannel.value)
                     })
                 });
-
                 const encodeData = await encodeResponse.json();
-
-                if (!encodeResponse.ok) {
-                    throw new Error(encodeData.error || 'Encoding failed');
-                }
-
+                if (!encodeResponse.ok) throw new Error(encodeData.error || 'Encoding failed');
                 stegoImageBase64 = 'data:image/png;base64,' + encodeData.stego_image;
 
-                // Analyze quality
                 const analyzeResponse = await fetch(`${API_BASE_URL}/api/analyze`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1950,24 +1780,18 @@
                         stego_image: stegoImageBase64
                     })
                 });
-
                 const analyzeData = await analyzeResponse.json();
-
-                // Display results
                 currentMetrics = analyzeData.metrics;
-                displayImageResults(currentMetrics);
+                displayMetrics(currentMetrics);
 
-                // Show previews
                 document.getElementById('originalPreview').src = coverImageBase64;
                 document.getElementById('stegoPreview').src = stegoImageBase64;
                 previewGrid.classList.remove('hidden');
-
-                downloadStegoBtn.classList.remove('hidden');
-                analyzeAgainBtn.classList.remove('hidden');
+                downloadBtn.classList.remove('hidden');
+                analyzeBtn.classList.remove('hidden');
                 imageResults.classList.remove('hidden');
 
-                showToast('✨ Image encoded successfully! Quality metrics calculated.', 'success');
-
+                showToast('✨ Image encoded successfully!', 'success');
             } catch (error) {
                 showToast(error.message, 'error');
             } finally {
@@ -1975,14 +1799,13 @@
             }
         });
 
+        // Image decode
         imageDecodeBtn.addEventListener('click', async () => {
             if (!coverImageBase64) {
-                showToast('Please select a stego image first', 'error');
+                showToast('Please select a stego image', 'error');
                 return;
             }
-
             showLoading(true);
-
             try {
                 const response = await fetch(`${API_BASE_URL}/api/decode`, {
                     method: 'POST',
@@ -1995,19 +1818,12 @@
                         channel: parseInt(imageChannel.value)
                     })
                 });
-
                 const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || 'Decoding failed');
-                }
-
+                if (!response.ok) throw new Error(data.error || 'Decoding failed');
                 imageDecodedMessage.value = data.secret_message;
-                decodedMessageGroup.classList.remove('hidden');
+                decodedSection.classList.remove('hidden');
                 imageResults.classList.remove('hidden');
-
-                showToast('🔓 Message decoded successfully from image!', 'success');
-
+                showToast('🔓 Message decoded successfully!', 'success');
             } catch (error) {
                 showToast(error.message, 'error');
             } finally {
@@ -2015,113 +1831,86 @@
             }
         });
 
-        downloadStegoBtn.addEventListener('click', () => {
+        downloadBtn.addEventListener('click', () => {
             const link = document.createElement('a');
-            link.download = `stego-image-${Date.now()}.png`;
+            link.download = `stego-${Date.now()}.png`;
             link.href = stegoImageBase64;
             link.click();
-            showToast('💾 Stego image downloaded!', 'success');
+            showToast('💾 Downloaded!', 'success');
         });
 
-        analyzeAgainBtn.addEventListener('click', () => {
+        analyzeBtn.addEventListener('click', () => {
             if (currentMetrics) {
-                displayImageResults(currentMetrics);
+                displayMetrics(currentMetrics);
                 showToast('📊 Metrics refreshed!', 'success');
             }
         });
 
-        // ============================================================================
-        // METRICS DISPLAY
-        // ============================================================================
-
-        function displayImageResults(metrics) {
-            // MSE
+        // Display metrics
+        function displayMetrics(metrics) {
             document.getElementById('metricMSE').textContent = metrics.mse.toFixed(4);
-            document.getElementById('statusMSE').textContent = getMetricStatus('mse', metrics.mse);
-            document.getElementById('statusMSE').className = 'metric-status ' + getMetricClass('mse', metrics.mse);
-            document.getElementById('progressMSE').style.width = getProgressWidth('mse', metrics.mse) + '%';
+            document.getElementById('badgeMSE').textContent = getStatus('mse', metrics.mse);
+            document.getElementById('badgeMSE').className = 'metric-badge ' + getClass('mse', metrics.mse);
+            document.getElementById('progressMSE').style.width = getProgress('mse', metrics.mse) + '%';
 
-            // PSNR
-            const psnrValue = metrics.psnr === 'Inf' ? '∞' : metrics.psnr.toFixed(2) + ' dB';
-            document.getElementById('metricPSNR').textContent = psnrValue;
-            document.getElementById('statusPSNR').textContent = getMetricStatus('psnr', metrics.psnr);
-            document.getElementById('statusPSNR').className = 'metric-status ' + getMetricClass('psnr', metrics.psnr);
-            document.getElementById('progressPSNR').style.width = getProgressWidth('psnr', metrics.psnr) + '%';
+            const psnr = metrics.psnr === 'Inf' ? '∞' : metrics.psnr.toFixed(2);
+            document.getElementById('metricPSNR').textContent = psnr;
+            document.getElementById('badgePSNR').textContent = getStatus('psnr', metrics.psnr);
+            document.getElementById('badgePSNR').className = 'metric-badge ' + getClass('psnr', metrics.psnr);
+            document.getElementById('progressPSNR').style.width = getProgress('psnr', metrics.psnr) + '%';
 
-            // SSIM
             document.getElementById('metricSSIM').textContent = metrics.ssim.toFixed(4);
-            document.getElementById('statusSSIM').textContent = getMetricStatus('ssim', metrics.ssim);
-            document.getElementById('statusSSIM').className = 'metric-status ' + getMetricClass('ssim', metrics.ssim);
-            document.getElementById('progressSSIM').style.width = getProgressWidth('ssim', metrics.ssim) + '%';
+            document.getElementById('badgeSSIM').textContent = getStatus('ssim', metrics.ssim);
+            document.getElementById('badgeSSIM').className = 'metric-badge ' + getClass('ssim', metrics.ssim);
+            document.getElementById('progressSSIM').style.width = getProgress('ssim', metrics.ssim) + '%';
 
-            // Overall
-            document.getElementById('overallQuality').textContent = '🏆 ' + metrics.quality_assessment;
-            document.getElementById('overallQuality').className = 'overall-quality-value ' + getMetricClass('overall', metrics.quality_assessment.toLowerCase());
-
-            metricsPanel.classList.remove('hidden');
+            document.getElementById('qualityValue').textContent = '🏆 ' + metrics.quality_assessment;
+            metricsDashboard.classList.remove('hidden');
         }
 
-        function getMetricStatus(type, value) {
+        function getStatus(type, value) {
             if (type === 'mse') {
                 if (value === 0) return 'Perfect';
                 if (value < 1) return 'Excellent';
                 if (value < 10) return 'Good';
-                if (value < 100) return 'Acceptable';
-                return 'Poor';
+                return 'Acceptable';
             } else if (type === 'psnr') {
                 if (value === 'Inf') return 'Perfect';
                 if (value > 50) return 'Excellent';
-                if (value > 40) return 'Very Good';
-                if (value > 30) return 'Acceptable';
-                return 'Poor';
+                if (value > 40) return 'Good';
+                return 'Acceptable';
             } else if (type === 'ssim') {
                 if (value >= 0.999) return 'Excellent';
-                if (value >= 0.99) return 'Very Good';
-                if (value >= 0.95) return 'Good';
-                if (value >= 0.90) return 'Acceptable';
-                return 'Poor';
+                if (value >= 0.99) return 'Good';
+                return 'Acceptable';
             }
         }
 
-        function getMetricClass(type, value) {
-            if (type === 'overall') {
-                if (value === 'excellent') return 'excellent';
-                if (value === 'very good') return 'good';
-                if (value === 'good') return 'acceptable';
-                return 'poor';
-            }
-
-            const status = getMetricStatus(type, value).toLowerCase();
-            if (status.includes('excellent') || status.includes('perfect')) return 'excellent';
-            if (status.includes('very good') || status.includes('good')) return 'good';
-            if (status.includes('acceptable')) return 'acceptable';
-            return 'poor';
+        function getClass(type, value) {
+            const status = getStatus(type, value).toLowerCase();
+            if (status === 'perfect' || status === 'excellent') return 'excellent';
+            if (status === 'good') return 'good';
+            return 'acceptable';
         }
 
-        function getProgressWidth(type, value) {
+        function getProgress(type, value) {
             if (type === 'mse') {
-                // Lower is better, invert scale
                 if (value === 0) return 100;
-                if (value < 1) return 90;
-                if (value < 10) return 70;
-                if (value < 100) return 40;
-                return 20;
+                if (value < 1) return 95;
+                if (value < 10) return 75;
+                return 50;
             } else if (type === 'psnr') {
                 if (value === 'Inf') return 100;
                 if (value > 50) return 95;
                 if (value > 40) return 75;
-                if (value > 30) return 50;
-                return 25;
+                return 50;
             } else if (type === 'ssim') {
                 return value * 100;
             }
             return 0;
         }
 
-        // ============================================================================
-        // UTILITY FUNCTIONS
-        // ============================================================================
-
+        // Utilities
         function showLoading(show) {
             loadingOverlay.classList.toggle('active', show);
         }
@@ -2130,19 +1919,11 @@
             toast.textContent = message;
             toast.className = `toast ${type}`;
             toast.classList.add('show');
-
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 4000);
+            setTimeout(() => toast.classList.remove('show'), 3500);
         }
 
-        // ============================================================================
-        // INITIALIZATION
-        // ============================================================================
-
-        console.log('🎨 Steganography Suite initialized');
-        console.log('📡 API endpoint:', API_BASE_URL);
-        console.log('✨ Next-generation interface ready!');
+        console.log('🔐 Steganography Suite initialized');
+        console.log('📡 API:', API_BASE_URL);
     </script>
 </body>
 </html>
