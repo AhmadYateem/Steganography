@@ -61,8 +61,14 @@ pip install -r requirements.txt
 # Install dependencies
 pip install -r requirements.txt
 
-# Start the server
-python app.py
+# Start the server (choose one):
+python start.py          # Cross-platform launcher (recommended)
+# OR
+python app.py           # Direct launch
+# OR
+./start.sh             # Linux/Mac only
+# OR
+start.bat              # Windows (or double-click it)
 ```
 
 Open your browser and navigate to: **http://localhost:5000**
