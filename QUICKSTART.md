@@ -21,15 +21,29 @@ This installs:
 
 ### 2. Start the Server
 
-**Option A: Python**
+**Option A: Python (Works Everywhere)**
 ```bash
 python app.py
 ```
 
-**Option B: Quick Start Script**
+**Option B: Cross-Platform Launcher (Recommended)**
+```bash
+python start.py
+```
+
+**Option C: Platform-Specific Scripts**
+
+*Linux/Mac:*
 ```bash
 ./start.sh
 ```
+
+*Windows:*
+```bash
+start.bat
+```
+
+Or double-click `start.bat` in File Explorer
 
 ### 3. Open Your Browser
 
