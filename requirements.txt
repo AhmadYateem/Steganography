@@ -3,6 +3,10 @@
 # Cryptography library for AES encryption
 cryptography>=41.0.0
 
+# Image processing for LSB steganography
+Pillow>=10.0.0
+numpy>=1.24.0
+
 # Note: The following are Python standard library (no installation needed):
 # - base64
 # - hashlib

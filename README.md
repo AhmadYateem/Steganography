@@ -1,6 +1,7 @@
-# Secure Text Steganography with Zero-Width Characters
+# Complete Steganography Suite
+## Text & Image Steganography with Encryption
 
-A complete implementation of secure text steganography combining AES encryption with invisible Unicode zero-width characters. This provides **defense-in-depth security**: encryption for confidentiality + steganography for concealment.
+A comprehensive implementation of steganography supporting **both text and images** with optional encryption for maximum security.
 
 ## 📋 Table of Contents
 
@@ -8,9 +9,10 @@ A complete implementation of secure text steganography combining AES encryption 
 - [Quick Start](#quick-start)
 - [Project Structure](#project-structure)
 - [Module Documentation](#module-documentation)
-  - [A1 & A2: Text Steganography (text_stego.py)](#a1--a2-text-steganography-text_stegopy)
-  - [A3: Encryption (crypto.py)](#a3-encryption-cryptopy)
-  - [Secure Steganography (secure_stego.py)](#secure-steganography-secure_stegopy)
+  - [TEXT: A1 & A2 - ZWC Steganography (text_stego.py)](#text-a1--a2---zwc-steganography-text_stegopy)
+  - [TEXT: A3 - Encryption (crypto.py)](#text-a3---encryption-cryptopy)
+  - [TEXT: Secure Pipeline (secure_stego.py)](#text-secure-pipeline-secure_stegopy)
+  - [IMAGE: B1 & B2 - LSB Steganography (image_stego.py)](#image-b1--b2---lsb-steganography-image_stegopy)
 - [Complete Examples](#complete-examples)
 - [Security Features](#security-features)
 - [Running Demos](#running-demos)
@@ -20,11 +22,16 @@ A complete implementation of secure text steganography combining AES encryption 
 
 ## Overview
 
-This project implements three main components:
+This project implements **five main components**:
 
+### Text Steganography (A1, A2, A3)
 1. **Zero-Width Character (ZWC) Steganography** - Hide messages in invisible Unicode characters
 2. **AES Encryption** - Encrypt messages before hiding for maximum security
 3. **Secure Pipeline** - High-level API combining both for defense-in-depth
+
+### Image Steganography (B1, B2)
+4. **LSB (Least Significant Bit) Encoding** - Hide messages by modifying image pixels
+5. **Multi-bit Capacity** - User-controlled capacity (1, 2, or 3 bits per pixel)
 
 ### Why This Approach?
 
@@ -85,10 +92,14 @@ Steganography/
 ├── text_stego.py          # A1 & A2: ZWC encoder/decoder
 ├── crypto.py              # A3: Encryption module
 ├── secure_stego.py        # Combined secure steganography
+├── image_stego.py         # B1 & B2: LSB image steganography
 ├── demo.py                # Demo: Basic ZWC steganography
 ├── demo_secure.py         # Demo: Encrypted steganography
+├── demo_image.py          # Demo: LSB image steganography
 ├── requirements.txt       # Python dependencies
-└── README.md             # This file
+├── README.md              # Complete documentation (this file)
+├── USAGE_GUIDE.md         # Quick reference for text stego
+└── IMAGE_GUIDE.md         # Complete guide for image stego
 ```
 
 ---
@@ -348,6 +359,207 @@ message = secure_stego.secure_decode_simple(stego, password)
 
 ---
 
+### IMAGE: B1 & B2 - LSB Steganography (image_stego.py)
+
+**Complete LSB (Least Significant Bit) image steganography implementation.**
+
+For detailed documentation, see [IMAGE_GUIDE.md](IMAGE_GUIDE.md)
+
+#### Quick Start
+
+```python
+from image_stego import hide_message, extract_message
+
+# Hide message in image
+hide_message('photo.png', 'Secret message!', 'stego.png')
+
+# Extract message
+message = extract_message('stego.png')
+```
+
+#### B1: Basic LSB Functions
+
+##### 1. `load_image(image_path) -> (pixels, format)`
+
+Load an image and convert to numpy array.
+
+```python
+pixels, fmt = image_stego.load_image("photo.png")
+# pixels = 3D array [height, width, 3 (RGB)]
+```
+
+**Supported formats:** PNG, BMP, TIFF (lossless formats only)
+
+##### 2. `save_image(pixels, output_path, format='PNG')`
+
+Save modified pixels as an image.
+
+```python
+image_stego.save_image(pixels, "output.png", "PNG")
+```
+
+##### 3. `encode_lsb(image_path, message, output_path, bits_per_pixel=1)`
+
+**Main encoding function** - Hide message by modifying pixel LSBs.
+
+```python
+result = image_stego.encode_lsb(
+    image_path="cover.png",
+    message="Secret message to hide",
+    output_path="stego.png",
+    bits_per_pixel=1  # 1, 2, or 3
+)
+
+print(f"Encoded {result['message_length']} characters")
+print(f"Capacity used: {result['capacity_used_percent']:.2f}%")
+```
+
+**How it works:**
+1. Converts message to binary
+2. Adds 32-bit header with message length
+3. Modifies least significant bits of blue channel
+4. Saves stego image (looks identical to original!)
+
+##### 4. `decode_lsb(stego_image_path, bits_per_pixel=1)`
+
+**Main decoding function** - Extract hidden message.
+
+```python
+message = image_stego.decode_lsb(
+    stego_image_path="stego.png",
+    bits_per_pixel=1  # Must match encoding!
+)
+```
+
+**How it works:**
+1. Reads LSBs from pixels
+2. Extracts 32-bit header (message length)
+3. Reads exact number of message bits
+4. Converts back to text
+
+##### 5. `get_image_capacity(image_path, bits_per_pixel=1)`
+
+Check how many bytes can be hidden in an image.
+
+```python
+capacity = image_stego.get_image_capacity("photo.png", bits_per_pixel=1)
+print(f"Can hide {capacity['max_characters']:,} characters")
+# Example output: "Can hide 32,764 characters"
+```
+
+#### B2: Multi-Bit Capacity
+
+**User-controlled capacity: 1, 2, or 3 bits per pixel**
+
+| Bits/Pixel | Capacity | Visual Impact | Max Change |
+|------------|----------|---------------|------------|
+| **1** | Lowest | Invisible | ±1 |
+| **2** | Medium ✓ Recommended | Nearly invisible | ±3 |
+| **3** | Highest | Slightly visible | ±7 |
+
+```python
+# 1-bit: Maximum stealth (changes by ±1)
+image_stego.encode_lsb(img, msg, out, bits_per_pixel=1)
+
+# 2-bit: Balanced (RECOMMENDED, changes by ±3)
+image_stego.encode_lsb(img, msg, out, bits_per_pixel=2)
+
+# 3-bit: Maximum capacity (changes by ±7)
+image_stego.encode_lsb(img, msg, out, bits_per_pixel=3)
+```
+
+**Important:** `bits_per_pixel` must match between encoding and decoding!
+
+#### Message Length Header
+
+**Automatic header system** stores message length in first 32 bits.
+
+```
+Image pixels: [Header: 32 bits][Message: N bits]
+                    ↓
+              Message length
+```
+
+**Benefits:**
+- No need to specify message length when decoding
+- Prevents reading garbage beyond message
+- Supports messages up to 4GB (way more than images can hold!)
+
+#### Simple API (Easiest)
+
+```python
+from image_stego import hide_message, extract_message
+
+# Hide with quality settings
+hide_message('photo.png', 'Secret!', 'stego.png', quality='standard')
+# quality: 'high' (1 bit), 'standard' (2 bits), 'fast' (3 bits)
+
+# Extract
+message = extract_message('stego.png', quality='standard')
+```
+
+#### Utility Functions
+
+##### Compare Images
+
+```python
+diff = image_stego.compare_images("original.png", "stego.png")
+print(f"Max difference: {diff['max_difference']}")  # Should be 1, 3, or 7
+print(f"Imperceptible: {diff['imperceptible']}")  # True if max ≤ 3
+```
+
+##### Create Test Image
+
+```python
+image_stego.create_test_image(512, 512, "test.png")
+```
+
+#### Example: Full Workflow
+
+```python
+import image_stego
+
+# 1. Check capacity
+capacity = image_stego.get_image_capacity("photo.png", bits_per_pixel=2)
+print(f"Capacity: {capacity['max_characters']:,} characters")
+
+# 2. Encode message
+result = image_stego.encode_lsb(
+    image_path="photo.png",
+    message="This is my secret message!",
+    output_path="stego.png",
+    bits_per_pixel=2
+)
+print(f"Success! Used {result['capacity_used_percent']:.2f}% of capacity")
+
+# 3. Verify encoding
+decoded = image_stego.decode_lsb("stego.png", bits_per_pixel=2)
+assert decoded == "This is my secret message!"
+
+# 4. Compare images
+diff = image_stego.compare_images("photo.png", "stego.png")
+print(f"Images differ by max {diff['max_difference']} (imperceptible: {diff['imperceptible']})")
+```
+
+#### Capacity Examples
+
+**Small image (256×256):**
+- 1 bit/pixel: ~8,000 characters
+- 2 bits/pixel: ~16,000 characters
+- 3 bits/pixel: ~24,000 characters
+
+**Medium image (512×512):**
+- 1 bit/pixel: ~32,000 characters
+- 2 bits/pixel: ~65,000 characters
+- 3 bits/pixel: ~98,000 characters
+
+**Large image (1920×1080 Full HD):**
+- 1 bit/pixel: ~259,000 characters
+- 2 bits/pixel: ~518,000 characters
+- 3 bits/pixel: ~777,000 characters
+
+---
+
 ## Complete Examples
 
 ### Example 1: Basic Steganography (No Encryption)
@@ -514,6 +726,24 @@ python demo_secure.py
 6. Method comparison
 7. Defense-in-depth explanation
 8. Real-world communication scenario
+
+### Demo 3: LSB Image Steganography
+
+```bash
+python demo_image.py
+```
+
+**Shows:**
+1. Image capacity calculator
+2. Basic LSB encoding/decoding (B1)
+3. Multi-bit capacity (1, 2, 3 bits per pixel) (B2)
+4. Image comparison (visual impact analysis)
+5. Simple API demonstration
+6. Header system explanation
+7. Capacity limits and error handling
+8. Real-world communication scenario
+
+**Creates:** Test images in `test_images/` directory
 
 ---
 
