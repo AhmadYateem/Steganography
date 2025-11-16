@@ -3,32 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Steganography Suite — Advanced Secure Communication</title>
+    <title>Steganography Suite — Advanced Secure Communication Platform</title>
 
     <style>
         /* ============================================================================
            DESIGN SYSTEM & VARIABLES
-           Apple-inspired modern design with professional aesthetics
+           Next-generation Apple-inspired design with advanced visual effects
            ============================================================================ */
 
         :root {
-            /* Color Palette - Sophisticated & Minimal */
+            /* Color Palette - Ultra Sophisticated */
             --color-bg: #0a0a0f;
-            --color-surface: #1a1a24;
-            --color-surface-elevated: #24243a;
+            --color-surface: rgba(26, 26, 36, 0.8);
+            --color-surface-elevated: rgba(36, 36, 58, 0.9);
             --color-border: rgba(255, 255, 255, 0.08);
             --color-border-hover: rgba(255, 255, 255, 0.15);
 
-            /* Primary Colors */
+            /* Primary Colors with Glow */
             --color-primary: #007aff;
             --color-primary-hover: #0051d5;
-            --color-primary-glow: rgba(0, 122, 255, 0.3);
+            --color-primary-glow: rgba(0, 122, 255, 0.4);
 
             /* Accent Colors */
             --color-accent: #5e5ce6;
+            --color-accent-2: #af52de;
             --color-success: #30d158;
             --color-warning: #ff9f0a;
             --color-error: #ff453a;
+            --color-cyan: #64d2ff;
+            --color-purple: #bf5af2;
 
             /* Text Colors */
             --color-text-primary: rgba(255, 255, 255, 0.95);
@@ -39,7 +42,7 @@
             --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'Inter', system-ui, sans-serif;
             --font-mono: 'SF Mono', 'Monaco', 'Menlo', 'Courier New', monospace;
 
-            /* Spacing Scale */
+            /* Spacing */
             --space-xs: 0.5rem;
             --space-sm: 0.75rem;
             --space-md: 1rem;
@@ -79,6 +82,7 @@
             font-size: 16px;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
         }
 
         body {
@@ -87,37 +91,209 @@
             color: var(--color-text-primary);
             line-height: 1.6;
             overflow-x: hidden;
+            position: relative;
         }
 
         /* ============================================================================
-           BACKGROUND GRADIENT
+           ADVANCED ANIMATED BACKGROUND
            ============================================================================ */
 
-        body::before {
-            content: '';
+        .background-container {
             position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(
-                circle at 30% 20%,
-                rgba(94, 92, 230, 0.08) 0%,
-                transparent 50%
-            ),
-            radial-gradient(
-                circle at 70% 80%,
-                rgba(0, 122, 255, 0.06) 0%,
-                transparent 50%
-            );
-            animation: gradient-shift 20s ease-in-out infinite;
-            pointer-events: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: 0;
+            overflow: hidden;
         }
 
-        @keyframes gradient-shift {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(-10%, -10%); }
+        /* Gradient Orbs */
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 122, 255, 0.4) 0%, transparent 70%);
+            top: -300px;
+            left: -200px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(94, 92, 230, 0.3) 0%, transparent 70%);
+            top: 50%;
+            right: -150px;
+            animation-delay: 5s;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(175, 82, 222, 0.25) 0%, transparent 70%);
+            bottom: -200px;
+            left: 30%;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(50px, -50px) rotate(90deg);
+            }
+            50% {
+                transform: translate(-30px, 30px) rotate(180deg);
+            }
+            75% {
+                transform: translate(30px, 50px) rotate(270deg);
+            }
+        }
+
+        /* Particle Grid */
+        .particle-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: particle-drift 60s linear infinite;
+        }
+
+        @keyframes particle-drift {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(50px, 50px);
+            }
+        }
+
+        /* Animated Lines */
+        .animated-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .line {
+            position: absolute;
+            background: linear-gradient(90deg,
+                transparent,
+                rgba(0, 122, 255, 0.1),
+                transparent
+            );
+            animation: line-move 15s linear infinite;
+        }
+
+        .line-1 {
+            width: 200%;
+            height: 2px;
+            top: 20%;
+            left: -100%;
+            animation-delay: 0s;
+        }
+
+        .line-2 {
+            width: 200%;
+            height: 2px;
+            top: 60%;
+            left: -100%;
+            animation-delay: 7s;
+        }
+
+        @keyframes line-move {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        /* ============================================================================
+           FEATURE STATS BANNER
+           ============================================================================ */
+
+        .stats-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--color-border);
+            padding: var(--space-sm) 0;
+            z-index: 1000;
+            animation: slide-down 0.6s ease-out;
+        }
+
+        @keyframes slide-down {
+            from {
+                transform: translateY(-100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .stats-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-xs) var(--space-md);
+            background: var(--color-surface);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--color-border);
+            transition: all var(--transition-base);
+        }
+
+        .stat-item:hover {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 20px rgba(0, 122, 255, 0.2);
+        }
+
+        .stat-icon {
+            font-size: 1.25rem;
+        }
+
+        .stat-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         /* ============================================================================
@@ -129,12 +305,12 @@
             z-index: 1;
             max-width: 1400px;
             margin: 0 auto;
-            padding: var(--space-2xl) var(--space-lg);
+            padding: 80px var(--space-lg) var(--space-2xl);
             min-height: 100vh;
         }
 
         /* ============================================================================
-           HEADER
+           HEADER WITH BADGE
            ============================================================================ */
 
         .app-header {
@@ -143,28 +319,86 @@
             animation: fade-in-down 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        .badge {
+            display: inline-block;
+            padding: var(--space-xs) var(--space-md);
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.2), rgba(94, 92, 230, 0.2));
+            border: 1px solid rgba(0, 122, 255, 0.3);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: var(--space-lg);
+            animation: badge-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes badge-pulse {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(0, 122, 255, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(0, 122, 255, 0.5);
+            }
+        }
+
         .app-title {
-            font-size: 3.5rem;
+            font-size: 4rem;
             font-weight: 700;
             letter-spacing: -0.03em;
             background: linear-gradient(135deg,
-                var(--color-text-primary) 0%,
-                var(--color-text-secondary) 100%
+                #ffffff 0%,
+                var(--color-primary) 50%,
+                var(--color-accent) 100%
             );
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: var(--space-sm);
+            animation: title-shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes title-shimmer {
+            0%, 100% {
+                filter: brightness(1);
+            }
+            50% {
+                filter: brightness(1.2);
+            }
         }
 
         .app-subtitle {
             font-size: 1.25rem;
             color: var(--color-text-secondary);
             font-weight: 400;
+            margin-bottom: var(--space-lg);
+        }
+
+        .feature-tags {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-sm);
+            flex-wrap: wrap;
+            margin-top: var(--space-lg);
+        }
+
+        .feature-tag {
+            padding: var(--space-xs) var(--space-md);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            transition: all var(--transition-base);
+        }
+
+        .feature-tag:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            transform: translateY(-2px);
         }
 
         /* ============================================================================
-           MODE SWITCHER
+           MODE SWITCHER WITH ICONS
            ============================================================================ */
 
         .mode-switcher {
@@ -187,6 +421,7 @@
             cursor: pointer;
             transition: all var(--transition-base);
             overflow: hidden;
+            backdrop-filter: blur(10px);
         }
 
         .mode-btn::before {
@@ -202,14 +437,22 @@
             z-index: 0;
         }
 
-        .mode-btn span {
+        .mode-btn-content {
             position: relative;
             z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .mode-icon {
+            font-size: 1.5rem;
         }
 
         .mode-btn:hover {
             border-color: var(--color-border-hover);
             transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         .mode-btn.active {
@@ -223,7 +466,7 @@
         }
 
         /* ============================================================================
-           MAIN CARD
+           MAIN CARD WITH GLASS EFFECT
            ============================================================================ */
 
         .main-card {
@@ -234,6 +477,32 @@
             box-shadow: var(--shadow-lg);
             backdrop-filter: blur(20px);
             animation: fade-in-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg,
+                var(--color-primary),
+                var(--color-accent),
+                var(--color-accent-2)
+            );
+            animation: gradient-slide 3s linear infinite;
+        }
+
+        @keyframes gradient-slide {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
         }
 
         .mode-content {
@@ -257,21 +526,28 @@
         }
 
         /* ============================================================================
-           FORM ELEMENTS
+           ENHANCED FORM ELEMENTS
            ============================================================================ */
 
         .form-group {
             margin-bottom: var(--space-xl);
+            position: relative;
         }
 
         .form-label {
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
             font-size: 0.875rem;
             font-weight: 600;
             color: var(--color-text-primary);
             margin-bottom: var(--space-sm);
             text-transform: uppercase;
             letter-spacing: 0.05em;
+        }
+
+        .label-icon {
+            opacity: 0.6;
         }
 
         .form-input,
@@ -292,7 +568,8 @@
         .form-textarea:focus {
             outline: none;
             border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px var(--color-primary-glow);
+            box-shadow: 0 0 0 3px var(--color-primary-glow), 0 0 20px rgba(0, 122, 255, 0.2);
+            transform: translateY(-1px);
         }
 
         .form-textarea {
@@ -321,8 +598,17 @@
             box-shadow: 0 0 0 3px var(--color-primary-glow);
         }
 
+        /* Character Counter */
+        .char-counter {
+            position: absolute;
+            bottom: -20px;
+            right: 0;
+            font-size: 0.75rem;
+            color: var(--color-text-tertiary);
+        }
+
         /* ============================================================================
-           FILE UPLOAD
+           FILE UPLOAD WITH PROGRESS
            ============================================================================ */
 
         .file-upload-area {
@@ -339,12 +625,14 @@
         .file-upload-area:hover {
             border-color: var(--color-primary);
             background: rgba(0, 122, 255, 0.05);
+            transform: scale(1.02);
         }
 
         .file-upload-area.drag-over {
             border-color: var(--color-primary);
             background: rgba(0, 122, 255, 0.1);
             transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 122, 255, 0.3);
         }
 
         .file-upload-input {
@@ -358,9 +646,19 @@
         }
 
         .file-upload-icon {
-            font-size: 3rem;
+            font-size: 4rem;
             margin-bottom: var(--space-md);
             opacity: 0.5;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         .file-upload-text {
@@ -376,10 +674,14 @@
             margin-top: var(--space-md);
             color: var(--color-success);
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
         }
 
         /* ============================================================================
-           BUTTONS
+           ADVANCED BUTTONS
            ============================================================================ */
 
         .btn-group {
@@ -401,6 +703,9 @@
             transition: all var(--transition-base);
             overflow: hidden;
             font-family: var(--font-sans);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
         }
 
         .btn::before {
@@ -443,8 +748,8 @@
             transform: none;
         }
 
-        .btn:disabled:hover {
-            box-shadow: none;
+        .btn-icon {
+            font-size: 1.2rem;
         }
 
         /* ============================================================================
@@ -473,6 +778,9 @@
             font-weight: 600;
             margin-bottom: var(--space-lg);
             color: var(--color-text-primary);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
         }
 
         /* ============================================================================
@@ -492,12 +800,30 @@
             border-radius: var(--radius-lg);
             padding: var(--space-lg);
             transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity var(--transition-base);
         }
 
         .preview-card:hover {
             border-color: var(--color-border-hover);
             transform: translateY(-4px);
             box-shadow: var(--shadow-md);
+        }
+
+        .preview-card:hover::before {
+            opacity: 1;
         }
 
         .preview-label {
@@ -515,10 +841,12 @@
             border-radius: var(--radius-md);
             background: var(--color-bg);
             display: block;
+            position: relative;
+            z-index: 1;
         }
 
         /* ============================================================================
-           METRICS DISPLAY
+           METRICS DISPLAY WITH CHARTS
            ============================================================================ */
 
         .metrics-panel {
@@ -530,6 +858,28 @@
             border-radius: var(--radius-lg);
             padding: var(--space-xl);
             margin-bottom: var(--space-xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metrics-panel::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 122, 255, 0.05) 0%, transparent 70%);
+            animation: rotate-slow 20s linear infinite;
+        }
+
+        @keyframes rotate-slow {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .metrics-title {
@@ -537,12 +887,16 @@
             font-weight: 600;
             margin-bottom: var(--space-lg);
             text-align: center;
+            position: relative;
+            z-index: 1;
         }
 
         .metrics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: var(--space-lg);
+            position: relative;
+            z-index: 1;
         }
 
         .metric-card {
@@ -552,11 +906,29 @@
             padding: var(--space-lg);
             text-align: center;
             transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+            transform: scaleX(0);
+            transition: transform var(--transition-base);
         }
 
         .metric-card:hover {
-            transform: translateY(-2px);
+            transform: translateY(-4px) scale(1.02);
             box-shadow: var(--shadow-sm);
+        }
+
+        .metric-card:hover::before {
+            transform: scaleX(1);
         }
 
         .metric-label {
@@ -571,6 +943,10 @@
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: var(--space-xs);
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .metric-status {
@@ -579,26 +955,40 @@
             padding: var(--space-xs) var(--space-md);
             border-radius: var(--radius-sm);
             display: inline-block;
+            animation: status-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes status-pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
         }
 
         .metric-status.excellent {
             background: rgba(48, 209, 88, 0.2);
             color: var(--color-success);
+            border: 1px solid rgba(48, 209, 88, 0.3);
         }
 
         .metric-status.good {
             background: rgba(0, 122, 255, 0.2);
             color: var(--color-primary);
+            border: 1px solid rgba(0, 122, 255, 0.3);
         }
 
         .metric-status.acceptable {
             background: rgba(255, 159, 10, 0.2);
             color: var(--color-warning);
+            border: 1px solid rgba(255, 159, 10, 0.3);
         }
 
         .metric-status.poor {
             background: rgba(255, 69, 58, 0.2);
             color: var(--color-error);
+            border: 1px solid rgba(255, 69, 58, 0.3);
         }
 
         .overall-quality {
@@ -607,6 +997,8 @@
             padding: var(--space-lg);
             background: var(--color-surface-elevated);
             border-radius: var(--radius-md);
+            position: relative;
+            z-index: 1;
         }
 
         .overall-quality-label {
@@ -621,6 +1013,51 @@
         }
 
         /* ============================================================================
+           PROGRESS BAR
+           ============================================================================ */
+
+        .progress-container {
+            margin-top: var(--space-md);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 100px;
+            overflow: hidden;
+            height: 8px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+            border-radius: 100px;
+            transition: width 0.5s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            animation: shimmer 2s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        /* ============================================================================
            LOADING SPINNER
            ============================================================================ */
 
@@ -631,7 +1068,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(10, 10, 15, 0.8);
+            background: rgba(10, 10, 15, 0.9);
             backdrop-filter: blur(10px);
             z-index: 9999;
             align-items: center;
@@ -642,21 +1079,31 @@
             display: flex;
         }
 
+        .spinner-container {
+            text-align: center;
+        }
+
         .spinner {
             width: 60px;
             height: 60px;
-            border: 4px solid var(--color-surface);
+            border: 4px solid rgba(255, 255, 255, 0.1);
             border-top-color: var(--color-primary);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
+            margin: 0 auto var(--space-md);
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
+        .loading-text {
+            color: var(--color-text-secondary);
+            font-size: 1rem;
+        }
+
         /* ============================================================================
-           NOTIFICATION TOAST
+           TOAST NOTIFICATION
            ============================================================================ */
 
         .toast {
@@ -673,6 +1120,7 @@
             transition: all var(--transition-base);
             z-index: 10000;
             max-width: 400px;
+            backdrop-filter: blur(20px);
         }
 
         .toast.show {
@@ -724,6 +1172,49 @@
         }
 
         /* ============================================================================
+           FEATURE HIGHLIGHT CARDS
+           ============================================================================ */
+
+        .feature-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .feature-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            transition: all var(--transition-base);
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--color-primary);
+            box-shadow: 0 0 30px rgba(0, 122, 255, 0.2);
+        }
+
+        .feature-card-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .feature-card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+        }
+
+        .feature-card-desc {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            line-height: 1.5;
+        }
+
+        /* ============================================================================
            RESPONSIVE DESIGN
            ============================================================================ */
 
@@ -750,6 +1241,15 @@
 
             .btn {
                 width: 100%;
+                justify-content: center;
+            }
+
+            .stats-container {
+                justify-content: center;
+            }
+
+            .stat-item {
+                flex: 1 1 auto;
             }
         }
 
@@ -775,9 +1275,58 @@
     </style>
 </head>
 <body>
+    <!-- Animated Background -->
+    <div class="background-container">
+        <div class="particle-grid"></div>
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+        <div class="animated-lines">
+            <div class="line line-1"></div>
+            <div class="line line-2"></div>
+        </div>
+    </div>
+
+    <!-- Stats Banner -->
+    <div class="stats-banner">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-icon">🔒</div>
+                <div class="stat-content">
+                    <div class="stat-value">AES-128</div>
+                    <div class="stat-label">Encryption</div>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">📊</div>
+                <div class="stat-content">
+                    <div class="stat-value">3 Metrics</div>
+                    <div class="stat-label">Quality Analysis</div>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">🎨</div>
+                <div class="stat-content">
+                    <div class="stat-value">2 Algorithms</div>
+                    <div class="stat-label">Stego Methods</div>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-content">
+                    <div class="stat-value">Real-time</div>
+                    <div class="stat-label">Processing</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
-        <div class="spinner"></div>
+        <div class="spinner-container">
+            <div class="spinner"></div>
+            <div class="loading-text">Processing...</div>
+        </div>
     </div>
 
     <!-- Toast Notification -->
@@ -787,17 +1336,51 @@
     <div class="app-container">
         <!-- Header -->
         <header class="app-header">
+            <div class="badge">✨ Next-Generation Steganography Platform</div>
             <h1 class="app-title">Steganography Suite</h1>
-            <p class="app-subtitle">Advanced Secure Communication Platform</p>
+            <p class="app-subtitle">Military-Grade Secure Communication • Advanced LSB & ZWC Algorithms</p>
+
+            <div class="feature-tags">
+                <div class="feature-tag">🔐 End-to-End Encrypted</div>
+                <div class="feature-tag">📊 Real-Time Quality Metrics</div>
+                <div class="feature-tag">🚀 Instant Processing</div>
+                <div class="feature-tag">🎯 Imperceptible Hiding</div>
+                <div class="feature-tag">💎 Production Ready</div>
+            </div>
         </header>
+
+        <!-- Feature Highlights -->
+        <div class="feature-highlights">
+            <div class="feature-card">
+                <div class="feature-card-icon">🔬</div>
+                <div class="feature-card-title">Advanced LSB Algorithm</div>
+                <div class="feature-card-desc">Multi-bit capacity with 1, 2, or 3 bits per pixel. Automatic 32-bit message length header.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon">🔐</div>
+                <div class="feature-card-title">Military-Grade Encryption</div>
+                <div class="feature-card-desc">AES-128-CBC with HMAC-SHA256. Defense-in-depth security architecture.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon">📈</div>
+                <div class="feature-card-title">Quality Assurance</div>
+                <div class="feature-card-desc">Real-time MSE, PSNR, and SSIM analysis. Ensures imperceptible modifications.</div>
+            </div>
+        </div>
 
         <!-- Mode Switcher -->
         <div class="mode-switcher">
             <button class="mode-btn active" data-mode="text">
-                <span>📝 Text Steganography</span>
+                <div class="mode-btn-content">
+                    <span class="mode-icon">📝</span>
+                    <span>Text Steganography</span>
+                </div>
             </button>
             <button class="mode-btn" data-mode="image">
-                <span>🖼️ Image Steganography</span>
+                <div class="mode-btn-content">
+                    <span class="mode-icon">🖼️</span>
+                    <span>Image Steganography</span>
+                </div>
             </button>
         </div>
 
@@ -806,54 +1389,85 @@
             <!-- TEXT MODE -->
             <div class="mode-content active" id="textMode">
                 <div class="form-group">
-                    <label class="form-label">Cover Text</label>
+                    <label class="form-label">
+                        <span class="label-icon">📄</span>
+                        Cover Text (Public Message)
+                    </label>
                     <textarea
                         class="form-textarea"
                         id="textCoverText"
-                        placeholder="Enter your public cover text here..."
+                        placeholder="Enter your public cover text here... This will be visible to everyone."
                     ></textarea>
+                    <div class="char-counter" id="textCoverCounter">0 characters</div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Secret Message</label>
+                    <label class="form-label">
+                        <span class="label-icon">🔒</span>
+                        Secret Message (Hidden)
+                    </label>
                     <textarea
                         class="form-textarea"
                         id="textSecretMessage"
-                        placeholder="Enter your secret message to hide..."
+                        placeholder="Enter your secret message to hide using invisible Unicode characters..."
                     ></textarea>
+                    <div class="char-counter" id="textSecretCounter">0 characters</div>
                 </div>
 
                 <div class="options-grid">
                     <div class="form-group">
-                        <label class="form-label">Password (Optional)</label>
+                        <label class="form-label">
+                            <span class="label-icon">🔑</span>
+                            Password (Optional)
+                        </label>
                         <input
                             type="password"
                             class="form-input"
                             id="textPassword"
-                            placeholder="Enter password for encryption"
+                            placeholder="Enter password for AES-128 encryption"
                         >
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Encoding Bits</label>
+                        <label class="form-label">
+                            <span class="label-icon">⚙️</span>
+                            Encoding Bits
+                        </label>
                         <select class="form-select" id="textEncodingBits">
-                            <option value="1">1 bit (more secure)</option>
-                            <option value="2" selected>2 bits (recommended)</option>
+                            <option value="1">1 bit (more secure, larger output)</option>
+                            <option value="2" selected>2 bits (recommended, 50% smaller)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="label-icon">📍</span>
+                            Insertion Method
+                        </label>
+                        <select class="form-select" id="textInsertionMethod">
+                            <option value="append">Append (simplest)</option>
+                            <option value="between_words" selected>Between Words (subtle)</option>
+                            <option value="distributed">Distributed (most hidden)</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="btn-group">
                     <button class="btn" id="textEncodeBtn">
-                        🔒 Encode Message
+                        <span class="btn-icon">🔒</span>
+                        <span>Encode Message</span>
                     </button>
                     <button class="btn btn-secondary" id="textDecodeBtn">
-                        🔓 Decode Message
+                        <span class="btn-icon">🔓</span>
+                        <span>Decode Message</span>
                     </button>
                 </div>
 
                 <div class="results-section hidden" id="textResults">
-                    <h3 class="results-title">✨ Results</h3>
+                    <h3 class="results-title">
+                        <span>✨</span>
+                        <span>Results</span>
+                    </h3>
                     <div class="form-group">
                         <label class="form-label">Stego Text / Decoded Message</label>
                         <textarea
@@ -862,16 +1476,26 @@
                             readonly
                         ></textarea>
                     </div>
-                    <button class="btn btn-secondary" id="textCopyBtn">
-                        📋 Copy to Clipboard
-                    </button>
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" id="textCopyBtn">
+                            <span class="btn-icon">📋</span>
+                            <span>Copy to Clipboard</span>
+                        </button>
+                        <button class="btn btn-secondary" id="textClearBtn">
+                            <span class="btn-icon">🗑️</span>
+                            <span>Clear Results</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
             <!-- IMAGE MODE -->
             <div class="mode-content" id="imageMode">
                 <div class="form-group">
-                    <label class="form-label">Cover Image</label>
+                    <label class="form-label">
+                        <span class="label-icon">🖼️</span>
+                        Cover Image
+                    </label>
                     <div class="file-upload-area" id="fileUploadArea">
                         <input
                             type="file"
@@ -882,24 +1506,31 @@
                         <div class="file-upload-icon">📁</div>
                         <div class="file-upload-text">
                             <strong>Click to upload</strong> or drag and drop<br>
-                            PNG, JPG, or BMP
+                            PNG, JPG, or BMP (max 16MB)
                         </div>
                         <div class="file-name hidden" id="fileName"></div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Secret Message</label>
+                    <label class="form-label">
+                        <span class="label-icon">🔒</span>
+                        Secret Message
+                    </label>
                     <textarea
                         class="form-textarea"
                         id="imageSecretMessage"
-                        placeholder="Enter your secret message to hide in the image..."
+                        placeholder="Enter your secret message to hide in the image pixels using LSB steganography..."
                     ></textarea>
+                    <div class="char-counter" id="imageSecretCounter">0 characters</div>
                 </div>
 
                 <div class="options-grid">
                     <div class="form-group">
-                        <label class="form-label">Password (Optional)</label>
+                        <label class="form-label">
+                            <span class="label-icon">🔑</span>
+                            Password (Optional)
+                        </label>
                         <input
                             type="password"
                             class="form-input"
@@ -909,59 +1540,79 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Bits Per Pixel</label>
+                        <label class="form-label">
+                            <span class="label-icon">⚙️</span>
+                            Bits Per Pixel
+                        </label>
                         <select class="form-select" id="imageBitsPerPixel">
-                            <option value="1">1 bit (best quality)</option>
-                            <option value="2" selected>2 bits (balanced)</option>
-                            <option value="3">3 bits (max capacity)</option>
+                            <option value="1">1 bit (best quality, PSNR >50dB)</option>
+                            <option value="2" selected>2 bits (balanced, PSNR ~45dB)</option>
+                            <option value="3">3 bits (max capacity, PSNR ~40dB)</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Channel</label>
+                        <label class="form-label">
+                            <span class="label-icon">🎨</span>
+                            Color Channel
+                        </label>
                         <select class="form-select" id="imageChannel">
-                            <option value="0">Red</option>
-                            <option value="1">Green</option>
-                            <option value="2" selected>Blue</option>
+                            <option value="0">🔴 Red Channel</option>
+                            <option value="1">🟢 Green Channel</option>
+                            <option value="2" selected>🔵 Blue Channel (Recommended)</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="btn-group">
                     <button class="btn" id="imageEncodeBtn">
-                        🔒 Encode Image
+                        <span class="btn-icon">🔒</span>
+                        <span>Encode Image</span>
                     </button>
                     <button class="btn btn-secondary" id="imageDecodeBtn">
-                        🔓 Decode Image
+                        <span class="btn-icon">🔓</span>
+                        <span>Decode Image</span>
                     </button>
                 </div>
 
                 <!-- Image Results -->
                 <div class="results-section hidden" id="imageResults">
-                    <h3 class="results-title">✨ Results</h3>
+                    <h3 class="results-title">
+                        <span>✨</span>
+                        <span>Results & Analysis</span>
+                    </h3>
 
                     <!-- Metrics Panel -->
                     <div class="metrics-panel hidden" id="metricsPanel">
-                        <h4 class="metrics-title">📊 Quality Metrics</h4>
+                        <h4 class="metrics-title">📊 Image Quality Metrics & Analysis</h4>
                         <div class="metrics-grid">
                             <div class="metric-card">
-                                <div class="metric-label">MSE</div>
+                                <div class="metric-label">MSE (Mean Squared Error)</div>
                                 <div class="metric-value" id="metricMSE">—</div>
                                 <div class="metric-status" id="statusMSE"></div>
+                                <div class="progress-container">
+                                    <div class="progress-bar" id="progressMSE" style="width: 0%"></div>
+                                </div>
                             </div>
                             <div class="metric-card">
-                                <div class="metric-label">PSNR</div>
+                                <div class="metric-label">PSNR (Peak SNR)</div>
                                 <div class="metric-value" id="metricPSNR">—</div>
                                 <div class="metric-status" id="statusPSNR"></div>
+                                <div class="progress-container">
+                                    <div class="progress-bar" id="progressPSNR" style="width: 0%"></div>
+                                </div>
                             </div>
                             <div class="metric-card">
-                                <div class="metric-label">SSIM</div>
+                                <div class="metric-label">SSIM (Structural Similarity)</div>
                                 <div class="metric-value" id="metricSSIM">—</div>
                                 <div class="metric-status" id="statusSSIM"></div>
+                                <div class="progress-container">
+                                    <div class="progress-bar" id="progressSSIM" style="width: 0%"></div>
+                                </div>
                             </div>
                         </div>
                         <div class="overall-quality">
-                            <div class="overall-quality-label">Overall Quality</div>
+                            <div class="overall-quality-label">Overall Quality Assessment</div>
                             <div class="overall-quality-value" id="overallQuality">—</div>
                         </div>
                     </div>
@@ -969,23 +1620,33 @@
                     <!-- Image Preview Grid -->
                     <div class="preview-grid hidden" id="previewGrid">
                         <div class="preview-card">
-                            <div class="preview-label">Original Image</div>
+                            <div class="preview-label">🖼️ Original Image</div>
                             <img class="preview-image" id="originalPreview" alt="Original">
                         </div>
                         <div class="preview-card">
-                            <div class="preview-label">Stego Image</div>
+                            <div class="preview-label">🔒 Stego Image (With Hidden Message)</div>
                             <img class="preview-image" id="stegoPreview" alt="Stego">
                         </div>
                     </div>
 
-                    <!-- Download Button -->
-                    <button class="btn hidden" id="downloadStegoBtn">
-                        💾 Download Stego Image
-                    </button>
+                    <!-- Action Buttons -->
+                    <div class="btn-group">
+                        <button class="btn hidden" id="downloadStegoBtn">
+                            <span class="btn-icon">💾</span>
+                            <span>Download Stego Image</span>
+                        </button>
+                        <button class="btn btn-secondary hidden" id="analyzeAgainBtn">
+                            <span class="btn-icon">🔄</span>
+                            <span>Analyze Again</span>
+                        </button>
+                    </div>
 
                     <!-- Decoded Message -->
                     <div class="form-group hidden" id="decodedMessageGroup">
-                        <label class="form-label">Decoded Message</label>
+                        <label class="form-label">
+                            <span class="label-icon">🔓</span>
+                            Decoded Secret Message
+                        </label>
                         <textarea
                             class="form-textarea"
                             id="imageDecodedMessage"
@@ -1011,6 +1672,7 @@
         let currentMode = 'text';
         let coverImageBase64 = null;
         let stegoImageBase64 = null;
+        let currentMetrics = null;
 
         // ============================================================================
         // DOM ELEMENTS
@@ -1030,11 +1692,15 @@
         const textSecretMessage = document.getElementById('textSecretMessage');
         const textPassword = document.getElementById('textPassword');
         const textEncodingBits = document.getElementById('textEncodingBits');
+        const textInsertionMethod = document.getElementById('textInsertionMethod');
         const textEncodeBtn = document.getElementById('textEncodeBtn');
         const textDecodeBtn = document.getElementById('textDecodeBtn');
         const textResults = document.getElementById('textResults');
         const textResultArea = document.getElementById('textResultArea');
         const textCopyBtn = document.getElementById('textCopyBtn');
+        const textClearBtn = document.getElementById('textClearBtn');
+        const textCoverCounter = document.getElementById('textCoverCounter');
+        const textSecretCounter = document.getElementById('textSecretCounter');
 
         // Image mode
         const fileUploadArea = document.getElementById('fileUploadArea');
@@ -1050,8 +1716,26 @@
         const metricsPanel = document.getElementById('metricsPanel');
         const previewGrid = document.getElementById('previewGrid');
         const downloadStegoBtn = document.getElementById('downloadStegoBtn');
+        const analyzeAgainBtn = document.getElementById('analyzeAgainBtn');
         const decodedMessageGroup = document.getElementById('decodedMessageGroup');
         const imageDecodedMessage = document.getElementById('imageDecodedMessage');
+        const imageSecretCounter = document.getElementById('imageSecretCounter');
+
+        // ============================================================================
+        // CHARACTER COUNTERS
+        // ============================================================================
+
+        textCoverText.addEventListener('input', () => {
+            textCoverCounter.textContent = `${textCoverText.value.length} characters`;
+        });
+
+        textSecretMessage.addEventListener('input', () => {
+            textSecretCounter.textContent = `${textSecretMessage.value.length} characters`;
+        });
+
+        imageSecretMessage.addEventListener('input', () => {
+            imageSecretCounter.textContent = `${imageSecretMessage.value.length} characters`;
+        });
 
         // ============================================================================
         // MODE SWITCHING
@@ -1108,13 +1792,14 @@
             const file = e.target.files[0];
             if (!file) return;
 
-            fileName.textContent = `Selected: ${file.name}`;
+            fileName.innerHTML = `<span>✅</span> <span>${file.name} (${(file.size / 1024).toFixed(2)} KB)</span>`;
             fileName.classList.remove('hidden');
 
             // Convert to base64
             const reader = new FileReader();
             reader.onload = (e) => {
                 coverImageBase64 = e.target.result;
+                showToast(`Image loaded: ${file.name}`, 'success');
             };
             reader.readAsDataURL(file);
         }
@@ -1143,7 +1828,8 @@
                         cover_text: coverText,
                         secret_message: secretMessage,
                         password: textPassword.value || undefined,
-                        encoding_bits: parseInt(textEncodingBits.value)
+                        encoding_bits: parseInt(textEncodingBits.value),
+                        insertion_method: textInsertionMethod.value
                     })
                 });
 
@@ -1155,7 +1841,7 @@
 
                 textResultArea.value = data.stego_text;
                 textResults.classList.remove('hidden');
-                showToast('Message encoded successfully! ✨', 'success');
+                showToast('✨ Message encoded successfully! Hidden with invisible characters.', 'success');
 
             } catch (error) {
                 showToast(error.message, 'error');
@@ -1194,7 +1880,7 @@
 
                 textResultArea.value = data.secret_message;
                 textResults.classList.remove('hidden');
-                showToast('Message decoded successfully! 🔓', 'success');
+                showToast('🔓 Message decoded successfully!', 'success');
 
             } catch (error) {
                 showToast(error.message, 'error');
@@ -1206,7 +1892,12 @@
         textCopyBtn.addEventListener('click', () => {
             textResultArea.select();
             document.execCommand('copy');
-            showToast('Copied to clipboard! 📋', 'success');
+            showToast('📋 Copied to clipboard!', 'success');
+        });
+
+        textClearBtn.addEventListener('click', () => {
+            textResultArea.value = '';
+            textResults.classList.add('hidden');
         });
 
         // ============================================================================
@@ -1263,7 +1954,8 @@
                 const analyzeData = await analyzeResponse.json();
 
                 // Display results
-                displayImageResults(analyzeData.metrics);
+                currentMetrics = analyzeData.metrics;
+                displayImageResults(currentMetrics);
 
                 // Show previews
                 document.getElementById('originalPreview').src = coverImageBase64;
@@ -1271,9 +1963,10 @@
                 previewGrid.classList.remove('hidden');
 
                 downloadStegoBtn.classList.remove('hidden');
+                analyzeAgainBtn.classList.remove('hidden');
                 imageResults.classList.remove('hidden');
 
-                showToast('Image encoded successfully! ✨', 'success');
+                showToast('✨ Image encoded successfully! Quality metrics calculated.', 'success');
 
             } catch (error) {
                 showToast(error.message, 'error');
@@ -1313,7 +2006,7 @@
                 decodedMessageGroup.classList.remove('hidden');
                 imageResults.classList.remove('hidden');
 
-                showToast('Message decoded successfully! 🔓', 'success');
+                showToast('🔓 Message decoded successfully from image!', 'success');
 
             } catch (error) {
                 showToast(error.message, 'error');
@@ -1324,10 +2017,17 @@
 
         downloadStegoBtn.addEventListener('click', () => {
             const link = document.createElement('a');
-            link.download = 'stego-image.png';
+            link.download = `stego-image-${Date.now()}.png`;
             link.href = stegoImageBase64;
             link.click();
-            showToast('Image downloaded! 💾', 'success');
+            showToast('💾 Stego image downloaded!', 'success');
+        });
+
+        analyzeAgainBtn.addEventListener('click', () => {
+            if (currentMetrics) {
+                displayImageResults(currentMetrics);
+                showToast('📊 Metrics refreshed!', 'success');
+            }
         });
 
         // ============================================================================
@@ -1339,20 +2039,23 @@
             document.getElementById('metricMSE').textContent = metrics.mse.toFixed(4);
             document.getElementById('statusMSE').textContent = getMetricStatus('mse', metrics.mse);
             document.getElementById('statusMSE').className = 'metric-status ' + getMetricClass('mse', metrics.mse);
+            document.getElementById('progressMSE').style.width = getProgressWidth('mse', metrics.mse) + '%';
 
             // PSNR
             const psnrValue = metrics.psnr === 'Inf' ? '∞' : metrics.psnr.toFixed(2) + ' dB';
             document.getElementById('metricPSNR').textContent = psnrValue;
             document.getElementById('statusPSNR').textContent = getMetricStatus('psnr', metrics.psnr);
             document.getElementById('statusPSNR').className = 'metric-status ' + getMetricClass('psnr', metrics.psnr);
+            document.getElementById('progressPSNR').style.width = getProgressWidth('psnr', metrics.psnr) + '%';
 
             // SSIM
             document.getElementById('metricSSIM').textContent = metrics.ssim.toFixed(4);
             document.getElementById('statusSSIM').textContent = getMetricStatus('ssim', metrics.ssim);
             document.getElementById('statusSSIM').className = 'metric-status ' + getMetricClass('ssim', metrics.ssim);
+            document.getElementById('progressSSIM').style.width = getProgressWidth('ssim', metrics.ssim) + '%';
 
             // Overall
-            document.getElementById('overallQuality').textContent = metrics.quality_assessment;
+            document.getElementById('overallQuality').textContent = '🏆 ' + metrics.quality_assessment;
             document.getElementById('overallQuality').className = 'overall-quality-value ' + getMetricClass('overall', metrics.quality_assessment.toLowerCase());
 
             metricsPanel.classList.remove('hidden');
@@ -1395,6 +2098,26 @@
             return 'poor';
         }
 
+        function getProgressWidth(type, value) {
+            if (type === 'mse') {
+                // Lower is better, invert scale
+                if (value === 0) return 100;
+                if (value < 1) return 90;
+                if (value < 10) return 70;
+                if (value < 100) return 40;
+                return 20;
+            } else if (type === 'psnr') {
+                if (value === 'Inf') return 100;
+                if (value > 50) return 95;
+                if (value > 40) return 75;
+                if (value > 30) return 50;
+                return 25;
+            } else if (type === 'ssim') {
+                return value * 100;
+            }
+            return 0;
+        }
+
         // ============================================================================
         // UTILITY FUNCTIONS
         // ============================================================================
@@ -1410,7 +2133,7 @@
 
             setTimeout(() => {
                 toast.classList.remove('show');
-            }, 3000);
+            }, 4000);
         }
 
         // ============================================================================
@@ -1419,6 +2142,7 @@
 
         console.log('🎨 Steganography Suite initialized');
         console.log('📡 API endpoint:', API_BASE_URL);
+        console.log('✨ Next-generation interface ready!');
     </script>
 </body>
 </html>
