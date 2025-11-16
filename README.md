@@ -55,7 +55,29 @@ This project implements **seven main components**:
 pip install -r requirements.txt
 ```
 
-### Using the Web API (Easiest - D1, D2)
+### Using the Web Interface (Recommended - Easiest!)
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Start the server
+python app.py
+```
+
+Open your browser and navigate to: **http://localhost:5000**
+
+You'll see a stunning, Apple-level professional interface with:
+- ✨ Beautiful dark mode design with smooth animations
+- 🎨 Drag-and-drop file upload
+- 📊 Real-time quality metrics visualization
+- 🖼️ Side-by-side image comparison
+- 🔒 One-click encoding/decoding
+- 💾 Direct download of stego images
+
+See **[FRONTEND_GUIDE.md](FRONTEND_GUIDE.md)** for complete frontend documentation.
+
+### Using the Web API (For Developers - D1, D2)
 
 ```bash
 # Start the Flask server
@@ -130,9 +152,11 @@ Steganography/
 │   ├── metrics.py          # C: Image quality metrics (MSE, PSNR, SSIM)
 │   └── security.py         # Security module wrapper
 │
-├── Web API (D1, D2):
+├── Web API & Frontend (D1, D2, E):
 │   ├── app.py              # Flask REST API server
-│   └── test_api.py         # API validation tests
+│   ├── test_api.py         # API validation tests
+│   └── static/
+│       └── index.html      # Beautiful frontend interface
 │
 ├── Demos:
 │   ├── demo.py             # Demo: Basic ZWC steganography
@@ -144,7 +168,8 @@ Steganography/
 │   ├── USAGE_GUIDE.md      # Text steganography guide
 │   ├── IMAGE_GUIDE.md      # Image steganography guide
 │   ├── METRICS_GUIDE.md    # Quality metrics guide
-│   └── API_GUIDE.md        # Web API documentation
+│   ├── API_GUIDE.md        # Web API documentation
+│   └── FRONTEND_GUIDE.md   # Frontend interface guide
 │
 └── requirements.txt        # Python dependencies
 ```

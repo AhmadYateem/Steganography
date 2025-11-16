@@ -14,7 +14,8 @@ Endpoints:
     POST /api/analyze         - Analyze image quality metrics
 """
 
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, send_from_directory
+from flask_cors import CORS
 import base64
 import io
 import os
@@ -27,8 +28,11 @@ import image_stego
 import security
 import metrics
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
+
+# Enable CORS for all routes
+CORS(app)
 
 
 # ============================================================================
@@ -67,8 +71,14 @@ def encode_image_to_base64(image_path: str) -> str:
 
 
 # ============================================================================
-# SECTION 2: Test Route (D1)
+# SECTION 2: Frontend & Test Routes
 # ============================================================================
+
+@app.route('/')
+def index():
+    """Serve the frontend application."""
+    return send_from_directory('static', 'index.html')
+
 
 @app.route('/ping', methods=['GET'])
 def ping():
