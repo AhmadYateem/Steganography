@@ -22,16 +22,20 @@ A comprehensive implementation of steganography supporting **both text and image
 
 ## Overview
 
-This project implements **five main components**:
+This project implements **seven main components**:
 
 ### Text Steganography (A1, A2, A3)
 1. **Zero-Width Character (ZWC) Steganography** - Hide messages in invisible Unicode characters
 2. **AES Encryption** - Encrypt messages before hiding for maximum security
 3. **Secure Pipeline** - High-level API combining both for defense-in-depth
 
-### Image Steganography (B1, B2)
+### Image Steganography (B1, B2, C)
 4. **LSB (Least Significant Bit) Encoding** - Hide messages by modifying image pixels
 5. **Multi-bit Capacity** - User-controlled capacity (1, 2, or 3 bits per pixel)
+6. **Quality Metrics** - MSE, PSNR, SSIM for measuring imperceptibility
+
+### Web API (D1, D2)
+7. **Flask REST API** - HTTP endpoints for encoding, decoding, and analyzing steganography
 
 ### Why This Approach?
 
@@ -51,7 +55,36 @@ This project implements **five main components**:
 pip install -r requirements.txt
 ```
 
-### Basic Usage (Secure Mode - Recommended)
+### Using the Web API (Easiest - D1, D2)
+
+```bash
+# Start the Flask server
+python app.py
+
+# Server runs on http://localhost:5000
+```
+
+**Test with curl:**
+```bash
+# Health check
+curl http://localhost:5000/ping
+
+# Hide message in text
+curl -X POST http://localhost:5000/api/encode \
+  -H "Content-Type: application/json" \
+  -d '{
+    "algorithm": "zwc",
+    "cover_text": "Hello world",
+    "secret_message": "Secret!",
+    "password": "mypass"
+  }'
+```
+
+See **[API_GUIDE.md](API_GUIDE.md)** for complete API documentation with Python examples.
+
+### Using Python Modules Directly
+
+#### Basic Usage (Secure Mode - Recommended)
 
 ```python
 from secure_stego import secure_encode, secure_decode
@@ -89,17 +122,31 @@ message = text_stego.decode_message(stego)
 
 ```
 Steganography/
-├── text_stego.py          # A1 & A2: ZWC encoder/decoder
-├── crypto.py              # A3: Encryption module
-├── secure_stego.py        # Combined secure steganography
-├── image_stego.py         # B1 & B2: LSB image steganography
-├── demo.py                # Demo: Basic ZWC steganography
-├── demo_secure.py         # Demo: Encrypted steganography
-├── demo_image.py          # Demo: LSB image steganography
-├── requirements.txt       # Python dependencies
-├── README.md              # Complete documentation (this file)
-├── USAGE_GUIDE.md         # Quick reference for text stego
-└── IMAGE_GUIDE.md         # Complete guide for image stego
+├── Core Modules:
+│   ├── text_stego.py       # A1 & A2: ZWC encoder/decoder
+│   ├── crypto.py           # A3: Encryption module
+│   ├── secure_stego.py     # Combined secure steganography
+│   ├── image_stego.py      # B1 & B2: LSB image steganography
+│   ├── metrics.py          # C: Image quality metrics (MSE, PSNR, SSIM)
+│   └── security.py         # Security module wrapper
+│
+├── Web API (D1, D2):
+│   ├── app.py              # Flask REST API server
+│   └── test_api.py         # API validation tests
+│
+├── Demos:
+│   ├── demo.py             # Demo: Basic ZWC steganography
+│   ├── demo_secure.py      # Demo: Encrypted steganography
+│   └── demo_image.py       # Demo: LSB image steganography
+│
+├── Documentation:
+│   ├── README.md           # This file - complete overview
+│   ├── USAGE_GUIDE.md      # Text steganography guide
+│   ├── IMAGE_GUIDE.md      # Image steganography guide
+│   ├── METRICS_GUIDE.md    # Quality metrics guide
+│   └── API_GUIDE.md        # Web API documentation
+│
+└── requirements.txt        # Python dependencies
 ```
 
 ---
@@ -693,6 +740,103 @@ for method, data in results.items():
 - If steganography is **not detected**: Message remains hidden
 - If steganography **is detected**: Message is still encrypted
 - Attacker needs to **break both** encryption AND detection
+
+---
+
+## Web API (D1, D2)
+
+### Flask REST API Server
+
+The project includes a complete Flask REST API for steganography operations. This makes it easy to integrate steganography into web applications, mobile apps, or use from any programming language that can make HTTP requests.
+
+#### Available Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET    | `/ping` | Health check - verify API is running |
+| GET    | `/api/algorithms` | List all available algorithms and options |
+| POST   | `/api/encode` | Hide message in text or image |
+| POST   | `/api/decode` | Extract hidden message |
+| POST   | `/api/analyze` | Calculate image quality metrics |
+
+#### Quick Start
+
+```bash
+# Install dependencies (including Flask)
+pip install -r requirements.txt
+
+# Start the server
+python app.py
+
+# Server runs on http://localhost:5000
+```
+
+#### Example: Hide Message in Text (Python)
+
+```python
+import requests
+
+url = "http://localhost:5000/api/encode"
+
+payload = {
+    "algorithm": "zwc",
+    "cover_text": "Hello, how are you?",
+    "secret_message": "Meet at noon",
+    "password": "secretpass",
+    "encoding_bits": 2
+}
+
+response = requests.post(url, json=payload)
+result = response.json()
+
+print("Stego text:", result['stego_text'])
+print("Encrypted:", result['encrypted'])
+```
+
+#### Example: Analyze Image Quality
+
+```python
+import requests
+import base64
+
+# Read images
+with open("original.png", "rb") as f:
+    original = base64.b64encode(f.read()).decode('ascii')
+
+with open("stego.png", "rb") as f:
+    stego = base64.b64encode(f.read()).decode('ascii')
+
+# Analyze
+url = "http://localhost:5000/api/analyze"
+response = requests.post(url, json={
+    "original_image": original,
+    "stego_image": stego
+})
+
+metrics = response.json()['metrics']
+print(f"PSNR: {metrics['psnr']} dB")
+print(f"SSIM: {metrics['ssim']}")
+print(f"Quality: {metrics['quality_assessment']}")
+```
+
+#### Features
+
+- **RESTful JSON API** - Clean, standard HTTP endpoints
+- **Base64 Image Support** - Send/receive images as base64
+- **Automatic Encryption** - Optional password parameter
+- **Quality Analysis** - Built-in MSE, PSNR, SSIM metrics
+- **Error Handling** - Detailed error messages with status codes
+- **16MB File Limit** - Prevents abuse
+
+#### Documentation
+
+See **[API_GUIDE.md](API_GUIDE.md)** for:
+- Complete API documentation
+- Request/response examples
+- Error handling guide
+- Security best practices
+- Production deployment tips
+- cURL and Python examples
 
 ---
 
