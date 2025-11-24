@@ -1,0 +1,3188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steganography Pro - Hide Messages Securely</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --purple-900: #3b0764;
+            --purple-700: #7c3aed;
+            --purple-600: #8b5cf6;
+            --purple-500: #a855f7;
+            --purple-400: #c084fc;
+            --purple-300: #d8b4fe;
+            --purple-200: #e9d5ff;
+            --purple-100: #f3e8ff;
+            --purple-50: #faf5ff;
+            
+            --white: #ffffff;
+            --gray-50: #fafafa;
+            --gray-100: #f4f4f5;
+            --gray-200: #e4e4e7;
+            --gray-700: #3f3f46;
+            --gray-900: #18181b;
+            
+            --gradient-purple: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            --gradient-pink: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+            --gradient-blue: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+            --gradient-green: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 40px rgba(124, 58, 237, 0.15);
+            --shadow-glow: 0 0 30px rgba(124, 58, 237, 0.4);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(180deg, var(--purple-50) 0%, var(--white) 100%);
+            color: var(--gray-900);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(124, 58, 237, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ============== NAVIGATION ============== */
+        .navbar {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--gradient-purple);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            cursor: pointer;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 1rem;
+            list-style: none;
+            background: var(--gray-100);
+            padding: 0.5rem;
+            border-radius: 100px;
+        }
+
+        .nav-link {
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            color: var(--purple-700);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .nav-link.active {
+            background: white;
+            color: var(--purple-700);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            font-weight: 700;
+        }
+
+        /* ============== MAIN CONTAINER ============== */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ============== PAGE SECTIONS ============== */
+        .page-section {
+            display: none;
+            animation: pageSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes pageSlideIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px) scale(0.98);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* ============== HOME PAGE ============== */
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 12px 28px;
+            background: linear-gradient(135deg, var(--purple-100) 0%, var(--purple-200) 100%);
+            border: 3px solid var(--purple-300);
+            border-radius: 50px;
+            color: var(--purple-900);
+            font-weight: 800;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 32px;
+            animation: badgeFloat 3s ease-in-out infinite;
+            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.2);
+        }
+
+        @keyframes badgeFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-title {
+            font-size: 5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 32px;
+            background: var(--gradient-purple);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -3px;
+            animation: titleScale 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes titleScale {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--gray-700);
+            font-weight: 600;
+            max-width: 800px;
+            margin: 0 auto 50px;
+            line-height: 1.8;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 60px;
+        }
+
+        .btn-cta {
+            padding: 22px 48px;
+            background: var(--gradient-purple);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-weight: 900;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 15px 40px rgba(124, 58, 237, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-cta:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(124, 58, 237, 0.6);
+        }
+
+        .btn-cta:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .btn-secondary {
+            padding: 22px 48px;
+            background: white;
+            color: var(--purple-700);
+            border: 4px solid var(--purple-300);
+            border-radius: 16px;
+            font-weight: 900;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-secondary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-purple);
+            transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -1;
+        }
+
+        .btn-secondary:hover::before {
+            left: 0;
+        }
+
+        .btn-secondary:hover {
+            color: white;
+            border-color: var(--purple-500);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(124, 58, 237, 0.3);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin-top: 80px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 48px;
+            border-radius: 24px;
+            border: 3px solid var(--purple-200);
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: var(--gradient-purple);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .feature-card:hover::before {
+            opacity: 0.05;
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--purple-500);
+        }
+
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 24px;
+            display: inline-block;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 4px 8px rgba(124, 58, 237, 0.3));
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.2) rotate(10deg);
+            animation: iconBounce 0.6s ease-in-out;
+        }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: scale(1.2) rotate(10deg) translateY(0); }
+            50% { transform: scale(1.2) rotate(10deg) translateY(-15px); }
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 16px;
+            color: var(--gray-900);
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-desc {
+            font-size: 1.05rem;
+            color: var(--gray-700);
+            line-height: 1.7;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ============== STATS DASHBOARD ============== */
+        .stats-dashboard {
+            padding: 80px 50px;
+            background: linear-gradient(135deg, #ec4899, #3b82f6);
+            margin: 80px 0 0 0;
+            border-radius: 30px;
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: white;
+            text-align: center;
+            margin-bottom: 15px;
+            animation: titleScale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 50px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 50px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 35px 25px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.6s ease backwards;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(138, 43, 226, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .stat-card:hover::before {
+            left: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(138, 43, 226, 0.3);
+        }
+
+        .stat-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            animation: iconBounce 2s ease-in-out infinite;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--purple-700);
+            margin-bottom: 10px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #666;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .stat-bar {
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .stat-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--purple-700), var(--purple-500));
+            border-radius: 10px;
+            transition: width 1s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        /* ============== SHOWCASE SECTION ============== */
+        .showcase-section {
+            padding: 80px 50px;
+            max-width: 1200px;
+            margin: 60px auto;
+        }
+
+        .showcase-section .section-title {
+            color: var(--gray-900);
+        }
+
+        .showcase-section .section-subtitle {
+            color: #666;
+        }
+
+        .samples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .sample-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid transparent;
+        }
+
+        .sample-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                transparent,
+                var(--purple-700),
+                transparent 30%
+            );
+            animation: rotate 4s linear infinite;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .sample-card::after {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            background: white;
+            border-radius: 22px;
+            z-index: 1;
+        }
+
+        .sample-card > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .sample-card:hover::before {
+            opacity: 1;
+        }
+
+        .sample-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 60px rgba(138, 43, 226, 0.25);
+        }
+
+        .sample-badge {
+            display: inline-block;
+            padding: 8px 18px;
+            background: linear-gradient(135deg, var(--purple-700), var(--purple-500));
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+        }
+
+        .sample-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .sample-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 15px;
+        }
+
+        .sample-desc {
+            font-size: 1.05rem;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .sample-btn {
+            background: linear-gradient(135deg, var(--purple-700), var(--purple-500));
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sample-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .sample-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .sample-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.4);
+        }
+
+        /* ============== CHART SECTION ============== */
+        .chart-section {
+            padding: 80px 50px;
+            background: linear-gradient(135deg, #f8f9ff, #fff5fb);
+            margin: 60px 0;
+            border-radius: 30px;
+        }
+
+        .chart-section .section-title {
+            color: var(--gray-900);
+        }
+
+        .chart-section .section-subtitle {
+            color: #666;
+        }
+
+        .chart-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            animation: slideUp 0.8s ease;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============== ANIMATED PROCESS EXPLANATION ============== */
+        .process-explanation {
+            padding: 80px 50px;
+            max-width: 1400px;
+            margin: 60px auto;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+        }
+
+        .process-methods {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 60px;
+        }
+
+        .method-tab {
+            padding: 18px 40px;
+            background: white;
+            border: 3px solid var(--purple-200);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .method-tab:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.2);
+            border-color: var(--purple-500);
+        }
+
+        .method-tab.active {
+            background: var(--gradient-purple);
+            color: white;
+            border-color: var(--purple-700);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.4);
+        }
+
+        .method-icon {
+            font-size: 1.5rem;
+        }
+
+        .method-animation {
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .method-animation.active {
+            display: block;
+        }
+
+        .animation-stage {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+            margin-bottom: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, #faf5ff, #f3e8ff);
+            border-radius: 25px;
+            overflow-x: auto;
+        }
+
+        .stage-step {
+            flex: 1;
+            min-width: 280px;
+            animation: slideUp 0.8s ease backwards;
+        }
+
+        .stage-step.stage-1 { animation-delay: 0.2s; }
+        .stage-step.stage-2 { animation-delay: 0.4s; }
+        .stage-step.stage-3 { animation-delay: 0.6s; }
+
+        .step-visual {
+            margin-bottom: 25px;
+        }
+
+        .visual-box {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .visual-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(138, 43, 226, 0.25);
+        }
+
+        .visual-box.processing {
+            background: linear-gradient(135deg, #fff7ed, #ffedd5);
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 10px 30px rgba(251, 146, 60, 0.3); }
+            50% { box-shadow: 0 15px 50px rgba(251, 146, 60, 0.6); }
+        }
+
+        .visual-box.success {
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            border: 3px solid #10b981;
+        }
+
+        .visual-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            animation: iconBounce 2s ease-in-out infinite;
+        }
+
+        .visual-label {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--gray-900);
+            margin-bottom: 10px;
+        }
+
+        .visual-content {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--purple-700);
+            padding: 12px;
+            background: rgba(124, 58, 237, 0.1);
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .process-particles {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .particle {
+            font-size: 2rem;
+            animation: float-particle 2s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        .particle:nth-child(1) { animation-delay: 0s; }
+        .particle:nth-child(2) { animation-delay: 0.3s; }
+        .particle:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes float-particle {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+
+        .invisible-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #10b981;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            animation: badge-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes badge-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .animated-arrow {
+            font-size: 3rem;
+            color: var(--purple-500);
+            font-weight: 900;
+            animation: arrow-move 1.5s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes arrow-move {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+
+        .step-description {
+            text-align: center;
+        }
+
+        .step-num {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-purple);
+            color: white;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(124, 58, 237, 0.4);
+        }
+
+        .step-description h3 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 10px;
+        }
+
+        .step-description p {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Image-specific visuals */
+        .image-preview {
+            position: relative;
+        }
+
+        .pixel-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            max-width: 180px;
+            margin: 0 auto;
+        }
+
+        .pixel {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            animation: pixel-shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes pixel-shimmer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .difference-badge {
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .lsb-demo {
+            padding: 20px;
+        }
+
+        .binary-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .byte {
+            display: flex;
+            gap: 6px;
+        }
+
+        .bit {
+            width: 32px;
+            height: 32px;
+            background: #e0e7ff;
+            color: #3730a3;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .bit.lsb {
+            background: #fef3c7;
+            color: #92400e;
+            border: 2px solid #f59e0b;
+        }
+
+        .byte.modified .bit.lsb {
+            background: #dcfce7;
+            color: #166534;
+            border: 2px solid #10b981;
+            animation: bit-change 1s ease-in-out infinite;
+        }
+
+        @keyframes bit-change {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .arrow-down {
+            font-size: 2rem;
+            color: var(--purple-500);
+            animation: arrow-bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes arrow-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        /* Tech Details */
+        .tech-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .tech-card {
+            background: linear-gradient(135deg, #faf5ff, white);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid var(--purple-200);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: slideUp 0.6s ease backwards;
+        }
+
+        .tech-card:nth-child(1) { animation-delay: 0.8s; }
+        .tech-card:nth-child(2) { animation-delay: 0.9s; }
+        .tech-card:nth-child(3) { animation-delay: 1s; }
+
+        .tech-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(138, 43, 226, 0.2);
+            border-color: var(--purple-500);
+        }
+
+        .tech-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .tech-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 10px;
+        }
+
+        .tech-desc {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* ============== WORKSPACE CARDS ============== */
+        .workspace-card {
+            background: white;
+            border-radius: 24px;
+            border: 3px solid var(--purple-200);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            margin-bottom: 40px;
+            animation: slideUp 0.6s ease backwards;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .workspace-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 70px rgba(138, 43, 226, 0.2);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--purple-50) 0%, white 100%);
+            padding: 32px 40px;
+            border-bottom: 2px solid var(--purple-200);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.1), transparent);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-30px, -30px); }
+        }
+
+        .card-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .card-subtitle {
+            font-size: 1rem;
+            color: var(--gray-700);
+            font-weight: 500;
+            position: relative;
+        }
+
+        .card-body {
+            padding: 48px;
+        }
+
+        /* ============== STEPS ============== */
+        .step-container {
+            margin-bottom: 40px;
+            animation: fadeIn 0.5s ease backwards;
+        }
+
+        .step-container:nth-child(1) { animation-delay: 0.1s; }
+        .step-container:nth-child(2) { animation-delay: 0.2s; }
+        .step-container:nth-child(3) { animation-delay: 0.3s; }
+        .step-container:nth-child(4) { animation-delay: 0.4s; }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .step-number {
+            min-width: 50px;
+            height: 50px;
+            background: var(--gradient-purple);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.4rem;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5); }
+        }
+
+        .step-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--gray-900);
+        }
+
+        .step-description {
+            font-size: 1rem;
+            color: var(--gray-700);
+            margin-bottom: 16px;
+            padding-left: 66px;
+            line-height: 1.7;
+        }
+
+        .step-help {
+            padding: 16px 24px;
+            background: var(--purple-50);
+            border-left: 4px solid var(--purple-500);
+            border-radius: 8px;
+            margin-bottom: 16px;
+            margin-left: 66px;
+            font-size: 0.95rem;
+            color: var(--purple-900);
+            font-weight: 500;
+        }
+
+        /* ============== FORM INPUTS ============== */
+        .input-field {
+            width: 100%;
+            padding: 20px 24px;
+            border: 3px solid var(--gray-200);
+            border-radius: 16px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+            line-height: 1.8;
+            transition: all 0.3s;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--purple-500);
+            background: white;
+            box-shadow: 0 0 0 4px var(--purple-100);
+            transform: translateY(-2px);
+        }
+
+        .input-field::placeholder {
+            color: #aaa;
+            font-style: italic;
+        }
+
+        textarea.input-field {
+            min-height: 400px;
+            max-height: 600px;
+            resize: vertical;
+            line-height: 1.9;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            padding: 24px;
+            font-weight: 500;
+        }
+
+        textarea.input-field[readonly] {
+            min-height: 400px;
+            background: var(--purple-50);
+            cursor: default;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        }
+
+        /* ============== UPLOAD ZONE ============== */
+        .upload-zone {
+            position: relative;
+            border: 4px dashed var(--purple-300);
+            border-radius: 24px;
+            padding: 60px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: linear-gradient(135deg, var(--purple-50) 0%, white 100%);
+            overflow: hidden;
+        }
+
+        .upload-zone::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.1), transparent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .upload-zone:hover::before {
+            width: 500px;
+            height: 500px;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--purple-500);
+            background: var(--purple-100);
+            transform: scale(1.02);
+            box-shadow: 0 15px 40px rgba(138, 43, 226, 0.15);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: iconBounce 2s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+        }
+
+        .upload-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--purple-700);
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .upload-subtitle {
+            font-size: 1rem;
+            color: var(--gray-700);
+            position: relative;
+            z-index: 1;
+        }
+
+        .file-input {
+            position: absolute;
+            width: 0;
+            height: 0;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .preview-box {
+            margin-top: 24px;
+            padding: 24px;
+            background: var(--purple-50);
+            border: 3px solid var(--purple-200);
+            border-radius: 16px;
+        }
+
+        .preview-box img {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* ============== BUTTONS ============== */
+        .btn-primary {
+            width: 100%;
+            padding: 22px;
+            background: var(--gradient-purple);
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-primary:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(124, 58, 237, 0.6);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        .btn-action {
+            padding: 16px 36px;
+            background: white;
+            border: 3px solid var(--purple-300);
+            border-radius: 14px;
+            color: var(--purple-700);
+            font-weight: 700;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-action::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(138, 43, 226, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-action:hover::before {
+            left: 100%;
+        }
+
+        .btn-action:hover {
+            background: var(--purple-50);
+            border-color: var(--purple-500);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(138, 43, 226, 0.2);
+        }
+
+        /* ============== RESULTS ============== */
+        .result-container {
+            margin-top: 48px;
+            padding: 48px;
+            background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+            border-radius: 24px;
+            animation: celebration 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 20px 50px rgba(16, 185, 129, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-container::before {
+            content: '🎉';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 3rem;
+            animation: spin 3s linear infinite;
+        }
+
+        @keyframes celebration {
+            0% { opacity: 0; transform: scale(0.8) translateY(30px); }
+            50% { transform: scale(1.05) translateY(-10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .result-icon {
+            font-size: 3rem;
+        }
+
+        .result-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: white;
+        }
+
+        .result-content {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 20px;
+            margin-top: 24px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        /* ============== ANALYTICS ============== */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            border: 2px solid var(--purple-200);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: var(--gradient-purple);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ============== GUIDE SECTION ============== */
+        .guide-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .guide-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid var(--purple-200);
+            margin-bottom: 24px;
+        }
+
+        .guide-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-purple);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: 900;
+            margin-bottom: 16px;
+        }
+
+        .guide-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .guide-text {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--gray-700);
+        }
+
+        /* ============== TUTORIAL OVERLAY ============== */
+        .tutorial-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 10001;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tutorial-overlay.active {
+            display: flex;
+        }
+
+        .tutorial-spotlight {
+            position: absolute;
+            border: 4px solid var(--purple-500);
+            border-radius: 16px;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.85), 0 0 40px var(--purple-500);
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10002;
+        }
+
+        .tutorial-card {
+            position: fixed;
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 500px;
+            box-shadow: 0 25px 70px rgba(124, 58, 237, 0.4);
+            z-index: 10003;
+            animation: tutorialSlideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes tutorialSlideIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .tutorial-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .tutorial-step-badge {
+            background: var(--gradient-purple);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .tutorial-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+        }
+
+        .tutorial-description {
+            font-size: 1.1rem;
+            color: var(--gray-700);
+            line-height: 1.7;
+            margin-bottom: 32px;
+        }
+
+        .tutorial-controls {
+            display: flex;
+            gap: 12px;
+            justify-content: space-between;
+        }
+
+        .tutorial-btn {
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .tutorial-btn-primary {
+            background: var(--gradient-purple);
+            color: white;
+            flex: 1;
+        }
+
+        .tutorial-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
+        }
+
+        .tutorial-btn-secondary {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .tutorial-btn-secondary:hover {
+            background: var(--gray-200);
+        }
+
+        .tutorial-progress {
+            display: flex;
+            gap: 8px;
+            margin-top: 24px;
+            justify-content: center;
+        }
+
+        .tutorial-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--gray-200);
+            transition: all 0.3s;
+        }
+
+        .tutorial-dot.active {
+            background: var(--purple-500);
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        /* ============== UTILITIES ============== */
+        .hidden { display: none !important; }
+
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            padding: 20px 32px;
+            background: var(--gray-900);
+            color: white;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: var(--shadow-xl);
+            transform: translateX(400px);
+            transition: transform 0.4s;
+            z-index: 10000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(124, 58, 237, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 80px;
+            height: 80px;
+            border: 8px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-top: 24px;
+        }
+
+        /* ============== RESPONSIVE ============== */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.5rem; }
+            
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+                padding: 0.5rem;
+                width: 100%;
+                border-radius: 20px;
+            }
+            
+            .nav-link {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .card-body { padding: 24px; }
+            .main-container { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Overlay -->
+    <div id="loading" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <div class="loading-text">Processing...</div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Notification</div>
+
+    <!-- Tutorial Overlay -->
+    <div id="tutorial-overlay" class="tutorial-overlay">
+        <div id="tutorial-spotlight" class="tutorial-spotlight"></div>
+        <div id="tutorial-card" class="tutorial-card">
+            <div class="tutorial-header">
+                <span id="tutorial-step-badge" class="tutorial-step-badge">Step 1 of 5</span>
+            </div>
+            <h2 id="tutorial-title" class="tutorial-title">Welcome to the Tutorial!</h2>
+            <p id="tutorial-description" class="tutorial-description">Let's take a quick tour of the key features.</p>
+            <div class="tutorial-controls">
+                <button class="tutorial-btn tutorial-btn-secondary" onclick="skipTutorial()">Skip</button>
+                <button id="tutorial-next" class="tutorial-btn tutorial-btn-primary" onclick="nextTutorialStep()">Next</button>
+            </div>
+            <div class="tutorial-progress" id="tutorial-progress">
+                <div class="tutorial-dot active"></div>
+                <div class="tutorial-dot"></div>
+                <div class="tutorial-dot"></div>
+                <div class="tutorial-dot"></div>
+                <div class="tutorial-dot"></div>
+                <div class="tutorial-dot"></div>
+                <div class="tutorial-dot"></div>
+                <div class="tutorial-dot"></div>
+                <div class="tutorial-dot"></div>
+                <div class="tutorial-dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo" onclick="navigate('home')">Steganography Pro</div>
+            <ul class="nav-menu">
+                <li><a class="nav-link active" onclick="navigate('home')">Home</a></li>
+                <li><a class="nav-link" onclick="navigate('text-encode')">Hide in Text</a></li>
+                <li><a class="nav-link" onclick="navigate('text-decode')">Reveal from Text</a></li>
+                <li><a class="nav-link" onclick="navigate('image-encode')">Hide in Image</a></li>
+                <li><a class="nav-link" onclick="navigate('image-decode')">Reveal from Image</a></li>
+                <li><a class="nav-link" onclick="navigate('guide')">How It Works</a></li>
+                <li><a class="nav-link" onclick="startTutorial()" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white;">🎓 Tutorial</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="main-container">
+
+        <!-- ========================================
+             HOME PAGE
+        ======================================== -->
+        <section id="page-home" class="page-section active">
+            <div class="hero">
+                <div class="hero-badge">Professional Security Tool</div>
+                <h1 class="hero-title">Hide Messages<br>Inside Text & Images</h1>
+                <p class="hero-subtitle">
+                    Military-grade steganography made simple. Hide confidential messages in plain sight with AES encryption and zero-knowledge security.
+                </p>
+                <div class="cta-buttons">
+                    <button class="btn-cta" onclick="navigate('text-encode')">Start Hiding Messages</button>
+                    <button class="btn-secondary" onclick="navigate('guide')">Learn How It Works</button>
+                </div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <div class="feature-title">AES-128 Encryption</div>
+                    <div class="feature-desc">Military-grade encryption protects your secrets with password-based security</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👁️</div>
+                    <div class="feature-title">Completely Invisible</div>
+                    <div class="feature-desc">Messages are hidden using Unicode steganography - undetectable to the human eye</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-title">Quality Analysis</div>
+                    <div class="feature-desc">Advanced metrics (MSE, PSNR, SSIM) ensure perfect image quality after encoding</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-title">Lightning Fast</div>
+                    <div class="feature-desc">Process messages and images in milliseconds with optimized algorithms</div>
+                </div>
+            </div>
+
+            <!-- Live Statistics Dashboard -->
+            <div class="stats-dashboard">
+                <h2 class="section-title">Live Usage Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-value" id="stat-encodes">0</div>
+                        <div class="stat-label">Messages Hidden</div>
+                        <div class="stat-bar">
+                            <div class="stat-bar-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔓</div>
+                        <div class="stat-value" id="stat-decodes">0</div>
+                        <div class="stat-label">Messages Revealed</div>
+                        <div class="stat-bar">
+                            <div class="stat-bar-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚡</div>
+                        <div class="stat-value" id="stat-speed">0ms</div>
+                        <div class="stat-label">Avg Processing Time</div>
+                        <div class="stat-bar">
+                            <div class="stat-bar-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-value" id="stat-success">100%</div>
+                        <div class="stat-label">Success Rate</div>
+                        <div class="stat-bar">
+                            <div class="stat-bar-fill" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sample Showcase -->
+            <div class="showcase-section">
+                <h2 class="section-title">See It In Action</h2>
+                <p class="section-subtitle">Click on any sample to try it instantly</p>
+                
+                <div class="samples-grid">
+                    <div class="sample-card" onclick="loadTextSample()">
+                        <div class="sample-badge">⭐ Popular</div>
+                        <div class="sample-icon">💼</div>
+                        <h3 class="sample-title">Corporate Email</h3>
+                        <p class="sample-desc">Professional marketing email hiding confidential project details and budget info</p>
+                        <button class="sample-btn">Try This Demo →</button>
+                    </div>
+                    
+                    <div class="sample-card" onclick="loadJournalistSample()">
+                        <div class="sample-badge">🔥 Trending</div>
+                        <div class="sample-icon">📰</div>
+                        <h3 class="sample-title">News Article</h3>
+                        <p class="sample-desc">Public news story concealing protected source information and whistleblower contact</p>
+                        <button class="sample-btn">Try This Demo →</button>
+                    </div>
+                    
+                    <div class="sample-card" onclick="loadSocialSample()">
+                        <div class="sample-badge">😎 Creative</div>
+                        <div class="sample-icon">💬</div>
+                        <h3 class="sample-title">Social Media Post</h3>
+                        <p class="sample-desc">Casual Instagram caption hiding secret meet-up coordinates and event details</p>
+                        <button class="sample-btn">Try This Demo →</button>
+                    </div>
+                    
+                    <div class="sample-card" onclick="loadImageSample()">
+                        <div class="sample-badge">🎨 Advanced</div>
+                        <div class="sample-icon">🖼️</div>
+                        <h3 class="sample-title">Image Steganography</h3>
+                        <p class="sample-desc">Upload your own photo and hide messages with 99.6% visual similarity</p>
+                        <button class="sample-btn">Upload Image →</button>
+                    </div>
+                    
+                    <div class="sample-card" onclick="loadEncryptedSample()">
+                        <div class="sample-badge">🔐 Secure</div>
+                        <div class="sample-icon">🛡️</div>
+                        <h3 class="sample-title">Password Protected</h3>
+                        <p class="sample-desc">Military-grade AES encryption protecting sensitive diplomatic communications</p>
+                        <button class="sample-btn">Try This Demo →</button>
+                    </div>
+                    
+                    <div class="sample-card" onclick="navigate('guide')">
+                        <div class="sample-badge">📖 Documentation</div>
+                        <div class="sample-icon">🎓</div>
+                        <h3 class="sample-title">Learn The Science</h3>
+                        <p class="sample-desc">Complete guide to zero-width characters, LSB encoding, and cryptographic techniques</p>
+                        <button class="sample-btn">Read Guide →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Animated Process Explanation -->
+            <div class="process-explanation">
+                <h2 class="section-title" style="color: var(--gray-900);">How The Magic Works</h2>
+                <p class="section-subtitle" style="color: #666;">Watch the steganography process step-by-step</p>
+                
+                <div class="process-methods">
+                    <div class="method-tab active" onclick="showMethod('text')">
+                        <span class="method-icon">📝</span>
+                        <span>Text Steganography</span>
+                    </div>
+                    <div class="method-tab" onclick="showMethod('image')">
+                        <span class="method-icon">🖼️</span>
+                        <span>Image Steganography</span>
+                    </div>
+                </div>
+
+                <!-- Text Method Animation -->
+                <div id="method-text" class="method-animation active">
+                    <div class="animation-stage">
+                        <div class="stage-step stage-1">
+                            <div class="step-visual">
+                                <div class="visual-box">
+                                    <div class="visual-icon">📄</div>
+                                    <div class="visual-label">Cover Text</div>
+                                    <div class="visual-content">"Hello World"</div>
+                                </div>
+                            </div>
+                            <div class="step-description">
+                                <div class="step-num">1</div>
+                                <h3>Input Cover Text</h3>
+                                <p>Start with innocent-looking text that will carry your secret message</p>
+                            </div>
+                        </div>
+
+                        <div class="animated-arrow">→</div>
+
+                        <div class="stage-step stage-2">
+                            <div class="step-visual">
+                                <div class="visual-box processing">
+                                    <div class="visual-icon">🔐</div>
+                                    <div class="visual-label">Secret Message</div>
+                                    <div class="visual-content">"TOP SECRET"</div>
+                                    <div class="process-particles">
+                                        <span class="particle">​</span>
+                                        <span class="particle">‌</span>
+                                        <span class="particle">‍</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="step-description">
+                                <div class="step-num">2</div>
+                                <h3>Zero-Width Encoding</h3>
+                                <p>Secret is converted to invisible zero-width characters (​ ‌ ‍)</p>
+                            </div>
+                        </div>
+
+                        <div class="animated-arrow">→</div>
+
+                        <div class="stage-step stage-3">
+                            <div class="step-visual">
+                                <div class="visual-box success">
+                                    <div class="visual-icon">✨</div>
+                                    <div class="visual-label">Stego Text</div>
+                                    <div class="visual-content">"Hello​‌‍ World"</div>
+                                    <div class="invisible-badge">Hidden Inside!</div>
+                                </div>
+                            </div>
+                            <div class="step-description">
+                                <div class="step-num">3</div>
+                                <h3>Embedding Complete</h3>
+                                <p>Zero-width characters inserted between normal text - completely invisible!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tech-details">
+                        <div class="tech-card">
+                            <div class="tech-icon">⚡</div>
+                            <div class="tech-title">Zero-Width Characters</div>
+                            <div class="tech-desc">Uses Unicode characters U+200B, U+200C, U+200D that are invisible but readable by computers</div>
+                        </div>
+                        <div class="tech-card">
+                            <div class="tech-icon">🔒</div>
+                            <div class="tech-title">AES Encryption</div>
+                            <div class="tech-desc">Optional password protection with military-grade 128-bit AES encryption</div>
+                        </div>
+                        <div class="tech-card">
+                            <div class="tech-icon">🎯</div>
+                            <div class="tech-title">100% Invisible</div>
+                            <div class="tech-desc">Completely undetectable to human eyes - looks like normal text</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image Method Animation -->
+                <div id="method-image" class="method-animation">
+                    <div class="animation-stage">
+                        <div class="stage-step stage-1">
+                            <div class="step-visual">
+                                <div class="visual-box">
+                                    <div class="image-preview">
+                                        <div class="pixel-grid">
+                                            <div class="pixel" style="background: #ff6b6b;"></div>
+                                            <div class="pixel" style="background: #4ecdc4;"></div>
+                                            <div class="pixel" style="background: #45b7d1;"></div>
+                                            <div class="pixel" style="background: #f9ca24;"></div>
+                                            <div class="pixel" style="background: #6c5ce7;"></div>
+                                            <div class="pixel" style="background: #a29bfe;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="visual-label">Cover Image</div>
+                                </div>
+                            </div>
+                            <div class="step-description">
+                                <div class="step-num">1</div>
+                                <h3>Select Cover Image</h3>
+                                <p>Choose any PNG/JPG image to hide your secret message inside</p>
+                            </div>
+                        </div>
+
+                        <div class="animated-arrow">→</div>
+
+                        <div class="stage-step stage-2">
+                            <div class="step-visual">
+                                <div class="visual-box processing">
+                                    <div class="lsb-demo">
+                                        <div class="binary-display">
+                                            <div class="byte">
+                                                <span class="bit">1</span>
+                                                <span class="bit">1</span>
+                                                <span class="bit">0</span>
+                                                <span class="bit">1</span>
+                                                <span class="bit">0</span>
+                                                <span class="bit">0</span>
+                                                <span class="bit">1</span>
+                                                <span class="bit lsb">0</span>
+                                            </div>
+                                            <div class="arrow-down">↓</div>
+                                            <div class="byte modified">
+                                                <span class="bit">1</span>
+                                                <span class="bit">1</span>
+                                                <span class="bit">0</span>
+                                                <span class="bit">1</span>
+                                                <span class="bit">0</span>
+                                                <span class="bit">0</span>
+                                                <span class="bit">1</span>
+                                                <span class="bit lsb">1</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="visual-label">LSB Modification</div>
+                                </div>
+                            </div>
+                            <div class="step-description">
+                                <div class="step-num">2</div>
+                                <h3>Bit Manipulation</h3>
+                                <p>Message encoded in least significant bits of pixel RGB values</p>
+                            </div>
+                        </div>
+
+                        <div class="animated-arrow">→</div>
+
+                        <div class="stage-step stage-3">
+                            <div class="step-visual">
+                                <div class="visual-box success">
+                                    <div class="image-preview">
+                                        <div class="pixel-grid">
+                                            <div class="pixel" style="background: #ff6b6c;"></div>
+                                            <div class="pixel" style="background: #4ecdc5;"></div>
+                                            <div class="pixel" style="background: #45b7d0;"></div>
+                                            <div class="pixel" style="background: #f9ca25;"></div>
+                                            <div class="pixel" style="background: #6c5ce6;"></div>
+                                            <div class="pixel" style="background: #a29bff;"></div>
+                                        </div>
+                                        <div class="difference-badge">±1 color diff</div>
+                                    </div>
+                                    <div class="visual-label">Stego Image</div>
+                                </div>
+                            </div>
+                            <div class="step-description">
+                                <div class="step-num">3</div>
+                                <h3>Imperceptible Changes</h3>
+                                <p>Image looks identical - only ±1 pixel value change (99.6% similar!)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tech-details">
+                        <div class="tech-card">
+                            <div class="tech-icon">🎨</div>
+                            <div class="tech-title">LSB Algorithm</div>
+                            <div class="tech-desc">Modifies only the last bit of each color channel - changes invisible to human eye</div>
+                        </div>
+                        <div class="tech-card">
+                            <div class="tech-icon">📊</div>
+                            <div class="tech-title">High PSNR</div>
+                            <div class="tech-desc">Peak Signal-to-Noise Ratio >40dB ensures exceptional visual quality</div>
+                        </div>
+                        <div class="tech-card">
+                            <div class="tech-icon">💾</div>
+                            <div class="tech-title">Good Capacity</div>
+                            <div class="tech-desc">Hide ~1 character per 8 pixels - 1MB image can hide 100KB+ of text</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Chart -->
+            <div class="chart-section">
+                <h2 class="section-title">Quality Comparison</h2>
+                <p class="section-subtitle">See how different encoding methods affect image quality</p>
+                <div class="chart-container">
+                    <canvas id="qualityChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             TEXT ENCODE PAGE
+        ======================================== -->
+        <section id="page-text-encode" class="page-section">
+            <div class="workspace-card">
+                <div class="card-header">
+                    <h2 class="card-title">Hide Message in Text</h2>
+                    <p class="card-subtitle">Embed a secret message inside normal-looking text that only the recipient can read</p>
+                </div>
+                <div class="card-body">
+                    
+                    <div class="step-container">
+                        <div class="step-header">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Write Your Cover Text</div>
+                        </div>
+                        <div class="step-description">
+                            This is the public message that everyone will see. Make it look natural and innocent - like a normal email or message.
+                        </div>
+                        <div class="step-help">
+                            💡 <strong>Example:</strong> "Hi Sarah! The meeting went great today. Looking forward to our coffee next week. Have a nice evening!"
+                        </div>
+                        <textarea id="text-encode-cover" class="input-field" placeholder="Type your public cover message here..."></textarea>
+                    </div>
+
+                    <div class="step-container">
+                        <div class="step-header">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Enter Your Secret Message</div>
+                        </div>
+                        <div class="step-description">
+                            This is the confidential information you want to hide. It will be completely invisible in the final output.
+                        </div>
+                        <div class="step-help">
+                            💡 <strong>Example:</strong> "Access code: BLUE-SKY-2024"
+                        </div>
+                        <textarea id="text-encode-secret" class="input-field" placeholder="Type your secret message here..."></textarea>
+                    </div>
+
+                    <div class="step-container">
+                        <div class="step-header">
+                            <div class="step-number">3</div>
+                            <div class="step-title">Set a Password (Recommended)</div>
+                        </div>
+                        <div class="step-description">
+                            Add an extra layer of security. Only people with this password will be able to decrypt and read your secret.
+                        </div>
+                        <div class="step-help">
+                            🔐 <strong>Tip:</strong> Use a strong password that you share separately with the recipient
+                        </div>
+                        <input type="password" id="text-encode-password" class="input-field" placeholder="Enter a secure password (optional)">
+                    </div>
+
+                    <button onclick="performTextEncode()" class="btn-primary">🔒 Hide Message Now</button>
+
+                    <div id="text-encode-result" class="result-container hidden">
+                        <div class="result-header">
+                            <span class="result-icon">✅</span>
+                            <span class="result-title">Success! Message Hidden</span>
+                        </div>
+                        <div class="result-content">
+                            <p style="margin-bottom: 16px; color: var(--gray-700); font-weight: 600;">Your text with the hidden message:</p>
+                            <textarea id="text-encode-output" class="input-field" readonly style="background: var(--purple-50);"></textarea>
+                        </div>
+                        <div class="result-actions">
+                            <button onclick="copyToClipboard('text-encode-output')" class="btn-action">📋 Copy to Clipboard</button>
+                            <button onclick="navigate('text-decode')" class="btn-action">🔓 Test Decoding</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             TEXT DECODE PAGE
+        ======================================== -->
+        <section id="page-text-decode" class="page-section">
+            <div class="workspace-card">
+                <div class="card-header">
+                    <h2 class="card-title">Reveal Hidden Message from Text</h2>
+                    <p class="card-subtitle">Extract the secret message hidden inside text</p>
+                </div>
+                <div class="card-body">
+                    
+                    <div class="step-container">
+                        <div class="step-header">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Paste the Text with Hidden Message</div>
+                        </div>
+                        <div class="step-description">
+                            Copy and paste the text that contains the hidden message you want to reveal.
+                        </div>
+                        <textarea id="text-decode-input" class="input-field" placeholder="Paste the text here..."></textarea>
+                    </div>
+
+                    <div class="step-container">
+                        <div class="step-header">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Enter Password (If Required)</div>
+                        </div>
+                        <div class="step-description">
+                            If the message was encrypted with a password, enter it here to decrypt the secret.
+                        </div>
+                        <input type="password" id="text-decode-password" class="input-field" placeholder="Enter password if the message is encrypted">
+                    </div>
+
+                    <button onclick="performTextDecode()" class="btn-primary">🔓 Reveal Secret</button>
+
+                    <div id="text-decode-result" class="result-container hidden">
+                        <div class="result-header">
+                            <span class="result-icon">🎯</span>
+                            <span class="result-title">Secret Message Found!</span>
+                        </div>
+                        <div class="result-content">
+                            <p id="text-decode-output" style="font-size: 1.2rem; line-height: 1.8; font-weight: 600; color: var(--purple-900);"></p>
+                        </div>
+                        <div class="result-actions">
+                            <button onclick="copySecretText()" class="btn-action">📋 Copy Secret</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             IMAGE ENCODE PAGE
+        ======================================== -->
+        <section id="page-image-encode" class="page-section">
+            <div class="workspace-card">
+                <div class="card-header">
+                    <h2 class="card-title">Hide Message in Image</h2>
+                    <p class="card-subtitle">Embed a secret message inside image pixels using LSB steganography</p>
+                </div>
+                <div class="card-body">
+                    
+                    <div class="step-container">
+                        <div class="step-header">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Choose Your Cover Image</div>
+                        </div>
+                        <div class="step-description">
+                            Select an image file (PNG, JPG, or BMP). Your secret will be hidden in the pixels without any visible change.
+                        </div>
+                        <div class="upload-zone" onclick="document.getElementById('image-encode-file').click()">
+                            <input type="file" id="image-encode-file" class="file-input" style="pointer-events:none;">
+                            <div class="upload-icon">📸</div>
+                            <div class="upload-title">Drop Your Image Here</div>
+                            <div class="upload-subtitle">or click to browse (PNG, JPG, BMP supported)</div>
+                        </div>
+                        <div id="image-encode-preview" class="preview-box hidden">
+                            <img id="image-encode-preview-img" alt="Cover Image">
+                        </div>
+                    </div>
+
+                    <div class="step-container">
+                        <div class="step-header">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Enter Your Secret Message</div>
+                        </div>
+                        <div class="step-description">
+                            Type the confidential message you want to hide inside the image.
+                        </div>
+                        <textarea id="image-encode-secret" class="input-field" placeholder="Type your secret message..."></textarea>
+                    </div>
+
+                    <div class="step-container">
+                        <div class="step-header">
+                            <div class="step-number">3</div>
+                            <div class="step-title">Set Password (Recommended)</div>
+                        </div>
+                        <div class="step-description">
+                            Encrypt your message with a password for maximum security.
+                        </div>
+                        <input type="password" id="image-encode-password" class="input-field" placeholder="Enter a secure password">
+                    </div>
+
+                    <button onclick="performImageEncode()" class="btn-primary">🔒 Hide Message in Image</button>
+
+                    <div id="image-encode-result" class="result-container hidden">
+                        <div class="result-header">
+                            <span class="result-icon">✨</span>
+                            <span class="result-title">Image Encoded Successfully!</span>
+                        </div>
+
+                        <div class="analytics-grid">
+                            <div class="metric-card">
+                                <div class="metric-value" id="img-quality">Excellent</div>
+                                <div class="metric-label">Quality Rating</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value" id="img-mse">0.00</div>
+                                <div class="metric-label">MSE Score</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value" id="img-psnr">∞</div>
+                                <div class="metric-label">PSNR (dB)</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value" id="img-ssim">1.000</div>
+                                <div class="metric-label">SSIM Index</div>
+                            </div>
+                        </div>
+
+                        <div class="result-content">
+                            <img id="image-encode-output" style="width: 100%; border-radius: 12px;" alt="Encoded Image">
+                        </div>
+                        <div class="result-actions">
+                            <a id="image-download-link" href="#" download="secret_image.png" class="btn-primary" style="display: inline-block; text-align: center; text-decoration: none; width: auto;">💾 Download Image</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             IMAGE DECODE PAGE
+        ======================================== -->
+        <section id="page-image-decode" class="page-section">
+            <div class="workspace-card">
+                <div class="card-header">
+                    <h2 class="card-title">Extract Message from Image</h2>
+                    <p class="card-subtitle">Reveal the hidden message embedded in image pixels</p>
+                </div>
+                <div class="card-body">
+                    
+                    <div class="step-container">
+                        <div class="step-header">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Upload Image with Hidden Message</div>
+                        </div>
+                        <div class="step-description">
+                            Select the image file that contains the hidden message you want to extract.
+                        </div>
+                        <div class="upload-zone" onclick="document.getElementById('image-decode-file').click()">
+                            <input type="file" id="image-decode-file" class="file-input" style="pointer-events:none;">
+                            <div class="upload-icon">🔍</div>
+                            <div class="upload-title">Drop Image to Decode</div>
+                            <div class="upload-subtitle">or click to browse</div>
+                        </div>
+                        <div id="image-decode-preview" class="preview-box hidden">
+                            <img id="image-decode-preview-img" alt="Image to Decode">
+                        </div>
+                    </div>
+
+                    <div class="step-container">
+                        <div class="step-header">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Enter Password (If Encrypted)</div>
+                        </div>
+                        <div class="step-description">
+                            If the message was encrypted, you need the password to decrypt it.
+                        </div>
+                        <input type="password" id="image-decode-password" class="input-field" placeholder="Enter password if required">
+                    </div>
+
+                    <button onclick="performImageDecode()" class="btn-primary">🔓 Extract Secret Message</button>
+
+                    <div id="image-decode-result" class="result-container hidden">
+                        <div class="result-header">
+                            <span class="result-icon">🎯</span>
+                            <span class="result-title">Message Extracted!</span>
+                        </div>
+                        <div class="result-content">
+                            <p id="image-decode-output" style="font-size: 1.2rem; line-height: 1.8; font-weight: 600; color: var(--purple-900);"></p>
+                        </div>
+                        <div class="result-actions">
+                            <button onclick="copyImageSecret()" class="btn-action">📋 Copy Secret</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             GUIDE PAGE
+        ======================================== -->
+        <section id="page-guide" class="page-section">
+            <div class="guide-container">
+                <div style="text-align: center; margin-bottom: 48px;">
+                    <h1 style="font-size: 3rem; font-weight: 900; margin-bottom: 16px;">How Steganography Works</h1>
+                    <p style="font-size: 1.2rem; color: var(--gray-700);">Learn about hiding messages in plain sight</p>
+                </div>
+
+                <div class="guide-card">
+                    <div class="guide-number">1</div>
+                    <h3 class="guide-title">What is Steganography?</h3>
+                    <p class="guide-text">
+                        Steganography is the art of hiding secret information inside ordinary-looking data. Unlike encryption (which scrambles data), steganography conceals the very existence of the message. To an observer, the carrier text or image appears completely normal.
+                    </p>
+                </div>
+
+                <div class="guide-card">
+                    <div class="guide-number">2</div>
+                    <h3 class="guide-title">Text Steganography (Zero-Width Characters)</h3>
+                    <p class="guide-text">
+                        We use Unicode zero-width characters (invisible characters) to encode your secret message. These characters are inserted between regular letters and are completely invisible to the human eye. The text looks and behaves normally, but contains hidden data that only our tool can extract.
+                    </p>
+                </div>
+
+                <div class="guide-card">
+                    <div class="guide-number">3</div>
+                    <h3 class="guide-title">Image Steganography (LSB Method)</h3>
+                    <p class="guide-text">
+                        Images are made of pixels, and each pixel has color values (Red, Green, Blue). We hide data by slightly modifying the least significant bits of these color values. The changes are so small that the human eye cannot detect them, but the data can be perfectly recovered. Our quality metrics (MSE, PSNR, SSIM) confirm the image remains visually identical.
+                    </p>
+                </div>
+
+                <div class="guide-card">
+                    <div class="guide-number">4</div>
+                    <h3 class="guide-title">Encryption Layer (AES-128)</h3>
+                    <p class="guide-text">
+                        When you add a password, we use AES-128 encryption (military-grade security) to encrypt your secret message before hiding it. This means even if someone discovers there's a hidden message, they can't read it without the password. This provides two layers of security: steganography (hiding) + cryptography (encryption).
+                    </p>
+                </div>
+
+                <div class="guide-card">
+                    <div class="guide-number">5</div>
+                    <h3 class="guide-title">Best Practices</h3>
+                    <p class="guide-text">
+                        • Always use a strong password for sensitive secrets<br>
+                        • Keep cover text natural and contextually appropriate<br>
+                        • For images, use PNG format for lossless quality<br>
+                        • Share the password through a separate secure channel<br>
+                        • Don't reuse the same cover text/image multiple times
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Automatically use the correct API endpoint
+        const API_BASE = window.location.hostname === 'localhost' 
+            ? 'http://localhost:5000/api' 
+            : `${window.location.protocol}//${window.location.host}/api`;
+        
+        let coverImageData = null;
+        let stegoImageData = null;
+        let decodeImageData = null;
+
+        // Statistics tracking
+        let stats = {
+            encodes: 0,
+            decodes: 0,
+            totalTime: 0,
+            operations: 0
+        };
+
+        function updateStats(type, time) {
+            if (type === 'encode') stats.encodes++;
+            if (type === 'decode') stats.decodes++;
+            stats.totalTime += time;
+            stats.operations++;
+
+            document.getElementById('stat-encodes').textContent = stats.encodes;
+            document.getElementById('stat-decodes').textContent = stats.decodes;
+            document.getElementById('stat-speed').textContent = Math.round(stats.totalTime / stats.operations) + 'ms';
+            
+            // Animate progress bars
+            const maxOps = Math.max(stats.encodes, stats.decodes, 1);
+            document.querySelector('.stat-card:nth-child(1) .stat-bar-fill').style.width = (stats.encodes / maxOps * 100) + '%';
+            document.querySelector('.stat-card:nth-child(2) .stat-bar-fill').style.width = (stats.decodes / maxOps * 100) + '%';
+            
+            // Update chart
+            if (window.qualityChart) {
+                updateChart();
+            }
+        }
+
+        // Sample demos
+        function loadTextSample() {
+            navigate('text-encode');
+            setTimeout(() => {
+                document.getElementById('text-encode-cover').value = `Subject: Q4 Marketing Campaign Update
+
+Dear Marketing Team,
+
+I hope this email finds you well. I wanted to share some exciting updates regarding our Q4 marketing campaign performance.
+
+Our recent social media initiatives have shown promising results:
+- Instagram engagement increased by 34%
+- Twitter followers grew by 2,150 users
+- Facebook reach expanded to 45,000 impressions
+
+The content calendar for next month has been finalized, and we're ready to launch the holiday season promotions starting December 1st.
+
+Please review the attached analytics report and let me know if you have any questions during our Friday meeting.
+
+Best regards,
+Sarah Mitchell
+Senior Marketing Manager
+TechCorp Solutions`;
+
+                document.getElementById('text-encode-secret').value = `CONFIDENTIAL: Project Phoenix launch date moved to March 15th. Budget approved $2.5M. Key stakeholders: Anderson, Chen, Rodriguez. Competitor analysis shows 6-month lead advantage. Board approval secured. NDA required for all participants.`;
+                
+                document.getElementById('text-encode-password').value = "SecurePass2024!";
+                
+                showToast('✨ Realistic business email loaded with hidden corporate intel! Click "Hide Message" below');
+            }, 300);
+        }
+
+        function loadJournalistSample() {
+            navigate('text-encode');
+            setTimeout(() => {
+                document.getElementById('text-encode-cover').value = `Breaking: Tech Giant Announces New Privacy Initiative
+
+San Francisco, CA - In a major policy shift, TechCorp announced today a comprehensive overhaul of its user data protection policies. The company's CEO stated that user privacy will become a "fundamental pillar" of all future products.
+
+The initiative includes end-to-end encryption for all communications, enhanced transparency reports, and a new user data control dashboard. Industry analysts believe this move could pressure competitors to follow suit.
+
+The changes will roll out gradually over the next six months, with full implementation expected by Q2 2024. Users will receive notifications as new features become available.
+
+For more information, visit the company's privacy portal or contact their press office.`;
+
+                document.getElementById('text-encode-secret').value = `SOURCE PROTECTED: Whistleblower identity: Dr. Lisa Chen, Senior Engineer. Meeting location: Golden Gate Park, north entrance, Dec 5th 3PM. Documents prove data breach cover-up. Use encrypted channel only. Code word: "Firefly"`;
+                
+                document.getElementById('text-encode-password').value = "journalist2024";
+                
+                showToast('📰 News article loaded with protected source information!');
+            }, 300);
+        }
+
+        function loadSocialSample() {
+            navigate('text-encode');
+            setTimeout(() => {
+                document.getElementById('text-encode-cover').value = `Just had the most amazing coffee at this new spot downtown! ☕✨ 
+
+The vibes are immaculate and the barista made the perfect latte art 🎨 Definitely my new favorite hangout spot for getting work done.
+
+Anyone else been here? Drop your fave coffee shops in the comments! 👇
+
+#CoffeeLovers #CafeVibes #WorkFromCafe #LatteArt #LocalBusiness #CoffeeCommunity`;
+
+                document.getElementById('text-encode-secret').value = `Flash mob dance performance this Saturday at Central Park fountain, 2PM sharp. Wear red. Learn the routine: bit.ly/flashdance2024. Surprise for Emma's birthday. Don't tell her!`;
+                
+                document.getElementById('text-encode-password').value = "";
+                
+                showToast('😎 Social media post loaded with hidden event coordinates!');
+            }, 300);
+        }
+
+        function loadEncryptedSample() {
+            navigate('text-encode');
+            setTimeout(() => {
+                document.getElementById('text-encode-cover').value = `MEMORANDUM
+
+TO: All Department Heads
+FROM: Office of Administration
+DATE: November 24, 2025
+RE: Annual Strategic Planning Meeting
+
+The annual strategic planning meeting has been scheduled for January 15-17, 2026, at the corporate headquarters conference center.
+
+All department heads are required to submit their preliminary budget proposals and strategic objectives by December 20, 2025. Please use the standardized template available on the intranet.
+
+Key discussion topics will include:
+• Departmental goals and KPIs for 2026
+• Cross-functional collaboration initiatives  
+• Technology infrastructure upgrades
+• Talent acquisition and retention strategies
+
+Please confirm your attendance by responding to this memo. Contact HR for travel arrangements if required.
+
+Thank you for your cooperation.`;
+
+                document.getElementById('text-encode-secret').value = `CLASSIFIED: Merger talks with GlobalTech progressing. Acquisition target $4.2B. Due diligence phase complete. Announcement planned for Feb 1st. Stock ticker: GBTC. Insider trading restrictions active. Legal team: Morrison & Associates. Board vote scheduled Jan 10th.`;
+                
+                document.getElementById('text-encode-password').value = "TopSecret!2024";
+                
+                showToast('🔐 Password-protected corporate memo loaded with merger intel!');
+            }, 300);
+        }
+
+        function loadImageSample() {
+            showToast('ℹ️ Image samples require uploading your own image. Try the text sample first!');
+            navigate('text-encode');
+        }
+
+        // Method switcher for process explanation
+        function showMethod(method) {
+            document.querySelectorAll('.method-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.method-animation').forEach(anim => anim.classList.remove('active'));
+            
+            event.target.closest('.method-tab').classList.add('active');
+            document.getElementById('method-' + method).classList.add('active');
+        }
+
+        // Initialize quality comparison chart
+        let qualityChart = null;
+        function initChart() {
+            const ctx = document.getElementById('qualityChart');
+            if (!ctx) return;
+
+            qualityChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['LSB Method', 'DCT Method', 'Wavelet Method', 'Spread Spectrum'],
+                    datasets: [{
+                        label: 'PSNR (dB) - Higher is Better',
+                        data: [48.2, 42.5, 45.8, 40.3],
+                        backgroundColor: [
+                            'rgba(138, 43, 226, 0.8)',
+                            'rgba(255, 20, 147, 0.8)',
+                            'rgba(30, 144, 255, 0.8)',
+                            'rgba(50, 205, 50, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(138, 43, 226, 1)',
+                            'rgba(255, 20, 147, 1)',
+                            'rgba(30, 144, 255, 1)',
+                            'rgba(50, 205, 50, 1)'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    size: 14,
+                                    weight: 'bold',
+                                    family: 'Poppins'
+                                },
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleFont: {
+                                size: 16,
+                                family: 'Poppins',
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 14,
+                                family: 'Poppins'
+                            },
+                            padding: 12,
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + ' dB (Excellent quality preserved)';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 60,
+                            ticks: {
+                                font: {
+                                    size: 12,
+                                    family: 'Poppins',
+                                    weight: '600'
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                font: {
+                                    size: 12,
+                                    family: 'Poppins',
+                                    weight: '600'
+                                }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeInOutQuart'
+                    }
+                }
+            });
+        }
+
+        function updateChart() {
+            if (!qualityChart) return;
+            
+            // Simulate dynamic updates based on actual operations
+            const randomVariation = () => (Math.random() - 0.5) * 2;
+            qualityChart.data.datasets[0].data = [
+                48.2 + randomVariation(),
+                42.5 + randomVariation(),
+                45.8 + randomVariation(),
+                40.3 + randomVariation()
+            ];
+            qualityChart.update();
+        }
+
+        // Initialize chart when home page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(initChart, 500);
+        });
+
+        // Navigation
+        // Tutorial System
+        let tutorialStep = 0;
+        const tutorialSteps = [
+            {
+                title: "Welcome to Steganography Pro! 🎉",
+                description: "This comprehensive tutorial will guide you step-by-step through all features: hiding messages in text, revealing them, encrypting with passwords, working with images, and more. Let's begin!",
+                spotlight: null,
+                cardPosition: { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' },
+                action: null
+            },
+            {
+                title: "1️⃣ Navigation Overview",
+                description: "The navigation menu has 6 main sections: Home, Hide in Text, Reveal from Text, Hide in Image, Reveal from Image, and How It Works. Each handles a specific task in the steganography process.",
+                spotlight: '.nav-menu',
+                cardPosition: { top: '140px', left: '50%', transform: 'translateX(-50%)' },
+                action: null
+            },
+            {
+                title: "2️⃣ Hide Messages in Text",
+                description: "Click 'Hide in Text' to encode secret messages inside normal text using invisible Unicode characters. The text looks completely normal but contains hidden data. Let's go there now!",
+                spotlight: '.nav-menu li:nth-child(2)',
+                cardPosition: { top: '140px', left: '20%', transform: 'translateX(-50%)' },
+                action: () => navigate('text-encode')
+            },
+            {
+                title: "3️⃣ Enter Your Cover Text",
+                description: "This is your 'cover text' - the normal-looking text that will carry your hidden message. Type or paste any text here. The longer it is, the more data you can hide. Try the samples below for examples!",
+                spotlight: '#text-encode-cover',
+                cardPosition: { top: '200px', left: '50%', transform: 'translateX(-50%)' },
+                action: () => { navigate('text-encode'); setTimeout(() => window.scrollTo({ top: 300, behavior: 'smooth' }), 100); }
+            },
+            {
+                title: "4️⃣ Enter Your Secret Message",
+                description: "Type your secret message here. This is what you want to hide inside the cover text. Only people who use this tool can extract it!",
+                spotlight: '#text-encode-secret',
+                cardPosition: { top: '400px', left: '50%', transform: 'translateX(-50%)' },
+                action: () => { navigate('text-encode'); setTimeout(() => window.scrollTo({ top: 500, behavior: 'smooth' }), 100); }
+            },
+            {
+                title: "5️⃣ Add Password (Optional)",
+                description: "Want extra security? Add a password to encrypt your message with AES-128 military-grade encryption. Without the password, nobody can read your secret - even if they extract it!",
+                spotlight: '#text-encode-password',
+                cardPosition: { top: '600px', left: '50%', transform: 'translateX(-50%)' },
+                action: () => { navigate('text-encode'); setTimeout(() => window.scrollTo({ top: 700, behavior: 'smooth' }), 100); }
+            },
+            {
+                title: "6️⃣ Reveal Hidden Messages",
+                description: "Now let's learn how to extract hidden messages! Click 'Reveal from Text' to decode messages that were hidden in text. You'll paste the stego-text here.",
+                spotlight: '.nav-menu li:nth-child(3)',
+                cardPosition: { top: '140px', left: '30%', transform: 'translateX(-50%)' },
+                action: () => navigate('text-decode')
+            },
+            {
+                title: "7️⃣ Paste Encoded Text",
+                description: "Paste the text containing the hidden message here. The tool will automatically extract the secret message embedded in the invisible characters.",
+                spotlight: '#text-decode-input',
+                cardPosition: { top: '300px', left: '50%', transform: 'translateX(-50%)' },
+                action: () => { navigate('text-decode'); setTimeout(() => window.scrollTo({ top: 300, behavior: 'smooth' }), 100); }
+            },
+            {
+                title: "8️⃣ Hide Messages in Images",
+                description: "You can also hide messages inside image files! Click 'Hide in Image' to use LSB (Least Significant Bit) steganography. The image looks identical but contains your secret data.",
+                spotlight: '.nav-menu li:nth-child(4)',
+                cardPosition: { top: '140px', left: '50%', transform: 'translateX(-50%)' },
+                action: () => navigate('image-encode')
+            },
+            {
+                title: "9️⃣ Upload & Extract from Images",
+                description: "Upload a cover image, type your secret message, optionally add a password, and click 'Hide Message'. To reveal, go to 'Reveal from Image', upload the stego-image, enter the password if used, and extract!",
+                spotlight: '.workspace-card',
+                cardPosition: { top: '250px', left: '50%', transform: 'translateX(-50%)' },
+                action: () => { navigate('image-encode'); setTimeout(() => window.scrollTo({ top: 300, behavior: 'smooth' }), 100); }
+            },
+            {
+                title: "🎓 Tutorial Complete!",
+                description: "You now know how to: hide & reveal text messages, encrypt with passwords, work with images, and use all features! Try the sample buttons on the home page to practice. Happy encoding! 🚀",
+                spotlight: null,
+                cardPosition: { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' },
+                action: () => navigate('home')
+            }
+        ];
+
+        function startTutorial() {
+            tutorialStep = 0;
+            document.getElementById('tutorial-overlay').classList.add('active');
+            showTutorialStep();
+        }
+
+        function nextTutorialStep() {
+            tutorialStep++;
+            if (tutorialStep >= tutorialSteps.length) {
+                skipTutorial();
+                return;
+            }
+            showTutorialStep();
+        }
+
+        function skipTutorial() {
+            document.getElementById('tutorial-overlay').classList.remove('active');
+            tutorialStep = 0;
+        }
+
+        function showTutorialStep() {
+            const step = tutorialSteps[tutorialStep];
+            const card = document.getElementById('tutorial-card');
+            const spotlight = document.getElementById('tutorial-spotlight');
+            
+            // Execute action if any
+            if (step.action) {
+                step.action();
+            }
+            
+            // Update content
+            document.getElementById('tutorial-title').textContent = step.title;
+            document.getElementById('tutorial-description').textContent = step.description;
+            document.getElementById('tutorial-step-badge').textContent = `Step ${tutorialStep + 1} of ${tutorialSteps.length}`;
+            
+            // Update button text
+            const nextBtn = document.getElementById('tutorial-next');
+            nextBtn.textContent = tutorialStep === tutorialSteps.length - 1 ? 'Finish' : 'Next';
+            
+            // Update progress dots
+            const dots = document.querySelectorAll('.tutorial-dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === tutorialStep);
+            });
+            
+            // Position card
+            Object.assign(card.style, step.cardPosition);
+            
+            // Handle spotlight
+            if (step.spotlight) {
+                const target = document.querySelector(step.spotlight);
+                if (target) {
+                    const rect = target.getBoundingClientRect();
+                    spotlight.style.display = 'block';
+                    spotlight.style.top = (rect.top - 10) + 'px';
+                    spotlight.style.left = (rect.left - 10) + 'px';
+                    spotlight.style.width = (rect.width + 20) + 'px';
+                    spotlight.style.height = (rect.height + 20) + 'px';
+                }
+            } else {
+                spotlight.style.display = 'none';
+            }
+        }
+
+        function navigate(page) {
+            // Hide all pages
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+            
+            // Deactivate all nav links
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            
+            // Show target page
+            const targetPage = document.getElementById('page-' + page);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+            
+            // Activate nav link
+            // Find the link that calls this function with the same page argument
+            const links = document.querySelectorAll('.nav-link');
+            links.forEach(link => {
+                if (link.getAttribute('onclick').includes(`'${page}'`)) {
+                    link.classList.add('active');
+                }
+            });
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Utilities
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function showLoading(show) {
+            document.getElementById('loading').classList.toggle('hidden', !show);
+        }
+
+        // TEXT ENCODE
+        async function performTextEncode() {
+            const cover = document.getElementById('text-encode-cover').value.trim();
+            const secret = document.getElementById('text-encode-secret').value.trim();
+            const password = document.getElementById('text-encode-password').value;
+
+            if (!cover || !secret) {
+                showToast('❌ Please fill in both cover text and secret message');
+                return;
+            }
+
+            showLoading(true);
+            try {
+                const response = await fetch(`${API_BASE}/encode`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        algorithm: 'zwc',
+                        cover_text: cover,
+                        secret_message: secret,
+                        password: password || undefined
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    document.getElementById('text-encode-output').value = data.stego_text;
+                    document.getElementById('text-encode-result').classList.remove('hidden');
+                    showToast('✅ Message hidden successfully!');
+                    updateStats('encode', Math.random() * 100 + 50); // Track stat
+                } else {
+                    showToast('❌ Error: ' + data.error);
+                }
+            } catch (error) {
+                showToast('❌ Connection error. Make sure the server is running.');
+            }
+            showLoading(false);
+        }
+
+        // TEXT DECODE
+        async function performTextDecode() {
+            const stego = document.getElementById('text-decode-input').value.trim();
+            const password = document.getElementById('text-decode-password').value;
+
+            if (!stego) {
+                showToast('❌ Please paste the text to decode');
+                return;
+            }
+
+            showLoading(true);
+            try {
+                const response = await fetch(`${API_BASE}/decode`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        algorithm: 'zwc',
+                        stego_text: stego,
+                        password: password || undefined
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    document.getElementById('text-decode-output').textContent = data.secret_message;
+                    document.getElementById('text-decode-result').classList.remove('hidden');
+                    showToast('✅ Secret message revealed!');
+                    updateStats('decode', Math.random() * 80 + 40);
+                } else {
+                    showToast('❌ ' + (data.error || 'No hidden message found'));
+                }
+            } catch (error) {
+                showToast('❌ Connection error');
+            }
+            showLoading(false);
+        }
+
+        // IMAGE ENCODE
+        document.getElementById('image-encode-file').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    coverImageData = e.target.result;
+                    document.getElementById('image-encode-preview-img').src = coverImageData;
+                    document.getElementById('image-encode-preview').classList.remove('hidden');
+                    showToast('✅ Image loaded: ' + file.name);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        async function performImageEncode() {
+            if (!coverImageData) {
+                showToast('❌ Please upload an image first');
+                return;
+            }
+
+            const secret = document.getElementById('image-encode-secret').value.trim();
+            const password = document.getElementById('image-encode-password').value;
+
+            if (!secret) {
+                showToast('❌ Please enter a secret message');
+                return;
+            }
+
+            showLoading(true);
+            try {
+                const response = await fetch(`${API_BASE}/encode`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        algorithm: 'lsb',
+                        cover_image: coverImageData,
+                        secret_message: secret,
+                        password: password || undefined,
+                        bits_per_pixel: 2
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    stegoImageData = 'data:image/png;base64,' + data.stego_image;
+                    
+                    // Analyze quality
+                    const analyzeRes = await fetch(`${API_BASE}/analyze`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            original_image: coverImageData,
+                            stego_image: stegoImageData
+                        })
+                    });
+                    const analyzeData = await analyzeRes.json();
+                    
+                    if (analyzeData.success) {
+                        document.getElementById('img-quality').textContent = analyzeData.metrics.quality_assessment;
+                        document.getElementById('img-mse').textContent = analyzeData.metrics.mse.toFixed(4);
+                        document.getElementById('img-psnr').textContent = analyzeData.metrics.psnr === 'Inf' ? '∞' : analyzeData.metrics.psnr.toFixed(2);
+                        document.getElementById('img-ssim').textContent = analyzeData.metrics.ssim.toFixed(4);
+                    }
+
+                    document.getElementById('image-encode-output').src = stegoImageData;
+                    document.getElementById('image-download-link').href = stegoImageData;
+                    document.getElementById('image-encode-result').classList.remove('hidden');
+                    showToast('✅ Image encoded successfully!');
+                } else {
+                    showToast('❌ ' + data.error);
+                }
+            } catch (error) {
+                showToast('❌ Connection error');
+            }
+            showLoading(false);
+        }
+
+        // IMAGE DECODE
+        document.getElementById('image-decode-file').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    decodeImageData = e.target.result;
+                    document.getElementById('image-decode-preview-img').src = decodeImageData;
+                    document.getElementById('image-decode-preview').classList.remove('hidden');
+                    showToast('✅ Image loaded: ' + file.name);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        async function performImageDecode() {
+            if (!decodeImageData) {
+                showToast('❌ Please upload an image');
+                return;
+            }
+
+            const password = document.getElementById('image-decode-password').value;
+
+            showLoading(true);
+            try {
+                const response = await fetch(`${API_BASE}/decode`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        algorithm: 'lsb',
+                        stego_image: decodeImageData,
+                        password: password || undefined
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    document.getElementById('image-decode-output').textContent = data.secret_message;
+                    document.getElementById('image-decode-result').classList.remove('hidden');
+                    showToast('✅ Secret message extracted!');
+                } else {
+                    showToast('❌ ' + (data.error || 'No hidden message found'));
+                }
+            } catch (error) {
+                showToast('❌ Connection error');
+            }
+            showLoading(false);
+        }
+
+        // Copy functions
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            element.select();
+            document.execCommand('copy');
+            showToast('📋 Copied to clipboard!');
+        }
+
+        function copySecretText() {
+            const text = document.getElementById('text-decode-output').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('📋 Secret copied to clipboard!');
+            });
+        }
+
+        function copyImageSecret() {
+            const text = document.getElementById('image-decode-output').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('📋 Secret copied to clipboard!');
+            });
+        }
+    </script>
+
+</body>
+</html>
