@@ -1,0 +1,26 @@
+# Steganography Project Dependencies
+
+# Cryptography library for AES encryption
+cryptography>=41.0.0
+
+# Image processing for LSB steganography
+Pillow>=10.0.0
+numpy>=1.24.0
+scikit-image>=0.21.0  # For SSIM calculation (optional but recommended)
+
+# Web API framework (D1, D2)
+Flask>=3.0.0
+Flask-CORS>=4.0.0
+
+# JWT Authentication
+PyJWT>=2.8.0
+
+# Note: The following are Python standard library (no installation needed):
+# - base64
+# - hashlib
+# - os
+# - sys
+# - tempfile
+# - io
+# - sqlite3 (built-in database for PythonAnywhere compatibility)
+# - secrets (for secure token generation)

@@ -1,0 +1,251 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=magenta,citecolor=blue}
+
+\title{Steganography Pro\\Comprehensive System Report}
+\author{GitHub Copilot (GPT-5.1-Codex)}
+\date{November 26, 2025}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introduction}
+Steganography Pro is a full-stack Flask application that offers production-ready tooling for hiding and revealing messages inside text and images. The platform combines modern cryptography (AES-128/Fernet), least-significant-bit (LSB) image steganography, zero-width character (ZWC) text steganography, JWT-based authentication, rich history tracking, and a highly polished single-page frontend with dark-mode support. This report documents every subsystem, feature, limit, and implementation detail to serve as an Overleaf-ready reference for researchers, auditors, and maintainers.
+
+\section{Feature Inventory}
+\begin{itemize}[leftmargin=2.5em]
+    \item \textbf{Text Steganography}: Zero-width character strategy for cover texts up to 100{,}000 characters with optional AES encryption for hidden payloads up to 50{,}000 characters.
+    \item \textbf{Image Steganography}: Multi-format (PNG, JPG/JPEG, BMP, GIF) pipeline with automatic JPEG-to-PNG conversion, 16~MB upload cap, 4096$\times$4096 dimension ceiling, metrics (MSE/PSNR/SSIM), and password-protected payloads.
+    \item \textbf{Cryptography Layer}: AES-128 (Fernet) encryption for text and image payloads, PBKDF2 password hashing, salt management, password-strength validation, and secure token derivation.
+    \item \textbf{Authentication}: JWT access tokens (15~minutes), refresh tokens with database-backed session revocation, rate limiting, password reset scaffolding, account locking, and account deletion safeguards.
+    \item \textbf{Database}: SQLite schema (\texttt{users}, \texttt{sessions}, \texttt{operation\_history}, \texttt{password\_reset\_tokens}) with indices, JSON metadata, and per-user configuration storage.
+    \item \textbf{Frontend Experience}: SPA hero section, encode/decode workspaces, password generator + copy helpers, live character counters, drag-and-drop upload zones, limits panel, encryption visualization, speed metrics, tutorial overlay, account settings, operation history, and a detailed ``History of Steganography'' knowledge hub with dark-mode styling.
+    \item \textbf{Tooling}: PythonAnywhere deployment scripts, cross-platform start scripts, automated safe file deletion on Windows, and a requirements lockfile for Pillow, PyJWT, NumPy, and supporting libraries.
+\end{itemize}
+
+\section{System Overview}
+The system is organized around modular Python services (Figure~\ref{fig:architecture_overview}, conceptual):
+\begin{enumerate}[leftmargin=2.5em]
+    \item \textbf{API Layer} (\texttt{app.py}): Flask routes for authentication, encoding/decoding, analytics, limits, and static asset delivery.
+    \item \textbf{Domain Modules}: \texttt{text\_stego.py}, \texttt{image\_stego.py}, \texttt{crypto.py}/\texttt{security.py}, and \texttt{metrics.py} implement core algorithms.
+    \item \textbf{Persistence}: \texttt{database.py} plus \texttt{auth.py} for JWT/session coordination.
+    \item \textbf{Frontend}: \texttt{static/index.html} (HTML, CSS, vanilla JS) served as a single bundle via Flask.
+\end{enumerate}
+
+\section{Backend Architecture}
+\subsection{Frameworks and Configuration}
+\begin{itemize}[leftmargin=2.5em]
+    \item \textbf{Flask} powers routing, JSON serialization, and static serving.
+    \item \textbf{CORS}: Globally enabled with credential support to simplify local development and managed hosting.
+    \item \textbf{File Constraints}: \texttt{MAX\_CONTENT\_LENGTH} capped at 16~MB and additional per-route validations enforced via \texttt{SYSTEM\_LIMITS}.
+    \item \textbf{Safe File Handling}: \texttt{safe\_delete\_file} retries deletion with garbage-collection hints to avoid Windows \texttt{WinError~32} locks.
+\end{itemize}
+
+\subsection{Core Modules}
+\begin{description}[leftmargin=2.5em,style=nextline]
+    \item[\texttt{text\_stego.py}] Zero-width character encoding/decoding, input validation, and capacity calculations.
+    \item[\texttt{image\_stego.py}] Pillow-powered loaders, format normalization (JPEG~$\rightarrow$~PNG), LSB embedding/extraction, input sanitization, and temporary-file lifecycle management.
+    \item[\texttt{metrics.py}] Quality metrics (MSE, PSNR, SSIM) with recommendations. Uses NumPy and scikit-image (when available) for accuracy.
+    \item[\texttt{crypto.py}/\texttt{security.py}] Fernet (AES-128-CBC + HMAC) encryption helpers, password hashing, key derivation, random password generation, and metadata introspection.
+    \item[\texttt{auth.py}] JWT generation/verification, decorators (\texttt{jwt\_required}, \texttt{jwt\_optional}), refresh-token workflows, rate limiting, blacklist support, and device/IP logging.
+    \item[\texttt{database.py}] Schema initialization and manager classes for users, sessions, history entries, and password-reset tokens.
+\end{description}
+
+\section{Database and Persistence}
+\subsection{Schema}
+\begin{itemize}[leftmargin=2.5em]
+    \item \textbf{Users}: Username/email uniqueness, salted PBKDF2 hashes, lockout metadata, JSON settings, optional profile picture path.
+    \item \textbf{Sessions}: Refresh tokens tied to devices/IPs with explicit expiry and soft revocation flags.
+    \item \textbf{Operation History}: Records algorithm type (ZWC/LSB), payload previews, encryption flag, arbitrary metadata JSON, and timestamps per user.
+    \item \textbf{Password Reset Tokens}: Expiring, single-use tokens enabling future recovery flows.
+    \item \textbf{Indices}: Strategic indexing on usernames, emails, refresh tokens, user foreign keys, and timestamps for analytics-heavy queries.
+\end{itemize}
+
+\subsection{Managers}
+\begin{description}[leftmargin=2.5em,style=nextline]
+    \item[\textbf{UserManager}] Input validation (length, character sets, password complexity), account creation, authentication with lockouts (5 failed attempts, 15-minute cooldown), password updates, and deletion with password confirmation.
+    \item[\textbf{SessionManager}] Refresh token issuance, validation, rotation, revocation, and cleanup of expired entries.
+    \item[\textbf{HistoryManager}] CRUD utilities for operation history, supporting per-user stats and purging.
+\end{description}
+
+\section{Security, Authentication, and Authorization}
+\subsection{JWT and Session Strategy}
+\begin{itemize}[leftmargin=2.5em]
+    \item \textbf{Access Tokens}: Signed with \texttt{JWT\_SECRET\_KEY}; short-lived for API access.
+    \item \textbf{Refresh Tokens}: Stored server-side (\texttt{sessions} table) for rotation and revocation; tied to device metadata and IP addresses.
+    \item \textbf{Decorators}: \texttt{@jwt\_required} enforces authenticated routes; \texttt{@jwt\_optional} provides user context without blocking public operations.
+\end{itemize}
+
+\subsection{Account Protections}
+\begin{itemize}[leftmargin=2.5em]
+    \item Password complexity (upper, lower, digit, special), length bounds (8--128), and PBKDF2 hashing with per-user salt.
+    \item Lockouts after five failed attempts, with automatic unlock after 15 minutes.
+    \item Rate limiting: encode/decode (30 req/min), auth actions (10 req/min), and refresh (30 req/min).
+    \item Password change and account deletion endpoints demand password confirmation.
+\end{itemize}
+
+\section{Steganography Engines}
+\subsection{Text (Zero-Width Characters)}
+\begin{enumerate}[leftmargin=2.5em]
+    \item Validate cover and secret lengths against \texttt{SYSTEM\_LIMITS}.
+    \item Optionally encrypt the secret via AES-128 before encoding.
+    \item Map bits to zero-width characters (e.g., \texttt{\textbackslash u200b}, \texttt{\textbackslash u200c}) inserted between cover characters.
+    \item Record previews and metadata (encryption flag, algorithm) in history.
+\end{enumerate}
+
+\subsection{Image (Least Significant Bit)}
+\begin{enumerate}[leftmargin=2.5em]
+    \item Accept PNG/JPG/JPEG/BMP/GIF uploads up to 16~MB, auto-converting JPEG inputs to PNG outputs to preserve hidden data.
+    \item Validate dimensions (10--4096 px). Compute theoretical capacity to inform UX messaging.
+    \item Embed encrypted or plain payload bits across RGB channels with configurable bits-per-pixel (default~2).
+    \item Produce base64 PNG output for instant downloads and follow-up decoding.
+    \item Post-process with \texttt{metrics.calculate\_metrics\_summary} to present MSE/PSNR/SSIM in the UI.
+\end{enumerate}
+
+\section{Cryptography Layer}
+\begin{itemize}[leftmargin=2.5em]
+    \item \textbf{Fernet (AES-128-CBC + HMAC SHA-256)} ensures confidentiality and integrity for payloads derived from user passwords.
+    \item \textbf{Key Derivation}: PBKDF2 (100{,}000 iterations) to derive symmetric keys from passwords.
+    \item \textbf{Password Utilities}: Random generator (16-character mix), strength validator reused server-side and exposed via frontend helper buttons.
+    \item \textbf{Metadata}: \texttt{security.get\_encryption\_info} surfaces algorithm descriptors for audit logging.
+\end{itemize}
+
+\section{API Surface}
+Table~\ref{tab:api_endpoints} captures the primary endpoints.
+
+\setlength{\extrarowheight}{4pt}
+\begin{longtable}{>{\raggedright}p{2.5cm}>{\raggedright}p{5.5cm}>{\raggedright\arraybackslash}p{6cm}}
+    \caption{REST API Endpoints}\label{tab:api_endpoints}\\
+    \textbf{Method} & \textbf{Path} & \textbf{Purpose} \\\hline
+    GET & /ping & Health check with feature flags and version info. \\
+    GET & /api/limits & Returns \texttt{SYSTEM\_LIMITS} plus UX recommendations. \\
+    POST & /api/encode & Handles both ZWC and LSB encoding (payload fields determine mode). \\
+    POST & /api/decode & Performs symmetric decoding based on payload type. \\
+    POST & /api/analyze & Computes MSE/PSNR/SSIM for two images. \\
+    GET & /api/algorithms & Lists available steganography strategies. \\
+    POST & /api/auth/signup & Creates user, issues JWT + refresh token. \\
+    POST & /api/auth/login & Authenticates credentials, rotates tokens. \\
+    POST & /api/auth/refresh & Exchanges refresh token for new access token. \\
+    POST & /api/auth/logout & Invalidates refresh token session. \\
+    GET & /api/auth/me & Returns profile metadata for current user. \\
+    PUT & /api/auth/password & Updates password after verifying current credential. \\
+    DELETE & /api/auth/account & Deletes account after password confirmation. \\
+    GET & /api/history & Paginates per-user operation history. \\
+    GET & /api/history/stats & Aggregates counts (encodes/decodes/encrypted). \\
+    DELETE & /api/history/:id & Removes a single history entry. \\
+    DELETE & /api/history & Purges all entries for the user. \\
+\end{longtable}
+
+\section{Frontend Architecture and UX}
+\subsection{Single-Page Layout}
+The entire interface resides in \texttt{static/index.html}, structured into semantic sections:
+\begin{itemize}[leftmargin=2.5em]
+    \item Hero + CTA, feature grid, stats dashboard.
+    \item Text Encode/Decode workspaces with step-by-step instructions, sample hints, and live character counters (cover:~100{,}000, secret:~50{,}000).
+    \item Image Encode/Decode cards with drag-and-drop upload zones, previews, metric cards, and password helpers.
+    \item Account Settings (profile summary, password change flow, danger zone).
+    \item Operation History panel and educational ``How It Works'' guide.
+    \item ``History of Steganography'' knowledge section: timeline, famous cases, steganalysis techniques, modern methods, fun facts, and educational imagery callouts.
+\end{itemize}
+
+\subsection{Theme System}
+\begin{itemize}[leftmargin=2.5em]
+    \item CSS custom properties define light/dark color palettes (background layers, text tokens, gradients, borders).
+    \item Theme toggle button in the navbar persists preference to \texttt{localStorage} and honors \texttt{prefers-color-scheme} on first load.
+    \item All components (cards, inputs, dropdowns, upload zones, modals) include explicit dark-mode overrides for parity.
+\end{itemize}
+
+\subsection{Interactive Enhancements}
+\begin{itemize}[leftmargin=2.5em]
+    \item \textbf{Password Generator}: Random 16-character passwords with animation feedback and clipboard copy button across text/image workflows.
+    \item \textbf{Real-Time Speed Metrics}: After every encode/decode, a metrics ribbon shows processing time, input/output size (human-readable), and encryption status badge.
+    \item \textbf{Encryption Visualization}: When passwords are used, an AES-128 visualization animates 10~rounds with an updating progress bar and operation labels (AddKey, SubBytes, ShiftRows, MixColumns, Final).
+    \item \textbf{Upload UX}: Animated dashed drop zones, icon bounce, gradient backgrounds, and preview containers with persistent theming.
+    \item \textbf{Character Counters}: Warn/error states as limits approach or exceed thresholds.
+    \item \textbf{Tutorial Overlay}: Spotlight-based walkthrough with blurred backdrop and progress controls.
+    \item \textbf{History Timeline}: Educational cards describing ancient to modern steganography use cases, steganalysis attacks, and modern channel categories (image/audio/text/network).
+\end{itemize}
+
+\section{Operational Limits and Validation}
+\begin{itemize}[leftmargin=2.5em]
+    \item Text cover limit: 100{,}000 characters; secret limit: 50{,}000 characters.
+    \item Image uploads: 16~MB, 10--4096 px, formats (PNG, JPG, JPEG, BMP, GIF). JPEG inputs are re-encoded to PNG for safe output.
+    \item History cap: 100 entries per user with UI actions to refresh or clear.
+    \item Rate limits: encode/decode 30/min, auth actions 10/min, refresh 30/min.
+    \item Password enforcement: 8--128 characters, uppercase, lowercase, digit, symbol, validated both server- and client-side.
+\end{itemize}
+
+\section{User Journeys}
+\subsection{Authentication Flow}
+\begin{enumerate}[leftmargin=2.5em]
+    \item User signs up via modal; backend validates credentials, stores salted hash, issues access + refresh tokens, and records session metadata.
+    \item Login uses username/email plus password; failed attempts increment counters and may trigger lockouts.
+    \item Refresh tokens rotate via \texttt{/api/auth/refresh}; logout invalidates session records.
+    \item Account settings allow password rotations and irreversible deletion (with confirmation).
+\end{enumerate}
+
+\subsection{Text Steganography Flow}
+\begin{enumerate}[leftmargin=2.5em]
+    \item Author provides cover text, secret, and optional password.
+    \item UI enforces limits, offers password generation, and shows encryption visualization when applicable.
+    \item Backend (\texttt{text\_stego}) embeds encrypted payload via zero-width characters.
+    \item Result view exposes stego text, copy action, navigation to decode, and speed metrics.
+\end{enumerate}
+
+\subsection{Image Steganography Flow}
+\begin{enumerate}[leftmargin=2.5em]
+    \item User uploads image (drag/drop), enters secret, optionally uses password helper.
+    \item System validates format/size, shows encryption animation (if password provided), and processes request through LSB algorithm.
+    \item Metrics grid displays MSE/PSNR/SSIM quality assessment; download link offers PNG stego output.
+    \item Decode workspace mirrors process with preview, password input, speed metrics, and copy-friendly results.
+\end{enumerate}
+
+\subsection{History and Education}
+\begin{itemize}[leftmargin=2.5em]
+    \item Authenticated users see operation history with badges (text/image, encrypted/plain) and inline delete buttons.
+    \item Stats cards show totals, encodes, decodes, and encrypted counts.
+    \item Dedicated ``History of Steganography'' section educates users on historic cases, famous attacks, steganalysis techniques, modern channels, and pop-culture facts.
+\end{itemize}
+
+\section{Metrics and Logging}
+\begin{itemize}[leftmargin=2.5em]
+    \item Frontend captures elapsed time via \texttt{performance.now()} and renders metrics ribbons alongside results.
+    \item Backend history entries store algorithm, encryption status, previews, and timestamps, enabling audit-ready exports.
+    \item Image metrics (MSE/PSNR/SSIM) provide quantitative assurances regarding imperceptibility.
+\end{itemize}
+
+\section{Deployment and Tooling}
+\begin{itemize}[leftmargin=2.5em]
+    \item \textbf{Requirements}: \texttt{requirements.txt} lists Pillow, NumPy, PyJWT, Flask, Flask-CORS, scikit-image (optional), cryptography, and supporting packages.
+    \item \textbf{Start Scripts}: \texttt{start.sh}, \texttt{start.bat}, \texttt{setup\_pythonanywhere.sh}, and \texttt{wsgi.py} streamline local and hosted deployments.
+    \item \textbf{Instance Folder}: Database resides in \texttt{instance/steganography.db} for compatibility with PythonAnywhere and Flask's default patterns.
+\end{itemize}
+
+\section{Testing and Quality Assurance}
+\begin{itemize}[leftmargin=2.5em]
+    \item \texttt{test\_auth.py} and \texttt{test\_api.py} provide scaffolded tests for authentication workflows and encode/decode routes.
+    \item Manual QA reinforced through frontend instrumentation (speed metrics, encryption viz) and backend history logging.
+\end{itemize}
+
+\section{Future Enhancements}
+\begin{itemize}[leftmargin=2.5em]
+    \item Implement password reset email delivery using existing token table.
+    \item Add per-user storage quotas and search/filtering for operation history.
+    \item Expand steganography algorithms (audio, video) leveraging existing architecture.
+    \item Integrate WebAuthn or TOTP for multi-factor authentication.
+    \item Automate test suite execution via CI pipeline (GitHub Actions) with coverage reporting.
+\end{itemize}
+
+\section{Conclusion}
+This report captures every layer of Steganography Pro---from cryptographic primitives and database schema to UX flourishes such as theme toggles, password generators, real-time metrics, and educational content. The system balances ease of use with rigorous security controls, paving the way for both research experimentation and production deployments.\medskip
+
+For additional context, refer directly to the annotated source files mentioned throughout: \texttt{app.py}, \texttt{auth.py}, \texttt{database.py}, \texttt{text\_stego.py}, \texttt{image\_stego.py}, \texttt{metrics.py}, \texttt{crypto.py}, \texttt{security.py}, and \texttt{static/index.html}.
+
+\end{document}
