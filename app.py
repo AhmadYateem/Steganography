@@ -210,6 +210,20 @@ def index():
     return send_from_directory('static', 'index.html')
 
 
+@app.route('/<path:filename>')
+def serve_static(filename):
+    """Serve static files (CSS, JS, etc.)."""
+    # Only serve files that don't conflict with API routes
+    if not filename.startswith('api/') and not filename.startswith('ping'):
+        try:
+            return send_from_directory('static', filename)
+        except:
+            pass
+    # If file not found or is API route, return 404
+    from flask import abort
+    abort(404)
+
+
 @app.route('/ping', methods=['GET'])
 def ping():
     """
@@ -1193,6 +1207,322 @@ def analyze_image():
         return error_response(str(e), 400)
     except Exception as e:
         return error_response(f"Analysis failed: {str(e)}", 500)
+
+
+# ============================================================================
+# SECTION 6.5: AI Chatbot Endpoint
+# ============================================================================
+
+@app.route('/api/chatbot', methods=['POST'])
+@rate_limit(limit=20, window=60)  # 20 messages per minute
+def chatbot():
+    """
+    AI chatbot endpoint for steganography questions.
+
+    Request JSON:
+        {
+            "message": "User's question",
+            "conversation_history": [  // optional
+                {"role": "user", "content": "previous question"},
+                {"role": "assistant", "content": "previous answer"}
+            ]
+        }
+
+    Returns:
+        JSON: AI response
+    """
+    try:
+        from chatbot_ai import get_chatbot
+
+        data = request.get_json()
+
+        if not data:
+            return error_response("No data provided", 400, "INVALID_REQUEST")
+
+        user_message = data.get('message', '').strip()
+
+        if not user_message:
+            return error_response("'message' is required", 400, "MISSING_FIELD")
+
+        if len(user_message) > 500:
+            return error_response("Message too long (max 500 characters)", 400, "MESSAGE_TOO_LONG")
+
+        # Get conversation history if provided
+        conversation_history = data.get('conversation_history', [])
+
+        # Get AI chatbot instance
+        bot = get_chatbot()
+
+        # Get AI response
+        response = bot.chat(user_message, conversation_history)
+
+        return success_response({
+            'response': response,
+            'model': 'AI-powered'
+        }, message="Response generated successfully")
+
+    except Exception as e:
+        # Return fallback response instead of failing completely
+        return success_response({
+            'response': "I'm having trouble connecting right now. Please ask about: steganography basics, ZWC, LSB, encryption, or how to use this app.",
+            'model': 'fallback',
+            'error': str(e)
+        }, message="Using fallback response")
+
+
+# ============================================================================
+# SECTION 6.6: Advanced Features Endpoints
+# ============================================================================
+
+# Import advanced features
+from features import (
+    ChallengeManager, StegoDetector, BurnAfterReading, MultiFileStego
+)
+
+# Initialize default challenges
+try:
+    ChallengeManager.init_default_challenges()
+except:
+    pass
+
+
+@app.route('/api/challenges', methods=['GET'])
+def get_challenges():
+    """Get list of steganography challenges."""
+    try:
+        difficulty = request.args.get('difficulty')
+        challenges = ChallengeManager.get_challenges(difficulty)
+        return success_response({'challenges': challenges})
+    except Exception as e:
+        return error_response(f"Failed to get challenges: {str(e)}", 500)
+
+
+@app.route('/api/challenges/<int:challenge_id>', methods=['GET'])
+def get_challenge(challenge_id):
+    """Get specific challenge details."""
+    try:
+        challenge = ChallengeManager.get_challenge(challenge_id)
+        if not challenge:
+            return error_response("Challenge not found", 404)
+        return success_response({'challenge': challenge})
+    except Exception as e:
+        return error_response(f"Failed to get challenge: {str(e)}", 500)
+
+
+@app.route('/api/challenges/<int:challenge_id>/solve', methods=['POST'])
+@jwt_optional
+def solve_challenge(challenge_id):
+    """Submit solution to a challenge."""
+    try:
+        data = request.get_json()
+        solution = data.get('solution', '').strip()
+        start_time = data.get('start_time')
+
+        if not solution:
+            return error_response("Solution is required", 400)
+
+        user_id = get_current_user_id()
+        success, message, points = ChallengeManager.submit_solution(
+            challenge_id, solution, user_id, start_time
+        )
+
+        return jsonify({
+            'success': success,
+            'message': message,
+            'points': points,
+            'correct': success
+        })
+    except Exception as e:
+        return error_response(f"Failed to submit solution: {str(e)}", 500)
+
+
+@app.route('/api/detect/image', methods=['POST'])
+@rate_limit(limit=10, window=60)
+def detect_image_stego():
+    """Detect steganography in image."""
+    try:
+        data = request.get_json()
+        image_b64 = data.get('image')
+
+        if not image_b64:
+            return error_response("Image data required", 400)
+
+        image_data = decode_base64_image(image_b64)
+        analysis = StegoDetector.analyze_image(image_data)
+
+        return success_response({
+            'analysis': analysis
+        }, message="Image analyzed successfully")
+    except Exception as e:
+        return error_response(f"Detection failed: {str(e)}", 500)
+
+
+@app.route('/api/detect/text', methods=['POST'])
+@rate_limit(limit=10, window=60)
+def detect_text_stego():
+    """Detect steganography in text."""
+    try:
+        data = request.get_json()
+        text = data.get('text', '')
+
+        if not text:
+            return error_response("Text is required", 400)
+
+        analysis = StegoDetector.analyze_text(text)
+
+        return success_response({
+            'analysis': analysis
+        }, message="Text analyzed successfully")
+    except Exception as e:
+        return error_response(f"Detection failed: {str(e)}", 500)
+
+
+@app.route('/api/burn/create', methods=['POST'])
+@jwt_optional
+def create_burn_message():
+    """Create self-destructing message."""
+    try:
+        data = request.get_json()
+
+        stego_data = data.get('stego_data')
+        algorithm = data.get('algorithm')
+        password = data.get('password')
+        parameters = data.get('parameters', {})
+        max_views = data.get('max_views', 1)
+        expire_hours = data.get('expire_hours', 24)
+
+        if not stego_data or not algorithm:
+            return error_response("Stego data and algorithm required", 400)
+
+        burn_id = BurnAfterReading.create_burn_message(
+            stego_data, algorithm, password, parameters,
+            max_views, expire_hours
+        )
+
+        burn_url = f"{request.host_url}burn/{burn_id}"
+
+        return success_response({
+            'burn_id': burn_id,
+            'burn_url': burn_url,
+            'max_views': max_views,
+            'expires_in_hours': expire_hours
+        }, message="Burn message created successfully")
+    except Exception as e:
+        return error_response(f"Failed to create burn message: {str(e)}", 500)
+
+
+@app.route('/api/burn/<burn_id>', methods=['GET'])
+def get_burn_message(burn_id):
+    """Get and potentially burn a message."""
+    try:
+        success, result, metadata = BurnAfterReading.get_burn_message(burn_id)
+
+        if not success:
+            return error_response(result, 404 if 'not found' in result.lower() else 410)
+
+        return success_response({
+            'stego_data': result,
+            **metadata
+        }, message="Message retrieved" + (" and burned" if metadata.get('will_burn') else ""))
+    except Exception as e:
+        return error_response(f"Failed to get burn message: {str(e)}", 500)
+
+
+@app.route('/api/multi-encode', methods=['POST'])
+@jwt_optional
+@rate_limit(limit=5, window=60)
+def multi_file_encode():
+    """Encode secret across multiple files."""
+    try:
+        data = request.get_json()
+
+        secret_message = data.get('secret_message')
+        num_parts = data.get('num_parts', 3)
+        cover_images = data.get('cover_images', [])
+
+        if not secret_message:
+            return error_response("Secret message required", 400)
+
+        if num_parts < 2 or num_parts > 10:
+            return error_response("Number of parts must be between 2 and 10", 400)
+
+        if len(cover_images) < num_parts:
+            return error_response(f"Need {num_parts} cover images", 400)
+
+        # Split secret
+        secret_parts = MultiFileStego.split_secret(secret_message, num_parts)
+
+        # Encode each part into an image
+        stego_images = []
+        for i, (part, cover_b64) in enumerate(zip(secret_parts, cover_images[:num_parts])):
+            cover_data = decode_base64_image(cover_b64)
+
+            with tempfile.NamedTemporaryFile(suffix='.png', delete=False) as cover_temp:
+                cover_temp.write(cover_data)
+                cover_temp_path = cover_temp.name
+
+            stego_temp_path = tempfile.mktemp(suffix='.png')
+
+            try:
+                image_stego.encode_lsb(cover_temp_path, part, stego_temp_path)
+                stego_b64 = encode_image_to_base64(stego_temp_path)
+                stego_images.append({
+                    'part_number': i + 1,
+                    'stego_image': stego_b64
+                })
+            finally:
+                safe_delete_file(cover_temp_path)
+                safe_delete_file(stego_temp_path)
+
+        return success_response({
+            'stego_images': stego_images,
+            'total_parts': num_parts,
+            'message': f'Secret split into {num_parts} parts. ALL parts needed to decode.'
+        }, message="Multi-file encoding successful")
+    except Exception as e:
+        return error_response(f"Multi-file encoding failed: {str(e)}", 500)
+
+
+@app.route('/api/multi-decode', methods=['POST'])
+@jwt_optional
+@rate_limit(limit=5, window=60)
+def multi_file_decode():
+    """Decode secret from multiple files."""
+    try:
+        data = request.get_json()
+        stego_images = data.get('stego_images', [])
+
+        if len(stego_images) < 2:
+            return error_response("Need at least 2 stego images", 400)
+
+        # Decode each part
+        parts = []
+        for img_data in stego_images:
+            image_b64 = img_data.get('image')
+            if not image_b64:
+                continue
+
+            image_data = decode_base64_image(image_b64)
+
+            with tempfile.NamedTemporaryFile(suffix='.png', delete=False) as stego_temp:
+                stego_temp.write(image_data)
+                stego_temp_path = stego_temp.name
+
+            try:
+                decoded_part = image_stego.decode_lsb(stego_temp_path)
+                parts.append(decoded_part)
+            finally:
+                safe_delete_file(stego_temp_path)
+
+        # Combine parts
+        secret_message = MultiFileStego.combine_secrets(parts)
+
+        return success_response({
+            'secret_message': secret_message,
+            'parts_used': len(parts)
+        }, message="Secret successfully reconstructed from multiple files")
+    except Exception as e:
+        return error_response(f"Multi-file decoding failed: {str(e)}", 500)
 
 
 # ============================================================================

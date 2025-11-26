@@ -19,8 +19,9 @@ from functools import wraps
 from flask import request, jsonify, g
 
 # JWT Configuration
-# Generate a secret key for production or use environment variable
-JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', secrets.token_hex(32))
+# Use a fixed secret key for development, or use environment variable for production
+# WARNING: In production, always use a secure environment variable!
+JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'dev-secret-key-change-in-production-12345678901234567890')
 JWT_ALGORITHM = 'HS256'
 ACCESS_TOKEN_EXPIRY_MINUTES = 15
 REFRESH_TOKEN_EXPIRY_DAYS = 30
@@ -63,7 +64,8 @@ class JWTManager:
         """
         now = datetime.now(timezone.utc)
         payload = {
-            'sub': user_id,
+            'sub': str(user_id),  # JWT standard requires 'sub' to be a string
+            'user_id': user_id,   # Keep numeric ID for convenience
             'username': username,
             'email': email,
             'type': TOKEN_TYPE_ACCESS,
@@ -89,7 +91,8 @@ class JWTManager:
         expiry = now + timedelta(days=REFRESH_TOKEN_EXPIRY_DAYS)
         
         payload = {
-            'sub': user_id,
+            'sub': str(user_id),  # JWT standard requires 'sub' to be a string
+            'user_id': user_id,   # Keep numeric ID for convenience
             'type': TOKEN_TYPE_REFRESH,
             'iat': now,
             'exp': expiry,
@@ -240,7 +243,17 @@ def jwt_optional(f):
 def get_current_user_id() -> Optional[int]:
     """Get the current authenticated user's ID."""
     if hasattr(g, 'current_user') and g.current_user:
-        return g.current_user.get('sub')
+        # Try numeric user_id first, then fall back to converting sub
+        user_id = g.current_user.get('user_id')
+        if user_id is not None:
+            return user_id
+        # Fall back to converting 'sub' (which is a string) to int
+        sub = g.current_user.get('sub')
+        if sub is not None:
+            try:
+                return int(sub)
+            except (ValueError, TypeError):
+                pass
     return None
 
 

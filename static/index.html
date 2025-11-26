@@ -8,7 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+    <link rel="stylesheet" href="chatbot.css">
+
     <style>
         * {
             margin: 0;
@@ -351,39 +352,78 @@
             background: rgba(239, 68, 68, 0.2);
         }
 
+        /* ============== UNIFIED NAVIGATION MENU ============== */
         .nav-menu {
             display: flex;
-            gap: 0.5rem;
+            align-items: center;
+            gap: 4px;
             list-style: none;
             background: var(--bg-tertiary);
-            padding: 0.5rem;
+            padding: 6px;
             border-radius: 100px;
-            flex-wrap: wrap;
-            justify-content: center;
+            margin: 0;
         }
 
-        .nav-link {
+        .nav-menu > li {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-link,
+        .nav-dropdown-btn {
             color: var(--text-secondary);
             text-decoration: none;
             font-weight: 600;
-            font-size: 0.95rem;
-            padding: 0.75rem 1.5rem;
+            font-size: 0.9rem;
+            padding: 10px 18px;
             border-radius: 100px;
             transition: all 0.2s ease;
             cursor: pointer;
             white-space: nowrap;
+            border: none;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            line-height: 1;
         }
 
-        .nav-link:hover {
+        .nav-link:hover,
+        .nav-dropdown-btn:hover {
             color: var(--purple-700);
-            background: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.6);
+        }
+
+        [data-theme="dark"] .nav-link:hover,
+        [data-theme="dark"] .nav-dropdown-btn:hover {
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--purple-400);
         }
 
         .nav-link.active {
             background: white;
             color: var(--purple-700);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             font-weight: 700;
+        }
+
+        [data-theme="dark"] .nav-link.active {
+            background: var(--purple-600);
+            color: white;
+        }
+
+        /* Dropdown arrow styling */
+        .nav-dropdown-btn::after {
+            content: '';
+            border: 4px solid transparent;
+            border-top-color: currentColor;
+            margin-left: 2px;
+            margin-top: 2px;
+            transition: transform 0.2s;
+        }
+
+        .nav-dropdown:hover .nav-dropdown-btn::after {
+            transform: rotate(180deg);
         }
 
         /* ============== MAIN CONTAINER ============== */
@@ -1926,6 +1966,231 @@
             transform: translateY(-1px) scale(0.98);
         }
 
+        .btn-primary.btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
+        }
+        .btn-primary.btn-danger:hover {
+            box-shadow: 0 20px 50px rgba(239, 68, 68, 0.6);
+        }
+
+        /* ============== FILTER BUTTONS ============== */
+        .btn-filter {
+            padding: 10px 20px;
+            border-radius: 100px;
+            border: 2px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-secondary);
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-filter:hover {
+            border-color: var(--purple-500);
+            color: var(--purple-700);
+        }
+        .btn-filter.active {
+            background: var(--gradient-purple);
+            color: white;
+            border-color: transparent;
+        }
+        .btn-filter.easy { border-color: #10b981; color: #10b981; }
+        .btn-filter.easy:hover, .btn-filter.easy.active { background: #10b981; color: white; border-color: #10b981; }
+        .btn-filter.medium { border-color: #f59e0b; color: #f59e0b; }
+        .btn-filter.medium:hover, .btn-filter.medium.active { background: #f59e0b; color: white; border-color: #f59e0b; }
+        .btn-filter.hard { border-color: #ef4444; color: #ef4444; }
+        .btn-filter.hard:hover, .btn-filter.hard.active { background: #ef4444; color: white; border-color: #ef4444; }
+
+        /* ============== IMAGE SOURCE TOGGLE ============== */
+        .image-source-toggle {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .source-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-secondary);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .source-btn:hover {
+            border-color: var(--purple-500);
+            color: var(--purple-700);
+        }
+        .source-btn.active {
+            background: var(--gradient-purple);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* ============== SCANNER TABS ============== */
+        .scanner-tab {
+            flex: 1;
+            padding: 14px 24px;
+            border: 2px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-secondary);
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .scanner-tab:first-child { border-radius: 12px 0 0 12px; }
+        .scanner-tab:last-child { border-radius: 0 12px 12px 0; border-left: none; }
+        .scanner-tab:hover { color: var(--purple-700); }
+        .scanner-tab.active {
+            background: var(--gradient-purple);
+            color: white;
+            border-color: var(--purple-700);
+        }
+        .scanner-tab .demo-badge {
+            display: inline-block;
+            background: #f59e0b;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+        .demo-notice {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #92400e;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .demo-notice span { font-size: 1.4rem; }
+        [data-theme="dark"] .demo-notice {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fcd34d;
+        }
+
+        /* ============== UPLOAD ZONE ============== */
+        .upload-zone {
+            border: 3px dashed var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--bg-tertiary);
+        }
+        .upload-zone:hover {
+            border-color: var(--purple-500);
+            background: var(--purple-50);
+        }
+        .upload-zone.dragover {
+            border-color: var(--purple-600);
+            background: var(--purple-100);
+            transform: scale(1.02);
+        }
+        .upload-zone .upload-icon { font-size: 3rem; margin-bottom: 12px; }
+        .upload-zone .upload-text, .upload-zone .upload-title { font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+        .upload-zone .upload-hint, .upload-zone .upload-subtitle { font-size: 0.9rem; color: var(--text-muted); }
+        .upload-zone.has-file { border-style: solid; border-color: var(--purple-500); background: var(--purple-50); }
+
+        /* ============== CHALLENGES GRID ============== */
+        .challenges-grid {
+            display: grid;
+            gap: 16px;
+        }
+        .challenge-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        .challenge-card:hover {
+            border-color: var(--purple-500);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        .challenge-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .challenge-title { font-weight: 800; font-size: 1.1rem; color: var(--text-primary); }
+        .challenge-points { font-weight: 900; font-size: 1.3rem; color: var(--purple-700); }
+        .challenge-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+        .challenge-badge.easy { background: #dcfce7; color: #166534; }
+        .challenge-badge.medium { background: #fef3c7; color: #92400e; }
+        .challenge-badge.hard { background: #fee2e2; color: #991b1b; }
+        .challenge-desc { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 16px; }
+        .challenge-meta { display: flex; justify-content: space-between; align-items: center; }
+        .challenge-solved { font-size: 0.85rem; color: var(--text-muted); }
+
+        /* ============== RESULT BOX ============== */
+        .result-box {
+            background: var(--bg-tertiary);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .result-box.success {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            border: 2px solid #10b981;
+        }
+        .result-box.error {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border: 2px solid #ef4444;
+        }
+
+        /* ============== SCANNER RESULTS ============== */
+        .scanner-result {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 20px;
+        }
+        .scanner-meter {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .scanner-score {
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+        .scanner-score.clean { color: #10b981; }
+        .scanner-score.suspicious { color: #f59e0b; }
+        .scanner-score.likely { color: #ef4444; }
+        .scanner-verdict {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+        .scanner-indicators {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .scanner-indicators h4 { margin: 0 0 12px 0; font-weight: 700; }
+        .scanner-indicators ul { margin: 0; padding-left: 20px; }
+        .scanner-indicators li { margin-bottom: 6px; color: var(--text-secondary); }
+
         .btn-action {
             padding: 16px 36px;
             background: white;
@@ -2112,6 +2377,149 @@
             font-size: 1.05rem;
             line-height: 1.8;
             color: var(--text-secondary);
+        }
+
+        /* ============== STEGANOGRAPHY HISTORY TIMELINE ============== */
+        .stego-timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .stego-timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--purple-400), var(--purple-600));
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 32px;
+            padding-left: 24px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -25px;
+            top: 8px;
+            width: 14px;
+            height: 14px;
+            background: var(--purple-600);
+            border: 3px solid var(--card-bg);
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px var(--purple-200);
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--purple-600);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .timeline-content {
+            background: var(--card-bg);
+            padding: 20px 24px;
+            border-radius: 16px;
+            border: 2px solid var(--border-color);
+            transition: all 0.2s;
+        }
+
+        .timeline-content:hover {
+            border-color: var(--purple-300);
+            transform: translateX(4px);
+        }
+
+        .timeline-content h3 {
+            font-size: 1.1rem;
+            margin: 0 0 8px 0;
+            color: var(--text-primary);
+        }
+
+        .timeline-content p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Techniques Grid */
+        .techniques-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .technique-card {
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 16px;
+            border: 2px solid var(--border-color);
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .technique-card:hover {
+            border-color: var(--purple-400);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(124, 58, 237, 0.15);
+        }
+
+        .technique-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .technique-card h4 {
+            font-size: 1.1rem;
+            margin: 0 0 8px 0;
+            color: var(--text-primary);
+        }
+
+        .technique-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Uses Grid */
+        .uses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .use-card {
+            background: linear-gradient(135deg, var(--purple-50) 0%, var(--card-bg) 100%);
+            padding: 24px;
+            border-radius: 16px;
+            border: 2px solid var(--purple-200);
+        }
+
+        [data-theme="dark"] .use-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, var(--card-bg) 100%);
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .use-card h4 {
+            font-size: 1.05rem;
+            margin: 0 0 8px 0;
+            color: var(--text-primary);
+        }
+
+        .use-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.5;
         }
 
         /* ============== TUTORIAL OVERLAY ============== */
@@ -2497,15 +2905,6 @@
             overflow-y: auto;
         }
 
-        .history-item {
-            padding: 20px 32px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            transition: all 0.2s;
-        }
-
         .history-item:hover {
             background: var(--bg-tertiary);
         }
@@ -2600,6 +2999,120 @@
 
         .history-item-delete:hover {
             background: #fef2f2;
+        }
+
+        .history-item-wrapper {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .history-item {
+            padding: 20px 32px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .history-item-expand {
+            color: var(--text-secondary);
+            transition: transform 0.3s;
+            font-size: 0.8rem;
+        }
+
+        .history-item-wrapper.expanded .history-item-expand {
+            transform: rotate(180deg);
+        }
+
+        .history-item-details {
+            display: none;
+            padding: 0 32px 24px 32px;
+            background: var(--bg-secondary);
+            animation: slideDown 0.3s ease;
+        }
+
+        .history-item-wrapper.expanded .history-item-details {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .history-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 16px;
+        }
+
+        .history-detail-section {
+            background: var(--bg-tertiary);
+            padding: 16px;
+            border-radius: 12px;
+        }
+
+        .history-detail-section h4 {
+            margin: 0 0 12px 0;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .history-detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 0.9rem;
+        }
+
+        .history-detail-label {
+            color: var(--text-secondary);
+        }
+
+        .history-detail-value {
+            color: var(--text-primary);
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+
+        .history-detail-previews {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        .history-preview-box {
+            background: var(--bg-tertiary);
+            padding: 16px;
+            border-radius: 12px;
+        }
+
+        .history-preview-box h4 {
+            margin: 0 0 12px 0;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+
+        .history-preview-content {
+            background: var(--bg-primary);
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            max-height: 150px;
+            overflow-y: auto;
+            word-break: break-all;
+            white-space: pre-wrap;
         }
 
         .history-empty {
@@ -3292,15 +3805,30 @@
             .nav-menu {
                 flex-wrap: wrap;
                 justify-content: center;
-                gap: 0.5rem;
-                padding: 0.5rem;
+                gap: 4px;
+                padding: 6px;
                 width: 100%;
-                border-radius: 20px;
+                border-radius: 16px;
             }
             
-            .nav-link {
-                padding: 0.5rem 0.75rem;
+            .nav-link,
+            .nav-dropdown-btn {
+                padding: 8px 12px;
                 font-size: 0.8rem;
+            }
+
+            .nav-dropdown-btn::after {
+                border-width: 3px;
+            }
+            
+            .nav-dropdown-content {
+                min-width: 180px;
+                padding: 6px;
+            }
+
+            .nav-dropdown-item {
+                padding: 8px 10px;
+                font-size: 0.85rem;
             }
             
             .nav-auth-btn {
@@ -3311,6 +3839,804 @@
 
             .card-body { padding: 24px; }
             .main-container { padding: 16px; }
+
+            /* Timeline responsive */
+            .stego-timeline {
+                padding-left: 30px;
+            }
+
+            .timeline-item {
+                padding-left: 16px;
+            }
+
+            .timeline-content {
+                padding: 16px;
+            }
+
+            .techniques-grid,
+            .uses-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============== DROPDOWN MENU ============== */
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown-content {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 50%;
+            transform: translateX(-50%) translateY(-8px);
+            background: var(--card-bg);
+            min-width: 200px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            z-index: 1001;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+        /* Invisible bridge to prevent gap hover issues */
+        .nav-dropdown::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: transparent;
+        }
+
+        .nav-dropdown:hover .nav-dropdown-content,
+        .nav-dropdown:focus-within .nav-dropdown-content {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .nav-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.15s;
+            text-decoration: none;
+        }
+
+        .nav-dropdown-item:hover {
+            background: var(--purple-100);
+            color: var(--purple-700);
+        }
+
+        .nav-dropdown-item .item-icon {
+            font-size: 1rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        [data-theme="dark"] .nav-dropdown-content {
+            background: var(--card-bg);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        [data-theme="dark"] .nav-dropdown-item:hover {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--purple-300);
+        }
+
+        /* ============== LEARN PAGE STYLES ============== */
+        .learn-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .learn-hero {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .learn-title {
+            font-size: 2.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--purple-600), var(--purple-400));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+
+        .learn-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        /* Navigation Cards Grid */
+        .learn-nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+
+        .learn-nav-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .learn-nav-card:hover {
+            border-color: var(--purple-400);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(124, 58, 237, 0.2);
+        }
+
+        .learn-nav-card.active {
+            border-color: var(--purple-500);
+            background: linear-gradient(135deg, var(--purple-50), var(--card-bg));
+        }
+
+        [data-theme="dark"] .learn-nav-card.active {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), var(--card-bg));
+        }
+
+        .learn-nav-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .learn-nav-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 0 0 6px 0;
+            color: var(--text-primary);
+        }
+
+        .learn-nav-card p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        /* Content Sections */
+        .learn-section {
+            display: none;
+        }
+
+        .learn-section.active {
+            display: block;
+            animation: fadeSlideIn 0.4s ease;
+        }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .learn-welcome-box {
+            text-align: center;
+            padding: 80px 40px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            border: 2px dashed var(--border-color);
+        }
+
+        .learn-welcome-icon {
+            font-size: 4rem;
+            margin-bottom: 24px;
+            opacity: 0.8;
+        }
+
+        .learn-welcome-box h2 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin: 0 0 8px 0;
+        }
+
+        .learn-welcome-box p {
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        /* Section Header */
+        .learn-section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .learn-section-header .section-icon {
+            font-size: 2rem;
+        }
+
+        .learn-section-header h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        /* Info Cards Grid */
+        .learn-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .learn-info-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .learn-info-card .info-number {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--purple-500), var(--purple-600));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            opacity: 0.2;
+        }
+
+        .learn-info-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0 0 12px 0;
+        }
+
+        .learn-info-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* Modern Timeline */
+        .history-timeline-modern {
+            position: relative;
+            padding-left: 50px;
+        }
+
+        .history-timeline-modern::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            bottom: 20px;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--purple-300), var(--purple-600));
+            border-radius: 4px;
+        }
+
+        .timeline-era {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 32px 0 16px -50px;
+            padding-left: 50px;
+        }
+
+        .era-marker {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .era-marker.ancient { background: linear-gradient(135deg, #b8860b, #daa520); }
+        .era-marker.medieval { background: linear-gradient(135deg, #8b4513, #a0522d); }
+        .era-marker.modern { background: linear-gradient(135deg, #2f4f4f, #556b2f); }
+        .era-marker.digital { background: linear-gradient(135deg, var(--purple-500), var(--purple-700)); }
+
+        .era-label {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .timeline-event {
+            position: relative;
+            margin-bottom: 24px;
+            padding-left: 20px;
+        }
+
+        .timeline-event::before {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 12px;
+            width: 12px;
+            height: 12px;
+            background: var(--purple-500);
+            border-radius: 50%;
+            border: 3px solid var(--body-bg);
+        }
+
+        .timeline-event .event-date {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--purple-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .timeline-event .event-content {
+            background: var(--card-bg);
+            padding: 20px 24px;
+            border-radius: 16px;
+            border: 2px solid var(--border-color);
+            transition: all 0.2s;
+        }
+
+        .timeline-event .event-content:hover {
+            border-color: var(--purple-300);
+            transform: translateX(8px);
+        }
+
+        .timeline-event .event-content h4 {
+            font-size: 1.05rem;
+            margin: 0 0 8px 0;
+            color: var(--text-primary);
+        }
+
+        .timeline-event .event-content p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Techniques Showcase */
+        .technique-showcase {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .technique-item {
+            display: flex;
+            gap: 24px;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
+            transition: all 0.2s;
+        }
+
+        .technique-item:hover {
+            border-color: var(--purple-300);
+        }
+
+        .technique-visual {
+            flex: 0 0 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--purple-50), transparent);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        [data-theme="dark"] .technique-visual {
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .pixel-demo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .pixel-demo .pixel {
+            background: var(--card-bg);
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .pixel-demo .lsb {
+            color: var(--purple-600);
+            font-weight: 700;
+        }
+
+        .pixel-demo .lsb.changed {
+            color: #ef4444;
+        }
+
+        .pixel-demo .pixel-arrow {
+            color: var(--text-secondary);
+        }
+
+        .zwc-demo {
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .zwc-demo .zwc-char {
+            background: var(--purple-200);
+            padding: 0 4px;
+            border-radius: 2px;
+        }
+
+        .zwc-demo .zwc-reveal {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            font-family: monospace;
+        }
+
+        .audio-demo, .video-demo, .network-demo, .doc-demo {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        .technique-info {
+            flex: 1;
+        }
+
+        .technique-info h3 {
+            font-size: 1.2rem;
+            margin: 0 0 12px 0;
+            color: var(--text-primary);
+        }
+
+        .technique-info p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin: 0 0 16px 0;
+        }
+
+        .technique-stats {
+            display: flex;
+            gap: 16px;
+        }
+
+        .technique-stats .stat {
+            font-size: 0.8rem;
+            padding: 6px 12px;
+            background: var(--purple-100);
+            color: var(--purple-700);
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        [data-theme="dark"] .technique-stats .stat {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--purple-300);
+        }
+
+        /* Cases Showcase */
+        .cases-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .case-card-modern {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        .case-card-modern:hover {
+            transform: translateY(-4px);
+            border-color: var(--purple-300);
+        }
+
+        .case-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .case-badge.wartime { background: #fef3c7; color: #92400e; }
+        .case-badge.espionage { background: #fee2e2; color: #991b1b; }
+        .case-badge.classic { background: #e0e7ff; color: #3730a3; }
+        .case-badge.forensics { background: #d1fae5; color: #065f46; }
+        .case-badge.entertainment { background: #fce7f3; color: #9d174d; }
+        .case-badge.modern { background: #ede9fe; color: #5b21b6; }
+
+        [data-theme="dark"] .case-badge.wartime { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+        [data-theme="dark"] .case-badge.espionage { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+        [data-theme="dark"] .case-badge.classic { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; }
+        [data-theme="dark"] .case-badge.forensics { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
+        [data-theme="dark"] .case-badge.entertainment { background: rgba(236, 72, 153, 0.2); color: #f9a8d4; }
+        [data-theme="dark"] .case-badge.modern { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; }
+
+        .case-icon-large {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .case-card-modern h3 {
+            font-size: 1.15rem;
+            margin: 0 0 12px 0;
+            color: var(--text-primary);
+        }
+
+        .case-card-modern p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Detection Section */
+        .detection-intro {
+            background: linear-gradient(135deg, var(--purple-50), transparent);
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        [data-theme="dark"] .detection-intro {
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .detection-intro p {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.7;
+        }
+
+        .detection-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .detection-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .detection-card .detection-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .detection-card h3 {
+            font-size: 1.1rem;
+            margin: 0 0 10px 0;
+            color: var(--text-primary);
+        }
+
+        .detection-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin: 0 0 16px 0;
+        }
+
+        .effectiveness-meter {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .meter-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .meter-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--purple-400), var(--purple-600));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .detection-tip {
+            background: linear-gradient(135deg, var(--purple-100), var(--purple-50));
+            padding: 20px 24px;
+            border-radius: 12px;
+            border-left: 4px solid var(--purple-500);
+            color: var(--text-secondary);
+        }
+
+        [data-theme="dark"] .detection-tip {
+            background: rgba(139, 92, 246, 0.15);
+        }
+
+        .detection-tip a {
+            color: var(--purple-600);
+            font-weight: 600;
+        }
+
+        /* Best Practices */
+        .practices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .practice-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+        }
+
+        .practice-card.do .practice-header { background: linear-gradient(135deg, #10b981, #059669); }
+        .practice-card.dont .practice-header { background: linear-gradient(135deg, #ef4444, #dc2626); }
+
+        .practice-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            color: white;
+        }
+
+        .practice-icon {
+            font-size: 1.5rem;
+        }
+
+        .practice-header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .practice-list {
+            padding: 20px 24px;
+            margin: 0;
+            list-style: none;
+        }
+
+        .practice-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+
+        .practice-list li:last-child {
+            border-bottom: none;
+        }
+
+        .practice-card.do .practice-list li::before {
+            content: '✓ ';
+            color: #10b981;
+            font-weight: 700;
+        }
+
+        .practice-card.dont .practice-list li::before {
+            content: '✗ ';
+            color: #ef4444;
+            font-weight: 700;
+        }
+
+        /* Security Levels */
+        .security-levels h3 {
+            text-align: center;
+            font-size: 1.4rem;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+        }
+
+        .level-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .level-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .level-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .level-card.basic .level-badge { background: #fef3c7; color: #92400e; }
+        .level-card.medium .level-badge { background: #dbeafe; color: #1e40af; }
+        .level-card.high .level-badge { background: #d1fae5; color: #065f46; }
+
+        [data-theme="dark"] .level-card.basic .level-badge { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+        [data-theme="dark"] .level-card.medium .level-badge { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        [data-theme="dark"] .level-card.high .level-badge { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
+
+        .level-card h4 {
+            font-size: 1.1rem;
+            margin: 0 0 10px 0;
+            color: var(--text-primary);
+        }
+
+        .level-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0 0 16px 0;
+            line-height: 1.5;
+        }
+
+        .level-use {
+            font-size: 0.8rem;
+            color: var(--purple-600);
+            font-weight: 600;
+        }
+
+        /* Responsive for Learn Page */
+        @media (max-width: 768px) {
+            .learn-title { font-size: 2rem; }
+            .learn-nav-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .learn-nav-card { padding: 16px 12px; }
+            .learn-nav-icon { font-size: 2rem; }
+            .technique-item { flex-direction: column; }
+            .technique-visual { flex: none; width: 100%; }
+            .history-timeline-modern { padding-left: 30px; }
+            .timeline-era { margin-left: -30px; padding-left: 30px; }
         }
     </style>
 </head>
@@ -3450,14 +4776,57 @@
             
             <ul class="nav-menu">
                 <li><a class="nav-link active" onclick="navigate('home')">Home</a></li>
-                <li><a class="nav-link" onclick="navigate('text-encode')">Hide in Text</a></li>
-                <li><a class="nav-link" onclick="navigate('text-decode')">Reveal from Text</a></li>
-                <li><a class="nav-link" onclick="navigate('image-encode')">Hide in Image</a></li>
-                <li><a class="nav-link" onclick="navigate('image-decode')">Reveal from Image</a></li>
-                <li><a class="nav-link" onclick="navigate('history')" id="nav-history" style="display: none;">📜 History</a></li>
-                <li><a class="nav-link" onclick="navigate('stego-history')">📚 History</a></li>
-                <li><a class="nav-link" onclick="navigate('guide')">How It Works</a></li>
-                <li><a class="nav-link" onclick="startTutorial()" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: white;">🎓 Tutorial</a></li>
+                
+                <!-- Encode Dropdown -->
+                <li class="nav-dropdown">
+                    <button class="nav-dropdown-btn">Encode</button>
+                    <div class="nav-dropdown-content">
+                        <a class="nav-dropdown-item" onclick="navigate('text-encode')">
+                            <span class="item-icon">📝</span> Hide in Text
+                        </a>
+                        <a class="nav-dropdown-item" onclick="navigate('image-encode')">
+                            <span class="item-icon">🖼️</span> Hide in Image
+                        </a>
+                        <a class="nav-dropdown-item" onclick="navigate('multi-file'); setMultiFileMode('encode')">
+                            <span class="item-icon">📦</span> Multi-File Split
+                        </a>
+                    </div>
+                </li>
+                
+                <!-- Decode Dropdown -->
+                <li class="nav-dropdown">
+                    <button class="nav-dropdown-btn">Decode</button>
+                    <div class="nav-dropdown-content">
+                        <a class="nav-dropdown-item" onclick="navigate('text-decode')">
+                            <span class="item-icon">🔓</span> Reveal from Text
+                        </a>
+                        <a class="nav-dropdown-item" onclick="navigate('image-decode')">
+                            <span class="item-icon">🔍</span> Reveal from Image
+                        </a>
+                        <a class="nav-dropdown-item" onclick="navigate('multi-file'); setMultiFileMode('decode')">
+                            <span class="item-icon">🧩</span> Multi-File Combine
+                        </a>
+                    </div>
+                </li>
+                
+                <!-- Tools Dropdown -->
+                <li class="nav-dropdown">
+                    <button class="nav-dropdown-btn">Tools</button>
+                    <div class="nav-dropdown-content">
+                        <a class="nav-dropdown-item" onclick="navigate('scanner')">
+                            <span class="item-icon">🔬</span> Stego Scanner
+                        </a>
+                        <a class="nav-dropdown-item" onclick="navigate('burn')">
+                            <span class="item-icon">🔥</span> Burn Messages
+                        </a>
+                        <a class="nav-dropdown-item" onclick="navigate('challenges')">
+                            <span class="item-icon">🏆</span> Challenges
+                        </a>
+                    </div>
+                </li>
+                
+                <li><a class="nav-link" onclick="navigate('history')">History</a></li>
+                <li><a class="nav-link" onclick="navigate('learn')">Learn</a></li>
             </ul>
             
             <!-- Auth Buttons (shown when logged out) -->
@@ -3842,6 +5211,247 @@
         </section>
 
         <!-- ========================================
+             CHALLENGES PAGE
+        ======================================== -->
+        <section id="page-challenges" class="page-section">
+            <div class="workspace-card">
+                <div class="card-header">
+                    <h2 class="card-title">🏆 Stego Challenges</h2>
+                    <p class="card-subtitle">Test your steganography skills! Find hidden messages in puzzles and earn points.</p>
+                </div>
+                <div class="card-body">
+                    <div class="challenge-filters">
+                        <button class="btn-filter active" onclick="filterChallenges('')">All</button>
+                        <button class="btn-filter" onclick="filterChallenges('easy')">🌱 Easy</button>
+                        <button class="btn-filter" onclick="filterChallenges('medium')">🔥 Medium</button>
+                        <button class="btn-filter" onclick="filterChallenges('hard')">💀 Hard</button>
+                    </div>
+                    <div id="challenges-grid" class="challenges-grid">
+                        <!-- Challenges loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             MULTI-FILE PAGE
+        ======================================== -->
+        <section id="page-multi-file" class="page-section">
+            <div class="workspace-card">
+                <div class="card-header">
+                    <h2 class="card-title">📦 Multi-File Steganography</h2>
+                    <p class="card-subtitle">Split secrets across multiple images. All parts required for decoding - maximum security!</p>
+                </div>
+                <div class="card-body">
+                    <!-- Mode Toggle -->
+                    <div class="mode-toggle">
+                        <button class="mode-btn active" onclick="setMultiFileMode('encode')" id="mf-mode-encode">
+                            <span class="mode-icon">🔐</span> Encode
+                        </button>
+                        <button class="mode-btn" onclick="setMultiFileMode('decode')" id="mf-mode-decode">
+                            <span class="mode-icon">🔓</span> Decode
+                        </button>
+                    </div>
+                    
+                    <!-- Encode Section -->
+                    <div id="mf-encode-section">
+                        <div class="step-container">
+                            <div class="step-header">
+                                <div class="step-number">1</div>
+                                <div class="step-title">Enter Your Secret</div>
+                            </div>
+                            <p class="step-description">This message will be cryptographically split. Missing even one part makes decoding impossible.</p>
+                            <textarea id="mf-secret" class="input-field" rows="4" placeholder="Enter your ultra-secret message..."></textarea>
+                        </div>
+                        
+                        <div class="step-container">
+                            <div class="step-header">
+                                <div class="step-number">2</div>
+                                <div class="step-title">Number of Parts</div>
+                            </div>
+                            <p class="step-description">More parts = more security. Distribute to different people or locations.</p>
+                            <div class="parts-selector">
+                                <button class="part-btn" onclick="setMfParts(2)">2</button>
+                                <button class="part-btn active" onclick="setMfParts(3)">3</button>
+                                <button class="part-btn" onclick="setMfParts(4)">4</button>
+                                <button class="part-btn" onclick="setMfParts(5)">5</button>
+                                <input type="hidden" id="mf-parts" value="3" />
+                            </div>
+                        </div>
+                        
+                        <div class="step-container">
+                            <div class="step-header">
+                                <div class="step-number">3</div>
+                                <div class="step-title">Cover Images</div>
+                            </div>
+                            <p class="step-description">Choose to use auto-generated gradient images or upload your own custom images.</p>
+                            <div class="image-source-toggle">
+                                <button class="source-btn active" onclick="setMfImageSource('generated')" id="mf-source-generated">
+                                    🎨 Auto-Generate
+                                </button>
+                                <button class="source-btn" onclick="setMfImageSource('custom')" id="mf-source-custom">
+                                    📤 Upload Custom
+                                </button>
+                            </div>
+                            <div id="mf-custom-upload-section" style="display: none; margin-top: 12px;">
+                                <div class="upload-zone" onclick="document.getElementById('mf-encode-upload').click()">
+                                    <input type="file" id="mf-encode-upload" accept="image/*" multiple onchange="handleMfEncodeUpload(event)" style="display:none" />
+                                    <div class="upload-icon">📤</div>
+                                    <div class="upload-text">Upload cover images</div>
+                                    <div class="upload-hint">Upload as many images as parts you selected</div>
+                                </div>
+                                <div id="mf-encode-preview" class="mf-preview-grid"></div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-primary" onclick="multiFileEncode()">
+                            <span>🔒 Split & Create Images</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Decode Section (hidden by default) -->
+                    <div id="mf-decode-section" style="display: none;">
+                        <div class="step-container">
+                            <div class="step-header">
+                                <div class="step-number">1</div>
+                                <div class="step-title">Upload All Parts</div>
+                            </div>
+                            <p class="step-description">You need ALL parts to recover the message. Upload them in any order.</p>
+                            <div class="upload-zone" id="mf-dropzone" onclick="document.getElementById('mf-upload').click()">
+                                <input type="file" id="mf-upload" accept="image/*" multiple onchange="handleMultiFileUpload(event)" style="display:none" />
+                                <div class="upload-icon">📤</div>
+                                <div class="upload-text">Click or drag image parts here</div>
+                                <div class="upload-hint">Upload all parts to decode</div>
+                            </div>
+                            <div id="mf-preview" class="mf-preview-grid"></div>
+                        </div>
+                        
+                        <button class="btn-primary" onclick="multiFileDecode()">
+                            <span>🔓 Reconstruct Message</span>
+                        </button>
+                    </div>
+                    
+                    <div id="mf-results"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             SCANNER PAGE
+        ======================================== -->
+        <section id="page-scanner" class="page-section">
+            <div class="workspace-card">
+                <div class="card-header">
+                    <h2 class="card-title">🔬 Steganography Scanner</h2>
+                    <p class="card-subtitle">Detect hidden data using statistical analysis, chi-square tests, and pattern recognition.</p>
+                </div>
+                <div class="card-body">
+                    <div class="scanner-tabs">
+                        <button class="scanner-tab active" onclick="switchScannerTab('text')">
+                            📝 Text Analysis
+                        </button>
+                        <button class="scanner-tab" onclick="switchScannerTab('image')">
+                            🖼️ Image Analysis <span class="demo-badge">Demo</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Text Scanner (Now Primary) -->
+                    <div id="scanner-text-section" class="scanner-section active">
+                        <div class="step-container">
+                            <p class="step-description">Paste text to check for zero-width characters and other hidden data.</p>
+                            <textarea id="scanner-text" class="input-field" rows="6" placeholder="Paste suspicious text here..."></textarea>
+                        </div>
+                        <button class="btn-primary" onclick="scanText()">
+                            <span>🔬 Scan Text</span>
+                        </button>
+                        <div id="scanner-text-output"></div>
+                    </div>
+                    
+                    <!-- Image Scanner (Demo) -->
+                    <div id="scanner-image-section" class="scanner-section">
+                        <div class="demo-notice">
+                            <span>🚧</span> Image steganalysis is experimental and may produce false positives.
+                        </div>
+                        <div class="upload-zone" id="scanner-dropzone" onclick="document.getElementById('scanner-file').click()">
+                            <input type="file" id="scanner-file" accept="image/*" onchange="handleScannerFile(this)" style="display:none" />
+                            <div class="upload-icon">🔍</div>
+                            <div class="upload-text">Drop image to analyze</div>
+                            <div class="upload-hint">PNG, JPG, BMP • Max 10MB</div>
+                        </div>
+                        <div id="scanner-preview"></div>
+                        <button class="btn-primary" onclick="scanImage()">
+                            <span>🔬 Run Analysis</span>
+                        </button>
+                        <div id="scanner-output"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             BURN MESSAGE PAGE
+        ======================================== -->
+        <section id="page-burn" class="page-section">
+            <div class="workspace-card">
+                <div class="card-header">
+                    <h2 class="card-title">🔥 Self-Destructing Stego Messages</h2>
+                    <p class="card-subtitle">Create steganographic messages hidden in cover text that automatically destroy themselves after viewing</p>
+                </div>
+                <div class="card-body">
+                    <div class="step-container">
+                        <div class="step-header">
+                            <div class="step-number">1</div>
+                            <div class="step-title">Your Secret Message</div>
+                        </div>
+                        <p class="step-description">This message will be hidden using zero-width steganography and permanently destroyed after viewing. No recovery possible.</p>
+                        <textarea id="burn-data" class="input-field" rows="4" placeholder="Enter your secret message to hide..."></textarea>
+                    </div>
+                    
+                    <div class="step-container">
+                        <div class="step-header">
+                            <div class="step-number">2</div>
+                            <div class="step-title">Cover Text (Optional)</div>
+                        </div>
+                        <p class="step-description">The innocent-looking text that will carry your hidden message. Leave blank for default cover.</p>
+                        <textarea id="burn-cover" class="input-field" rows="2" placeholder="The weather is nice today. Hope you're doing well!"></textarea>
+                    </div>
+                    
+                    <div class="step-container">
+                        <div class="step-header">
+                            <div class="step-number">3</div>
+                            <div class="step-title">Destruction Rules</div>
+                        </div>
+                        <div class="burn-settings">
+                            <div class="burn-setting">
+                                <label class="input-label">👁️ Max Views</label>
+                                <div class="setting-control">
+                                    <button class="setting-btn" onclick="adjustBurnSetting('views', -1)">−</button>
+                                    <input id="burn-views" type="number" min="1" max="100" value="1" class="setting-input" readonly />
+                                    <button class="setting-btn" onclick="adjustBurnSetting('views', 1)">+</button>
+                                </div>
+                                <p class="setting-hint">Burns after this many views</p>
+                            </div>
+                            <div class="burn-setting">
+                                <label class="input-label">⏳ Expire After</label>
+                                <div class="setting-control">
+                                    <button class="setting-btn" onclick="adjustBurnSetting('hours', -1)">−</button>
+                                    <input id="burn-hours" type="number" min="1" max="720" value="24" class="setting-input" readonly />
+                                    <button class="setting-btn" onclick="adjustBurnSetting('hours', 1)">+</button>
+                                </div>
+                                <p class="setting-hint">Hours until auto-destruct</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary btn-burn" onclick="createBurn()">
+                        <span>🔥 Create Hidden Burn Link</span>
+                    </button>
+                    <div id="burn-result"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
              TEXT ENCODE PAGE
         ======================================== -->
         <section id="page-text-encode" class="page-section">
@@ -3940,7 +5550,7 @@
                             <textarea id="text-encode-output" class="input-field" readonly style="background: var(--purple-50);"></textarea>
                         </div>
                         <div class="result-actions">
-                            <button onclick="copyToClipboard('text-encode-output')" class="btn-action">📋 Copy to Clipboard</button>
+                            <button onclick="copyTextEncodeOutput()" class="btn-action">📋 Copy to Clipboard</button>
                             <button onclick="navigate('text-decode')" class="btn-action">🔓 Test Decoding</button>
                         </div>
                     </div>
@@ -4187,6 +5797,516 @@
         </section>
 
         <!-- ========================================
+             LEARN / EDUCATION PAGE (Combined Guide + History)
+        ======================================== -->
+        <section id="page-learn" class="page-section">
+            <div class="learn-container">
+                <!-- Hero Header -->
+                <div class="learn-hero">
+                    <h1 class="learn-title">📚 Steganography Academy</h1>
+                    <p class="learn-subtitle">Master the art of hiding secrets in plain sight</p>
+                </div>
+
+                <!-- Navigation Cards -->
+                <div class="learn-nav-grid">
+                    <div class="learn-nav-card" onclick="showLearnSection('basics')">
+                        <div class="learn-nav-icon">🎓</div>
+                        <h3>The Basics</h3>
+                        <p>Learn how steganography works</p>
+                    </div>
+                    <div class="learn-nav-card" onclick="showLearnSection('history')">
+                        <div class="learn-nav-icon">📜</div>
+                        <h3>History</h3>
+                        <p>From ancient Greece to digital age</p>
+                    </div>
+                    <div class="learn-nav-card" onclick="showLearnSection('techniques')">
+                        <div class="learn-nav-icon">🔧</div>
+                        <h3>Techniques</h3>
+                        <p>Methods and algorithms explained</p>
+                    </div>
+                    <div class="learn-nav-card" onclick="showLearnSection('cases')">
+                        <div class="learn-nav-icon">🕵️</div>
+                        <h3>Famous Cases</h3>
+                        <p>Real-world espionage and secrets</p>
+                    </div>
+                    <div class="learn-nav-card" onclick="showLearnSection('detection')">
+                        <div class="learn-nav-icon">🔍</div>
+                        <h3>Detection</h3>
+                        <p>Steganalysis and countermeasures</p>
+                    </div>
+                    <div class="learn-nav-card" onclick="showLearnSection('practice')">
+                        <div class="learn-nav-icon">💡</div>
+                        <h3>Best Practices</h3>
+                        <p>Security tips and recommendations</p>
+                    </div>
+                </div>
+
+                <!-- Section Content Areas -->
+                <div id="learn-content-area">
+                    <!-- Default/Welcome Message -->
+                    <div id="learn-welcome" class="learn-section active">
+                        <div class="learn-welcome-box">
+                            <div class="learn-welcome-icon">👆</div>
+                            <h2>Select a Topic Above</h2>
+                            <p>Click any card to explore that topic in depth</p>
+                        </div>
+                    </div>
+
+                    <!-- BASICS Section -->
+                    <div id="learn-basics" class="learn-section">
+                        <div class="learn-section-header">
+                            <span class="section-icon">🎓</span>
+                            <h2>Understanding Steganography</h2>
+                        </div>
+                        
+                        <div class="learn-cards-grid">
+                            <div class="learn-info-card">
+                                <div class="info-number">1</div>
+                                <h3>What is Steganography?</h3>
+                                <p>Steganography is the art of hiding secret information inside ordinary-looking data. Unlike encryption (which scrambles data), steganography conceals the very existence of the message. To an observer, the carrier text or image appears completely normal.</p>
+                            </div>
+                            
+                            <div class="learn-info-card">
+                                <div class="info-number">2</div>
+                                <h3>Steganography vs Cryptography</h3>
+                                <p><strong>Cryptography</strong> makes a message unreadable (but visible). <strong>Steganography</strong> makes it invisible. The best security? Combine both - hide an encrypted message. Even if found, it can't be read!</p>
+                            </div>
+                            
+                            <div class="learn-info-card">
+                                <div class="info-number">3</div>
+                                <h3>Text Steganography (ZWC)</h3>
+                                <p>We use Unicode zero-width characters (invisible characters) to encode your secret message. These characters are inserted between regular letters and are completely invisible to the human eye. The text looks and behaves normally.</p>
+                            </div>
+                            
+                            <div class="learn-info-card">
+                                <div class="info-number">4</div>
+                                <h3>Image Steganography (LSB)</h3>
+                                <p>Images are made of pixels, each with RGB color values. We hide data by modifying the least significant bits - changes so small the human eye cannot detect them, but the data can be perfectly recovered.</p>
+                            </div>
+                            
+                            <div class="learn-info-card">
+                                <div class="info-number">5</div>
+                                <h3>Encryption Layer (AES-128)</h3>
+                                <p>When you add a password, we use AES-128 encryption (military-grade security) to encrypt your secret message before hiding it. Two layers of security: steganography (hiding) + cryptography (encryption).</p>
+                            </div>
+                            
+                            <div class="learn-info-card">
+                                <div class="info-number">6</div>
+                                <h3>Quality Metrics</h3>
+                                <p>We measure image quality with MSE (Mean Squared Error), PSNR (Peak Signal-to-Noise Ratio), and SSIM (Structural Similarity). These confirm the stego-image remains visually identical to the original.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HISTORY Section -->
+                    <div id="learn-history" class="learn-section">
+                        <div class="learn-section-header">
+                            <span class="section-icon">📜</span>
+                            <h2>The History of Hidden Messages</h2>
+                        </div>
+                        
+                        <div class="history-timeline-modern">
+                            <div class="timeline-era">
+                                <div class="era-marker ancient"></div>
+                                <div class="era-label">Ancient World</div>
+                            </div>
+                            
+                            <div class="timeline-event">
+                                <div class="event-date">~440 BC</div>
+                                <div class="event-content">
+                                    <h4>🏛️ The Shaved Head Message</h4>
+                                    <p>Histiaeus of Miletus shaved a slave's head, tattooed a secret message on his scalp, waited for hair to regrow, then sent him to deliver the message to Aristagoras, helping to incite a revolt against Persia.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-event">
+                                <div class="event-date">~480 BC</div>
+                                <div class="event-content">
+                                    <h4>📜 Wax Tablets</h4>
+                                    <p>Demaratus warned Sparta of Xerxes' invasion by scraping wax off tablets, writing on wood beneath, then re-applying wax. Queen Gorgo discovered the hidden message and saved Greece.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-event">
+                                <div class="event-date">1st Century</div>
+                                <div class="event-content">
+                                    <h4>🍋 Invisible Inks</h4>
+                                    <p>Pliny the Elder documented using plant-based invisible inks. Messages written with milk, fruit juices, or urine become visible when heated. This technique remained popular for centuries.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-era">
+                                <div class="era-marker medieval"></div>
+                                <div class="era-label">Medieval Period</div>
+                            </div>
+                            
+                            <div class="timeline-event">
+                                <div class="event-date">1499</div>
+                                <div class="event-content">
+                                    <h4>📖 Birth of the Term</h4>
+                                    <p>Johannes Trithemius wrote "Steganographia" - the first book on hidden writing. While appearing to be about magic, it contained sophisticated cipher systems. The term steganography was born.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-era">
+                                <div class="era-marker modern"></div>
+                                <div class="era-label">World Wars</div>
+                            </div>
+                            
+                            <div class="timeline-event">
+                                <div class="event-date">WWI</div>
+                                <div class="event-content">
+                                    <h4>📬 Invisible Ink Wars</h4>
+                                    <p>German spies used invisible inks extensively. Messages were hidden in innocent-looking letters. The British developed chemical tests to detect these communications.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-event">
+                                <div class="event-date">WWII</div>
+                                <div class="event-content">
+                                    <h4>🔬 The Microdot Revolution</h4>
+                                    <p>Germans perfected "microdots" - photographs shrunk to the size of a period. An entire page of text in a single dot. The FBI called it "the enemy's masterpiece of espionage."</p>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-era">
+                                <div class="era-marker digital"></div>
+                                <div class="era-label">Digital Age</div>
+                            </div>
+                            
+                            <div class="timeline-event">
+                                <div class="event-date">1985</div>
+                                <div class="event-content">
+                                    <h4>💻 Digital Steganography</h4>
+                                    <p>With digital images emerging, researchers developed LSB (Least Significant Bit) embedding - hiding data in the imperceptible bits of pixel colors.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-event">
+                                <div class="event-date">1990s</div>
+                                <div class="event-content">
+                                    <h4>🌐 Internet Explosion</h4>
+                                    <p>The internet enabled new steganography applications. Digital watermarking protected copyrights. Tools proliferated for hiding data in images, audio, and video.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-event">
+                                <div class="event-date">Today</div>
+                                <div class="event-content">
+                                    <h4>🚀 AI & Advanced Methods</h4>
+                                    <p>Modern steganography uses neural networks for better hiding. Research continues in both hiding and detecting hidden data. The cat-and-mouse game evolves.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TECHNIQUES Section -->
+                    <div id="learn-techniques" class="learn-section">
+                        <div class="learn-section-header">
+                            <span class="section-icon">🔧</span>
+                            <h2>Steganography Techniques</h2>
+                        </div>
+                        
+                        <div class="technique-showcase">
+                            <div class="technique-item">
+                                <div class="technique-visual">
+                                    <div class="pixel-demo">
+                                        <div class="pixel original">10110<span class="lsb">1</span>10</div>
+                                        <div class="pixel-arrow">→</div>
+                                        <div class="pixel modified">10110<span class="lsb changed">0</span>10</div>
+                                    </div>
+                                </div>
+                                <div class="technique-info">
+                                    <h3>🖼️ LSB Embedding</h3>
+                                    <p>Hiding data in the least significant bits of image pixels. The rightmost bit changes from 1 to 0 - imperceptible to eyes but stores your data. Can hide ~3 bits per pixel in RGB images.</p>
+                                    <div class="technique-stats">
+                                        <span class="stat">Capacity: High</span>
+                                        <span class="stat">Detection: Medium</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="technique-item">
+                                <div class="technique-visual">
+                                    <div class="zwc-demo">
+                                        <span>Hello</span><span class="zwc-char">​</span><span>World</span>
+                                        <div class="zwc-reveal">H e l l o [ZWC] W o r l d</div>
+                                    </div>
+                                </div>
+                                <div class="technique-info">
+                                    <h3>📝 Zero-Width Characters</h3>
+                                    <p>Invisible Unicode characters (U+200B, U+200C, U+200D) inserted between visible text. Completely invisible when displayed, but encode binary data.</p>
+                                    <div class="technique-stats">
+                                        <span class="stat">Capacity: Medium</span>
+                                        <span class="stat">Detection: Low</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="technique-item">
+                                <div class="technique-visual">
+                                    <div class="audio-demo">
+                                        <div class="waveform">🎵 ～～～～～～</div>
+                                    </div>
+                                </div>
+                                <div class="technique-info">
+                                    <h3>🎵 Audio Steganography</h3>
+                                    <p>Embedding data in audio files by modifying inaudible frequencies, using echo hiding, or spread spectrum techniques. Human ears can't detect small amplitude changes.</p>
+                                    <div class="technique-stats">
+                                        <span class="stat">Capacity: High</span>
+                                        <span class="stat">Detection: Medium</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="technique-item">
+                                <div class="technique-visual">
+                                    <div class="video-demo">🎬 Frame 1 → 2 → 3</div>
+                                </div>
+                                <div class="technique-info">
+                                    <h3>🎮 Video Steganography</h3>
+                                    <p>Embedding data across video frames. The temporal dimension allows for massive payloads while maintaining visual quality. Each frame can carry hidden bits.</p>
+                                    <div class="technique-stats">
+                                        <span class="stat">Capacity: Very High</span>
+                                        <span class="stat">Detection: Low</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="technique-item">
+                                <div class="technique-visual">
+                                    <div class="network-demo">📡 [Header][Data][Hidden]</div>
+                                </div>
+                                <div class="technique-info">
+                                    <h3>🌐 Network Steganography</h3>
+                                    <p>Covert channels in network protocols - hiding data in packet headers, timing patterns, or unused protocol fields. Extremely difficult to detect.</p>
+                                    <div class="technique-stats">
+                                        <span class="stat">Capacity: Low</span>
+                                        <span class="stat">Detection: Very Low</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="technique-item">
+                                <div class="technique-visual">
+                                    <div class="doc-demo">📄 [Whitespace Hidden]</div>
+                                </div>
+                                <div class="technique-info">
+                                    <h3>📄 Document Steganography</h3>
+                                    <p>Hiding data in Word documents, PDFs through whitespace manipulation, font variations, or metadata fields. Often survives printing and scanning.</p>
+                                    <div class="technique-stats">
+                                        <span class="stat">Capacity: Medium</span>
+                                        <span class="stat">Detection: Medium</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAMOUS CASES Section -->
+                    <div id="learn-cases" class="learn-section">
+                        <div class="learn-section-header">
+                            <span class="section-icon">🕵️</span>
+                            <h2>Famous Cases & Real Stories</h2>
+                        </div>
+                        
+                        <div class="cases-showcase">
+                            <div class="case-card-modern">
+                                <div class="case-badge wartime">Wartime</div>
+                                <div class="case-icon-large">🎯</div>
+                                <h3>Operation Bernhard (WWII)</h3>
+                                <p>Nazi Germany's plan to destabilize Britain by flooding the economy with counterfeit pound notes. Messages were hidden in the watermarks of the forged currency. One of the largest counterfeiting operations in history.</p>
+                            </div>
+                            
+                            <div class="case-card-modern">
+                                <div class="case-badge espionage">Espionage</div>
+                                <div class="case-icon-large">🕵️</div>
+                                <h3>Russian Spy Ring (2010)</h3>
+                                <p>The FBI caught Russian sleeper agents who embedded secret messages in images posted on public websites. The "Illegals Program" used sophisticated digital steganography to communicate for over a decade.</p>
+                            </div>
+                            
+                            <div class="case-card-modern">
+                                <div class="case-badge classic">Classic</div>
+                                <div class="case-icon-large">📰</div>
+                                <h3>Velvalee Dickinson (WWII)</h3>
+                                <p>German spy sent letters about "dolls" to South American contacts. Reading the first letter of each word revealed military intelligence about US Navy ships. She was caught by the FBI in 1944.</p>
+                            </div>
+                            
+                            <div class="case-card-modern">
+                                <div class="case-badge forensics">Forensics</div>
+                                <div class="case-icon-large">🖨️</div>
+                                <h3>Printer Tracking Dots</h3>
+                                <p>Most color printers secretly embed nearly invisible yellow dots encoding the printer's serial number and timestamp. NSA leaker Reality Winner was caught in 2017 using this forensic technique.</p>
+                            </div>
+                            
+                            <div class="case-card-modern">
+                                <div class="case-badge entertainment">Entertainment</div>
+                                <div class="case-icon-large">🎵</div>
+                                <h3>Hidden Music Messages</h3>
+                                <p>Aphex Twin hid his face in the spectrogram of "Equation". Nine Inch Nails hid GPS coordinates in their album art. Musicians love hiding easter eggs in audio frequencies.</p>
+                            </div>
+                            
+                            <div class="case-card-modern">
+                                <div class="case-badge modern">Modern</div>
+                                <div class="case-icon-large">💻</div>
+                                <h3>Malware in Images</h3>
+                                <p>Modern attackers hide malicious code in innocent-looking images. The "StegoLoader" malware family embeds itself in PNG files, evading antivirus detection by hiding in plain sight.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DETECTION Section -->
+                    <div id="learn-detection" class="learn-section">
+                        <div class="learn-section-header">
+                            <span class="section-icon">🔍</span>
+                            <h2>Steganalysis: Detecting Hidden Messages</h2>
+                        </div>
+                        
+                        <div class="detection-intro">
+                            <p>Just as cryptanalysis tries to break encryption, <strong>steganalysis</strong> attempts to detect steganographic content. It's an eternal cat-and-mouse game between hiders and detectors.</p>
+                        </div>
+                        
+                        <div class="detection-methods">
+                            <div class="detection-card">
+                                <div class="detection-icon">📊</div>
+                                <h3>Statistical Analysis</h3>
+                                <p>Analyzes pixel value distributions. LSB embedding often disrupts natural statistical patterns, creating detectable anomalies in image histograms.</p>
+                                <div class="effectiveness-meter">
+                                    <span>Effectiveness:</span>
+                                    <div class="meter-bar"><div class="meter-fill" style="width: 85%"></div></div>
+                                </div>
+                            </div>
+                            
+                            <div class="detection-card">
+                                <div class="detection-icon">📈</div>
+                                <h3>Chi-Square Attack</h3>
+                                <p>Measures the probability that adjacent pixel pairs differ in specific ways. Clean images have predictable patterns that steganography disrupts.</p>
+                                <div class="effectiveness-meter">
+                                    <span>Effectiveness:</span>
+                                    <div class="meter-bar"><div class="meter-fill" style="width: 90%"></div></div>
+                                </div>
+                            </div>
+                            
+                            <div class="detection-card">
+                                <div class="detection-icon">🤖</div>
+                                <h3>Machine Learning</h3>
+                                <p>Neural networks trained on millions of clean and stego images can detect subtle patterns invisible to statistical tests. The future of steganalysis.</p>
+                                <div class="effectiveness-meter">
+                                    <span>Effectiveness:</span>
+                                    <div class="meter-bar"><div class="meter-fill" style="width: 95%"></div></div>
+                                </div>
+                            </div>
+                            
+                            <div class="detection-card">
+                                <div class="detection-icon">👁️</div>
+                                <h3>Visual Inspection</h3>
+                                <p>Enhanced contrast viewing, histogram analysis, and color plane separation can reveal artifacts. Works best when steganography is poorly implemented.</p>
+                                <div class="effectiveness-meter">
+                                    <span>Effectiveness:</span>
+                                    <div class="meter-bar"><div class="meter-fill" style="width: 60%"></div></div>
+                                </div>
+                            </div>
+                            
+                            <div class="detection-card">
+                                <div class="detection-icon">🔎</div>
+                                <h3>Signature Detection</h3>
+                                <p>Identifying artifacts left by known steganography tools. Many tools leave fingerprints that can be catalogued and searched for.</p>
+                                <div class="effectiveness-meter">
+                                    <span>Effectiveness:</span>
+                                    <div class="meter-bar"><div class="meter-fill" style="width: 75%"></div></div>
+                                </div>
+                            </div>
+                            
+                            <div class="detection-card">
+                                <div class="detection-icon">📐</div>
+                                <h3>RS Analysis</h3>
+                                <p>Examines regular and singular groups in pixel patterns. One of the most reliable methods for detecting LSB steganography.</p>
+                                <div class="effectiveness-meter">
+                                    <span>Effectiveness:</span>
+                                    <div class="meter-bar"><div class="meter-fill" style="width: 88%"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detection-tip">
+                            <strong>💡 Pro Tip:</strong> Use our <a href="#" onclick="navigate('scanner'); return false;">Stego Scanner</a> tool to analyze images for potential hidden content using several of these techniques!
+                        </div>
+                    </div>
+
+                    <!-- BEST PRACTICES Section -->
+                    <div id="learn-practice" class="learn-section">
+                        <div class="learn-section-header">
+                            <span class="section-icon">💡</span>
+                            <h2>Best Practices & Security Tips</h2>
+                        </div>
+                        
+                        <div class="practices-grid">
+                            <div class="practice-card do">
+                                <div class="practice-header">
+                                    <span class="practice-icon">✅</span>
+                                    <h3>Do's</h3>
+                                </div>
+                                <ul class="practice-list">
+                                    <li>Always use a strong password for sensitive secrets</li>
+                                    <li>Keep cover text natural and contextually appropriate</li>
+                                    <li>Use PNG format for lossless image quality</li>
+                                    <li>Share passwords through a separate secure channel</li>
+                                    <li>Use images with natural noise and detail</li>
+                                    <li>Test your stego-content before sending</li>
+                                    <li>Combine steganography with encryption</li>
+                                    <li>Use fresh, unique cover media each time</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="practice-card dont">
+                                <div class="practice-header">
+                                    <span class="practice-icon">❌</span>
+                                    <h3>Don'ts</h3>
+                                </div>
+                                <ul class="practice-list">
+                                    <li>Don't reuse the same cover text/image multiple times</li>
+                                    <li>Don't use simple or obvious passwords</li>
+                                    <li>Don't use JPEG for steganography (lossy compression)</li>
+                                    <li>Don't send password and message together</li>
+                                    <li>Don't use images with large flat color areas</li>
+                                    <li>Don't exceed 10% of image capacity</li>
+                                    <li>Don't trust steganography alone for security</li>
+                                    <li>Don't use well-known images as covers</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="security-levels">
+                            <h3>🛡️ Security Level Guide</h3>
+                            <div class="level-cards">
+                                <div class="level-card basic">
+                                    <div class="level-badge">Basic</div>
+                                    <h4>Steganography Only</h4>
+                                    <p>Hidden but not encrypted. Anyone with the right tool can decode.</p>
+                                    <div class="level-use">Use for: Non-sensitive data, fun</div>
+                                </div>
+                                
+                                <div class="level-card medium">
+                                    <div class="level-badge">Medium</div>
+                                    <h4>Stego + Password</h4>
+                                    <p>Hidden AND encrypted. Requires both tool and password to access.</p>
+                                    <div class="level-use">Use for: Personal secrets, private notes</div>
+                                </div>
+                                
+                                <div class="level-card high">
+                                    <div class="level-badge">High</div>
+                                    <h4>Stego + Strong Encryption + Fresh Media</h4>
+                                    <p>Long password, unique cover media, sent through separate channels.</p>
+                                    <div class="level-use">Use for: Sensitive communications</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
              GUIDE PAGE
         ======================================== -->
         <section id="page-guide" class="page-section">
@@ -4238,6 +6358,193 @@
                         • Share the password through a separate secure channel<br>
                         • Don't reuse the same cover text/image multiple times
                     </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             STEGANOGRAPHY HISTORY / ABOUT PAGE
+        ======================================== -->
+        <section id="page-stego-history" class="page-section">
+            <div class="guide-container">
+                <div style="text-align: center; margin-bottom: 48px;">
+                    <h1 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 16px;">📚 The History of Steganography</h1>
+                    <p style="font-size: 1.1rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto;">
+                        From ancient civilizations to modern digital age - discover how the art of hiding messages has evolved over millennia
+                    </p>
+                </div>
+
+                <!-- Timeline -->
+                <div class="stego-timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">~440 BC</div>
+                        <div class="timeline-content">
+                            <h3>🏛️ Ancient Greece - The Hidden Message</h3>
+                            <p>Histiaeus shaved a slave's head and tattooed a secret message on his scalp. After the hair regrew, the slave was sent to deliver the hidden message to Aristagoras, helping to incite a revolt against Persian rule.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">~480 BC</div>
+                        <div class="timeline-content">
+                            <h3>📜 Wax Tablets</h3>
+                            <p>Demaratus warned Sparta of Xerxes' invasion plans by scraping wax off tablets, writing on the wood beneath, then re-applying wax. The blank tablets passed inspection, but Queen Gorgo discovered the hidden message.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">1st Century</div>
+                        <div class="timeline-content">
+                            <h3>🍋 Invisible Inks</h3>
+                            <p>Pliny the Elder documented using plant-based invisible inks. Messages written with milk, fruit juices, or urine become visible when heated. This technique remained popular for centuries in espionage.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">15th Century</div>
+                        <div class="timeline-content">
+                            <h3>📖 Johannes Trithemius</h3>
+                            <p>The German abbot wrote "Steganographia" (1499), the first book dedicated to steganography. While appearing to be about magic, it actually contained sophisticated cipher systems hidden within.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">World War I</div>
+                        <div class="timeline-content">
+                            <h3>📬 Microdots & Invisible Ink</h3>
+                            <p>German spies used invisible inks extensively. Messages were hidden in innocent-looking letters. The British developed chemical tests to detect these hidden communications.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">World War II</div>
+                        <div class="timeline-content">
+                            <h3>🔬 The Microdot Revolution</h3>
+                            <p>The Germans perfected "microdots" - photographs shrunk to the size of a period. An entire page of text could be hidden in a single dot on a letter. The FBI called it "the enemy's masterpiece of espionage."</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">1985</div>
+                        <div class="timeline-content">
+                            <h3>💻 Digital Era Begins</h3>
+                            <p>With the rise of digital images, researchers began exploring how to hide data within image pixels. The concept of LSB (Least Significant Bit) embedding was developed.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">1990s</div>
+                        <div class="timeline-content">
+                            <h3>🌐 Internet & Digital Watermarking</h3>
+                            <p>As the internet grew, steganography tools proliferated. Companies began using digital watermarking to protect copyrighted images, music, and videos.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">2000s</div>
+                        <div class="timeline-content">
+                            <h3>🔐 Modern Applications</h3>
+                            <p>Steganography found legitimate uses: protecting intellectual property, secure communications, medical imaging privacy, and covert channels for whistleblowers and journalists.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">Today</div>
+                        <div class="timeline-content">
+                            <h3>🚀 AI & Advanced Techniques</h3>
+                            <p>Modern steganography uses neural networks for better hiding, audio/video embedding, and detection-resistant methods. Research continues in both hiding and detecting hidden data.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Famous Techniques Section -->
+                <div style="margin-top: 60px;">
+                    <h2 style="font-size: 1.8rem; margin-bottom: 24px; text-align: center;">🎭 Notable Techniques & Methods</h2>
+                    
+                    <div class="techniques-grid">
+                        <div class="technique-card">
+                            <div class="technique-icon">🖼️</div>
+                            <h4>LSB Embedding</h4>
+                            <p>Hiding data in the least significant bits of image pixels. Changes are imperceptible to human eyes but can store substantial data.</p>
+                        </div>
+                        
+                        <div class="technique-card">
+                            <div class="technique-icon">📝</div>
+                            <h4>Zero-Width Characters</h4>
+                            <p>Using invisible Unicode characters (ZWJ, ZWNJ) to encode binary data within ordinary text. Completely invisible when displayed.</p>
+                        </div>
+                        
+                        <div class="technique-card">
+                            <div class="technique-icon">🎵</div>
+                            <h4>Audio Steganography</h4>
+                            <p>Embedding data in audio files by modifying inaudible frequencies or using echo hiding and spread spectrum techniques.</p>
+                        </div>
+                        
+                        <div class="technique-card">
+                            <div class="technique-icon">📄</div>
+                            <h4>Document Steganography</h4>
+                            <p>Hiding data in Word documents, PDFs through whitespace manipulation, font variations, or metadata fields.</p>
+                        </div>
+                        
+                        <div class="technique-card">
+                            <div class="technique-icon">🌐</div>
+                            <h4>Network Steganography</h4>
+                            <p>Covert channels in network protocols - hiding data in packet headers, timing patterns, or unused protocol fields.</p>
+                        </div>
+                        
+                        <div class="technique-card">
+                            <div class="technique-icon">🎮</div>
+                            <h4>Video Steganography</h4>
+                            <p>Embedding data across video frames. The temporal dimension allows for larger payloads while maintaining visual quality.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modern Uses Section -->
+                <div style="margin-top: 60px;">
+                    <h2 style="font-size: 1.8rem; margin-bottom: 24px; text-align: center;">⚖️ Legitimate Modern Uses</h2>
+                    
+                    <div class="uses-grid">
+                        <div class="use-card">
+                            <h4>🏢 Digital Rights Management</h4>
+                            <p>Companies embed invisible watermarks in media to track unauthorized distribution and protect intellectual property.</p>
+                        </div>
+                        
+                        <div class="use-card">
+                            <h4>📰 Journalist Protection</h4>
+                            <p>Reporters in dangerous regions use steganography to safely transmit sensitive information past censorship systems.</p>
+                        </div>
+                        
+                        <div class="use-card">
+                            <h4>🏥 Medical Privacy</h4>
+                            <p>Patient information can be embedded within medical images (X-rays, MRIs), keeping data linked without visible annotations.</p>
+                        </div>
+                        
+                        <div class="use-card">
+                            <h4>🗳️ Ballot Security</h4>
+                            <p>Some electronic voting systems use steganographic techniques to verify ballot integrity without compromising voter privacy.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Steganalysis Section -->
+                <div style="margin-top: 60px; margin-bottom: 40px;">
+                    <h2 style="font-size: 1.8rem; margin-bottom: 24px; text-align: center;">🔍 Steganalysis: The Counter-Measure</h2>
+                    
+                    <div class="guide-card" style="max-width: 800px; margin: 0 auto;">
+                        <p class="guide-text" style="margin-bottom: 16px;">
+                            <strong>Steganalysis</strong> is the science of detecting hidden messages. Just as cryptanalysis tries to break encryption, steganalysis attempts to detect steganographic content. Methods include:
+                        </p>
+                        <ul style="color: var(--text-secondary); line-height: 1.8; padding-left: 20px;">
+                            <li><strong>Statistical Analysis:</strong> Looking for anomalies in data patterns (chi-square tests, RS analysis)</li>
+                            <li><strong>Visual Inspection:</strong> Enhanced contrast viewing, histogram analysis</li>
+                            <li><strong>Machine Learning:</strong> Training AI to detect subtle differences between clean and stego-images</li>
+                            <li><strong>Signature Detection:</strong> Identifying artifacts left by known steganography tools</li>
+                        </ul>
+                        <p class="guide-text" style="margin-top: 16px;">
+                            Our Scanner tool uses several of these techniques to analyze images for potential hidden content.
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -4801,6 +7108,108 @@
             });
         }
         
+        function clearAllFormFields() {
+            // Clear text encode/decode fields
+            const textCover = document.getElementById('text-cover');
+            const textSecret = document.getElementById('text-secret');
+            const textPassword = document.getElementById('text-password');
+            const textEncodeOutput = document.getElementById('text-encode-output');
+            const textDecodeInput = document.getElementById('text-decode-input');
+            const textDecodePassword = document.getElementById('text-decode-password');
+            const textDecodeOutput = document.getElementById('text-decode-output');
+            
+            if (textCover) textCover.value = '';
+            if (textSecret) textSecret.value = '';
+            if (textPassword) textPassword.value = '';
+            if (textEncodeOutput) textEncodeOutput.value = '';
+            if (textDecodeInput) textDecodeInput.value = '';
+            if (textDecodePassword) textDecodePassword.value = '';
+            if (textDecodeOutput) textDecodeOutput.textContent = '';
+            
+            // Clear image encode/decode fields  
+            const imageSecret = document.getElementById('image-secret');
+            const imagePassword = document.getElementById('image-password');
+            const imageDecodePassword = document.getElementById('image-decode-password');
+            const imageDecodeOutput = document.getElementById('image-decode-output');
+            const imageEncodePreview = document.getElementById('image-encode-preview');
+            const imageDecodePreview = document.getElementById('image-decode-preview');
+            const imageEncodeInput = document.getElementById('image-encode-input');
+            const imageDecodeInput = document.getElementById('image-decode-input');
+            
+            if (imageSecret) imageSecret.value = '';
+            if (imagePassword) imagePassword.value = '';
+            if (imageDecodePassword) imageDecodePassword.value = '';
+            if (imageDecodeOutput) imageDecodeOutput.textContent = '';
+            if (imageEncodePreview) imageEncodePreview.innerHTML = '';
+            if (imageDecodePreview) imageDecodePreview.innerHTML = '';
+            if (imageEncodeInput) imageEncodeInput.value = '';
+            if (imageDecodeInput) imageDecodeInput.value = '';
+            
+            // Clear multi-file stego
+            const mfSecret = document.getElementById('mf-secret');
+            const mfResults = document.getElementById('mf-results');
+            const mfPreview = document.getElementById('mf-preview');
+            const mfEncodePreview = document.getElementById('mf-encode-preview');
+            
+            if (mfSecret) mfSecret.value = '';
+            if (mfResults) mfResults.innerHTML = '';
+            if (mfPreview) mfPreview.innerHTML = '';
+            if (mfEncodePreview) mfEncodePreview.innerHTML = '';
+            
+            // Clear scanner
+            const scannerOutput = document.getElementById('scanner-output');
+            const scannerPreview = document.getElementById('scanner-preview');
+            const scannerText = document.getElementById('scanner-text');
+            const scannerTextOutput = document.getElementById('scanner-text-output');
+            
+            if (scannerOutput) scannerOutput.innerHTML = '';
+            if (scannerPreview) scannerPreview.innerHTML = '';
+            if (scannerText) scannerText.value = '';
+            if (scannerTextOutput) scannerTextOutput.innerHTML = '';
+            
+            // Clear burn messages
+            const burnStego = document.getElementById('burn-stego-data');
+            const burnAlgorithm = document.getElementById('burn-algorithm');
+            const burnPassword = document.getElementById('burn-password');
+            const burnResult = document.getElementById('burn-result');
+            const burnAccessResult = document.getElementById('burn-access-result');
+            
+            if (burnStego) burnStego.value = '';
+            if (burnAlgorithm) burnAlgorithm.value = 'zwc';
+            if (burnPassword) burnPassword.value = '';
+            if (burnResult) burnResult.innerHTML = '';
+            if (burnAccessResult) burnAccessResult.innerHTML = '';
+            
+            // Hide result sections
+            document.getElementById('text-encode-result')?.classList.add('hidden');
+            document.getElementById('text-decode-result')?.classList.add('hidden');
+            document.getElementById('image-encode-result')?.classList.add('hidden');
+            document.getElementById('image-decode-result')?.classList.add('hidden');
+            
+            // Reset character counters
+            document.querySelectorAll('.char-count').forEach(el => {
+                el.textContent = '0';
+            });
+            
+            // Reset global variables in features.js if they exist
+            if (typeof multiFileImages !== 'undefined') {
+                multiFileImages.length = 0;
+            }
+            if (typeof mfCustomImages !== 'undefined') {
+                mfCustomImages.length = 0;
+            }
+            if (typeof scannerImageData !== 'undefined') {
+                scannerImageData = null;
+            }
+            
+            // Reset any global image data
+            if (typeof currentImageData !== 'undefined') {
+                currentImageData = null;
+            }
+            
+            console.log('All form fields cleared');
+        }
+        
         function showAuthError(fieldId, message) {
             const input = document.getElementById(fieldId);
             const error = document.getElementById(fieldId + '-error');
@@ -4888,8 +7297,15 @@
                     };
                     localStorage.setItem('auth', JSON.stringify(authState));
                     
+                    // Clear all form fields for the new session
+                    clearAllFormFields();
+                    
                     updateAuthUI();
                     closeAuthModal();
+                    
+                    // Navigate to home page after login
+                    navigate('home');
+                    
                     showToast('✅ Welcome back, ' + data.user.username + '!');
                 } else {
                     // Format user-friendly error messages
@@ -5057,6 +7473,10 @@
             
             authState = { isLoggedIn: false, user: null, accessToken: null, refreshToken: null };
             localStorage.removeItem('auth');
+            
+            // Clear all form fields when logging out
+            clearAllFormFields();
+            
             updateAuthUI();
             closeUserDropdown();
             navigate('home');
@@ -5072,7 +7492,7 @@
             if (authState.isLoggedIn && authState.user) {
                 authButtons.style.display = 'none';
                 userMenu.classList.add('active');
-                navHistory.style.display = 'block';
+                if (navHistory) navHistory.style.display = 'block';
                 
                 // Update user info
                 document.getElementById('user-avatar').textContent = authState.user.username.charAt(0).toUpperCase();
@@ -5090,7 +7510,7 @@
             } else {
                 authButtons.style.display = 'flex';
                 userMenu.classList.remove('active');
-                navHistory.style.display = 'none';
+                if (navHistory) navHistory.style.display = 'none';
             }
         }
         
@@ -5114,6 +7534,33 @@
                 return { 'Authorization': `Bearer ${authState.accessToken}` };
             }
             return {};
+        }
+        
+        // Helper function to make authenticated API calls with automatic token refresh
+        async function authFetch(url, options = {}) {
+            // Add auth headers
+            options.headers = {
+                ...options.headers,
+                ...getAuthHeaders()
+            };
+            
+            let response = await fetch(url, options);
+            
+            // If unauthorized and we have a refresh token, try to refresh and retry
+            if (response.status === 401 && authState.refreshToken) {
+                const refreshed = await refreshAccessToken();
+                if (refreshed) {
+                    // Update headers with new token
+                    options.headers = {
+                        ...options.headers,
+                        ...getAuthHeaders()
+                    };
+                    // Retry the request
+                    response = await fetch(url, options);
+                }
+            }
+            
+            return response;
         }
         
         // Token refresh
@@ -5171,8 +7618,9 @@
             if (!authState.isLoggedIn) return;
             
             try {
-                const response = await fetch(`${API_BASE}/history`, {
-                    headers: { ...getAuthHeaders() }
+                const response = await authFetch(`${API_BASE}/history`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
                 });
                 
                 const data = await response.json();
@@ -5181,8 +7629,9 @@
                     renderHistory(data.history);
                     
                     // Load stats
-                    const statsResponse = await fetch(`${API_BASE}/history/stats`, {
-                        headers: { ...getAuthHeaders() }
+                    const statsResponse = await authFetch(`${API_BASE}/history/stats`, {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' }
                     });
                     const statsData = await statsResponse.json();
                     if (statsData.success) {
@@ -5210,26 +7659,99 @@
                 return;
             }
             
-            container.innerHTML = items.map(item => `
-                <div class="history-item" data-id="${item.id}">
-                    <div class="history-item-icon ${item.operation_type}">
-                        ${item.operation_type === 'encode' ? '🔒' : '🔓'}
-                    </div>
-                    <div class="history-item-content">
-                        <div class="history-item-title">
-                            ${item.operation_type === 'encode' ? 'Encoded' : 'Decoded'} message
-                            <span class="history-item-badge ${item.algorithm}">${item.algorithm.toUpperCase()}</span>
-                            ${item.is_encrypted ? '<span class="history-item-badge encrypted">🔐 Encrypted</span>' : ''}
+            container.innerHTML = items.map(item => {
+                const metadata = item.metadata || {};
+                return `
+                <div class="history-item-wrapper" data-id="${item.id}">
+                    <div class="history-item" onclick="toggleHistoryDetails(${item.id})">
+                        <div class="history-item-icon ${item.operation_type}">
+                            ${item.operation_type === 'encode' ? '🔒' : '🔓'}
                         </div>
-                        <div class="history-item-meta">
-                            <span>${item.input_preview ? item.input_preview.substring(0, 50) + '...' : '[Data]'}</span>
-                            <span>•</span>
-                            <span>${new Date(item.created_at).toLocaleString()}</span>
+                        <div class="history-item-content">
+                            <div class="history-item-title">
+                                ${item.operation_type === 'encode' ? 'Encoded' : 'Decoded'} message
+                                <span class="history-item-badge ${item.algorithm}">${item.algorithm.toUpperCase()}</span>
+                                ${item.is_encrypted ? '<span class="history-item-badge encrypted">🔐 Encrypted</span>' : ''}
+                            </div>
+                            <div class="history-item-meta">
+                                <span>${item.input_preview ? item.input_preview.substring(0, 50) + (item.input_preview.length > 50 ? '...' : '') : '[Data]'}</span>
+                                <span>•</span>
+                                <span>${new Date(item.created_at).toLocaleString()}</span>
+                            </div>
+                        </div>
+                        <div class="history-item-expand">▼</div>
+                        <button class="history-item-delete" onclick="event.stopPropagation(); deleteHistoryItem(${item.id})">🗑️</button>
+                    </div>
+                    <div class="history-item-details" id="history-details-${item.id}">
+                        <div class="history-details-grid">
+                            <div class="history-detail-section">
+                                <h4>📊 Operation Details</h4>
+                                <div class="history-detail-row">
+                                    <span class="history-detail-label">Type:</span>
+                                    <span class="history-detail-value">${item.operation_type === 'encode' ? 'Encode (Hide Message)' : 'Decode (Extract Message)'}</span>
+                                </div>
+                                <div class="history-detail-row">
+                                    <span class="history-detail-label">Algorithm:</span>
+                                    <span class="history-detail-value">${item.algorithm === 'zwc' ? 'Zero-Width Characters (Text)' : 'LSB Steganography (Image)'}</span>
+                                </div>
+                                <div class="history-detail-row">
+                                    <span class="history-detail-label">Encrypted:</span>
+                                    <span class="history-detail-value">${item.is_encrypted ? '✅ Yes (Password Protected)' : '❌ No'}</span>
+                                </div>
+                                <div class="history-detail-row">
+                                    <span class="history-detail-label">Date/Time:</span>
+                                    <span class="history-detail-value">${new Date(item.created_at).toLocaleString()}</span>
+                                </div>
+                            </div>
+                            ${metadata && Object.keys(metadata).length > 0 ? `
+                            <div class="history-detail-section">
+                                <h4>⚙️ Technical Info</h4>
+                                ${metadata.encoding_bits ? `<div class="history-detail-row"><span class="history-detail-label">Encoding Bits:</span><span class="history-detail-value">${metadata.encoding_bits}</span></div>` : ''}
+                                ${metadata.insertion_method ? `<div class="history-detail-row"><span class="history-detail-label">Method:</span><span class="history-detail-value">${metadata.insertion_method.replace('_', ' ')}</span></div>` : ''}
+                                ${metadata.bits_per_pixel ? `<div class="history-detail-row"><span class="history-detail-label">Bits/Pixel:</span><span class="history-detail-value">${metadata.bits_per_pixel}</span></div>` : ''}
+                                ${metadata.channel ? `<div class="history-detail-row"><span class="history-detail-label">Channel:</span><span class="history-detail-value">${metadata.channel}</span></div>` : ''}
+                                ${metadata.cover_length ? `<div class="history-detail-row"><span class="history-detail-label">Cover Length:</span><span class="history-detail-value">${metadata.cover_length.toLocaleString()} chars</span></div>` : ''}
+                                ${metadata.secret_length ? `<div class="history-detail-row"><span class="history-detail-label">Secret Length:</span><span class="history-detail-value">${metadata.secret_length.toLocaleString()} chars</span></div>` : ''}
+                                ${metadata.message_length ? `<div class="history-detail-row"><span class="history-detail-label">Message Length:</span><span class="history-detail-value">${metadata.message_length.toLocaleString()} chars</span></div>` : ''}
+                                ${metadata.pixels_modified ? `<div class="history-detail-row"><span class="history-detail-label">Pixels Modified:</span><span class="history-detail-value">${metadata.pixels_modified.toLocaleString()}</span></div>` : ''}
+                                ${metadata.capacity_used_percent ? `<div class="history-detail-row"><span class="history-detail-label">Capacity Used:</span><span class="history-detail-value">${metadata.capacity_used_percent}%</span></div>` : ''}
+                                ${metadata.image_dimensions ? `<div class="history-detail-row"><span class="history-detail-label">Image Size:</span><span class="history-detail-value">${metadata.image_dimensions}</span></div>` : ''}
+                            </div>
+                            ` : ''}
+                        </div>
+                        <div class="history-detail-previews">
+                            ${item.input_preview && item.input_preview !== '[Image]' && item.input_preview !== '[Image Data]' ? `
+                            <div class="history-preview-box">
+                                <h4>📥 Input Preview</h4>
+                                <div class="history-preview-content">${escapeHistoryHtml(item.input_preview)}</div>
+                            </div>` : ''}
+                            ${item.output_preview && item.output_preview !== '[Image]' && item.output_preview !== '[Image Data]' ? `
+                            <div class="history-preview-box">
+                                <h4>📤 Output Preview</h4>
+                                <div class="history-preview-content">${escapeHistoryHtml(item.output_preview)}</div>
+                            </div>` : ''}
                         </div>
                     </div>
-                    <button class="history-item-delete" onclick="deleteHistoryItem(${item.id})">🗑️</button>
                 </div>
-            `).join('');
+            `;
+            }).join('');
+        }
+        
+        function toggleHistoryDetails(id) {
+            const wrapper = document.querySelector(`.history-item-wrapper[data-id="${id}"]`);
+            if (wrapper) {
+                wrapper.classList.toggle('expanded');
+            }
+        }
+        
+        function escapeHistoryHtml(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
         }
         
         async function deleteHistoryItem(id) {
@@ -5884,12 +8406,55 @@ Thank you for your cooperation.`;
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // Learn Page Section Switching
+        function showLearnSection(sectionId) {
+            // Hide all learn sections
+            document.querySelectorAll('.learn-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active from all nav cards
+            document.querySelectorAll('.learn-nav-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Show the selected section
+            const targetSection = document.getElementById('learn-' + sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+            
+            // Highlight the nav card that was clicked
+            event.currentTarget.classList.add('active');
+            
+            // Smooth scroll to content area
+            document.getElementById('learn-content-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
         // Utilities
+        let toastTimeoutId = null;
         function showToast(message) {
             const toast = document.getElementById('toast');
+            if (!toast) return;
+            
+            // Clear any existing timeout to prevent overlap
+            if (toastTimeoutId) {
+                clearTimeout(toastTimeoutId);
+            }
+            
+            // Reset the toast state
+            toast.classList.remove('show');
+            
+            // Force reflow to restart animation
+            void toast.offsetWidth;
+            
             toast.textContent = message;
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+            
+            toastTimeoutId = setTimeout(() => {
+                toast.classList.remove('show');
+                toastTimeoutId = null;
+            }, 3000);
         }
 
         function showLoading(show) {
@@ -6065,17 +8630,11 @@ Thank you for your cooperation.`;
             showLoading(true);
             const startTime = performance.now();
             
-            // Show encryption visualization if password is used
-            if (password) {
-                showEncryptionVisualization('text-encode-viz', true);
-            }
-            
             try {
-                const response = await fetch(`${API_BASE}/encode`, {
+                const response = await authFetch(`${API_BASE}/encode`, {
                     method: 'POST',
                     headers: { 
-                        'Content-Type': 'application/json',
-                        ...getAuthHeaders()
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         algorithm: 'zwc',
@@ -6103,6 +8662,11 @@ Thank you for your cooperation.`;
                     
                     showToast(`✅ Message hidden in ${processingTime}s!`);
                     updateStats('encode', endTime - startTime);
+                    
+                    // Refresh history if user is logged in
+                    if (authState.isLoggedIn) {
+                        loadHistory();
+                    }
                 } else {
                     showToast('❌ Error: ' + data.error);
                 }
@@ -6126,11 +8690,10 @@ Thank you for your cooperation.`;
             const startTime = performance.now();
             
             try {
-                const response = await fetch(`${API_BASE}/decode`, {
+                const response = await authFetch(`${API_BASE}/decode`, {
                     method: 'POST',
                     headers: { 
-                        'Content-Type': 'application/json',
-                        ...getAuthHeaders()
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         algorithm: 'zwc',
@@ -6157,6 +8720,11 @@ Thank you for your cooperation.`;
                     
                     showToast(`✅ Secret revealed in ${processingTime}s!`);
                     updateStats('decode', endTime - startTime);
+                    
+                    // Refresh history if user is logged in
+                    if (authState.isLoggedIn) {
+                        loadHistory();
+                    }
                 } else {
                     showToast('❌ ' + (data.error || 'No hidden message found'));
                 }
@@ -6204,17 +8772,11 @@ Thank you for your cooperation.`;
             showLoading(true);
             const startTime = performance.now();
             
-            // Show encryption visualization if password is used
-            if (password) {
-                showEncryptionVisualization('image-encode-viz', true);
-            }
-            
             try {
-                const response = await fetch(`${API_BASE}/encode`, {
+                const response = await authFetch(`${API_BASE}/encode`, {
                     method: 'POST',
                     headers: { 
-                        'Content-Type': 'application/json',
-                        ...getAuthHeaders()
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         algorithm: 'lsb',
@@ -6264,6 +8826,11 @@ Thank you for your cooperation.`;
                     
                     showToast(`✅ Image encoded in ${processingTime}s!`);
                     updateStats('encode', endTime - startTime);
+                    
+                    // Refresh history if user is logged in
+                    if (authState.isLoggedIn) {
+                        loadHistory();
+                    }
                 } else {
                     showToast('❌ ' + data.error);
                 }
@@ -6300,11 +8867,10 @@ Thank you for your cooperation.`;
             const startTime = performance.now();
             
             try {
-                const response = await fetch(`${API_BASE}/decode`, {
+                const response = await authFetch(`${API_BASE}/decode`, {
                     method: 'POST',
                     headers: { 
-                        'Content-Type': 'application/json',
-                        ...getAuthHeaders()
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         algorithm: 'lsb',
@@ -6331,6 +8897,11 @@ Thank you for your cooperation.`;
                     
                     showToast(`✅ Secret extracted in ${processingTime}s!`);
                     updateStats('decode', endTime - startTime);
+                    
+                    // Refresh history if user is logged in
+                    if (authState.isLoggedIn) {
+                        loadHistory();
+                    }
                 } else {
                     showToast('❌ ' + (data.error || 'No hidden message found'));
                 }
@@ -6340,28 +8911,106 @@ Thank you for your cooperation.`;
             showLoading(false);
         }
 
-        // Copy functions
-        function copyToClipboard(elementId) {
-            const element = document.getElementById(elementId);
-            element.select();
-            document.execCommand('copy');
-            showToast('📋 Copied to clipboard!');
+        // Copy functions with robust fallback
+        function copyToClipboard(elementIdOrText) {
+            let text = '';
+            
+            // Check if it's an element ID or direct text
+            const element = document.getElementById(elementIdOrText);
+            
+            if (element) {
+                // It's an element ID - get text based on element type
+                if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                    text = element.value || '';
+                } else {
+                    text = element.textContent || element.innerText || '';
+                }
+            } else {
+                // It's direct text (not an element ID)
+                text = String(elementIdOrText);
+            }
+            
+            // Trim and validate
+            text = text.trim();
+            
+            if (!text) {
+                showToast('❌ Nothing to copy');
+                return;
+            }
+            
+            // Try modern clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('📋 Copied to clipboard!');
+                }).catch((err) => {
+                    console.error('Clipboard API failed:', err);
+                    // Fallback for clipboard API failure
+                    fallbackCopy(text);
+                });
+            } else {
+                // Fallback for older browsers
+                fallbackCopy(text);
+            }
+        }
+        
+        // Dedicated function for copying text encode output
+        function copyTextEncodeOutput() {
+            const element = document.getElementById('text-encode-output');
+            if (element && element.value && element.value.trim()) {
+                copyToClipboard(element.value);
+            } else {
+                showToast('❌ Nothing to copy - encode a message first');
+            }
+        }
+        
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.left = '-9999px';
+            textarea.style.top = '0';
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast('📋 Copied to clipboard!');
+                } else {
+                    showToast('❌ Copy failed');
+                }
+            } catch (err) {
+                showToast('❌ Copy not supported in this browser');
+            }
+            
+            document.body.removeChild(textarea);
         }
 
         function copySecretText() {
-            const text = document.getElementById('text-decode-output').textContent;
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('📋 Secret copied to clipboard!');
-            });
+            const element = document.getElementById('text-decode-output');
+            const text = element ? (element.textContent || element.innerText || '') : '';
+            if (!text.trim()) {
+                showToast('❌ Nothing to copy');
+                return;
+            }
+            copyToClipboard(text);
         }
 
         function copyImageSecret() {
-            const text = document.getElementById('image-decode-output').textContent;
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('📋 Secret copied to clipboard!');
-            });
+            const element = document.getElementById('image-decode-output');
+            const text = element ? (element.textContent || element.innerText || '') : '';
+            if (!text.trim()) {
+                showToast('❌ Nothing to copy');
+                return;
+            }
+            copyToClipboard(text);
         }
     </script>
+
+    <script src="features.js"></script>
+    <!-- Chatbot JavaScript -->
+    <script src="chatbot.js"></script>
 
 </body>
 </html>

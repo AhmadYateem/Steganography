@@ -15,6 +15,9 @@ Flask-CORS>=4.0.0
 # JWT Authentication
 PyJWT>=2.8.0
 
+# Hugging Face for AI Chatbot (free API)
+huggingface_hub>=0.20.0
+
 # Note: The following are Python standard library (no installation needed):
 # - base64
 # - hashlib
