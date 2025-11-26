@@ -1434,43 +1434,57 @@
         }
 
         .btn-generate {
-            background: var(--gradient-blue);
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
             color: white;
             border: none;
             border-radius: 12px;
-            padding: 12px 16px;
-            font-size: 1.1rem;
+            padding: 0;
+            width: 48px;
+            height: 48px;
+            font-size: 1.2rem;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-width: 50px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
         }
 
         .btn-generate:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-generate:active {
+            transform: translateY(0);
         }
 
         .btn-copy {
-            background: var(--gradient-green);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
             border: none;
             border-radius: 12px;
-            padding: 12px 16px;
-            font-size: 1.1rem;
+            padding: 0;
+            width: 48px;
+            height: 48px;
+            font-size: 1.2rem;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-width: 50px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
         }
 
         .btn-copy:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-copy:active {
+            transform: translateY(0);
         }
 
         /* ============== SPEED METRICS ============== */
@@ -2327,9 +2341,28 @@
         }
 
         .auth-submit-btn:disabled {
-            opacity: 0.6;
+            opacity: 0.7;
             cursor: not-allowed;
             transform: none;
+        }
+
+        .auth-submit-btn .btn-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 10px;
+        }
+
+        .auth-submit-btn.loading .btn-spinner {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         .auth-switch {
@@ -3345,7 +3378,10 @@
                     <div id="login-password-error" class="auth-form-error"></div>
                 </div>
                 
-                <button onclick="handleLogin()" class="auth-submit-btn">Sign In</button>
+                <button id="login-btn" onclick="handleLogin()" class="auth-submit-btn">
+                    <span class="btn-spinner"></span>
+                    <span class="btn-text">Sign In</span>
+                </button>
                 
                 <p class="auth-switch">
                     Don't have an account? <span class="auth-switch-link" onclick="showSignupForm()">Create one</span>
@@ -3389,7 +3425,10 @@
                     <div id="signup-confirm-error" class="auth-form-error"></div>
                 </div>
                 
-                <button onclick="handleSignup()" class="auth-submit-btn">Create Account</button>
+                <button id="signup-btn" onclick="handleSignup()" class="auth-submit-btn">
+                    <span class="btn-spinner"></span>
+                    <span class="btn-text">Create Account</span>
+                </button>
                 
                 <p class="auth-switch">
                     Already have an account? <span class="auth-switch-link" onclick="showLoginForm()">Sign in</span>
@@ -4597,9 +4636,12 @@
 
     <script>
         // Automatically use the correct API endpoint
-        const API_BASE = window.location.hostname === 'localhost' 
+        const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? 'http://localhost:5000/api' 
             : `${window.location.protocol}//${window.location.host}/api`;
+        
+        // Debug: Log API base on load
+        console.log('API Base URL:', API_BASE);
         
         let coverImageData = null;
         let stegoImageData = null;
@@ -4793,6 +4835,7 @@
             
             const username = document.getElementById('login-username').value.trim();
             const password = document.getElementById('login-password').value;
+            const loginBtn = document.getElementById('login-btn');
             
             if (!username) {
                 showAuthError('login-username', 'Username or email is required');
@@ -4803,18 +4846,37 @@
                 return;
             }
             
-            showLoading(true);
+            // Show loading state
+            loginBtn.classList.add('loading');
+            loginBtn.disabled = true;
+            
             try {
+                console.log('Attempting login to:', `${API_BASE}/auth/login`);
+                
                 const response = await fetch(`${API_BASE}/auth/login`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
                     body: JSON.stringify({
                         username_or_email: username,
                         password: password
                     })
                 });
                 
+                console.log('Login response status:', response.status);
+                
+                // Check if response is ok before parsing JSON
+                if (!response.ok && response.status === 404) {
+                    showAuthError('login-password', 'Server not available. Please try again later.');
+                    loginBtn.classList.remove('loading');
+                    loginBtn.disabled = false;
+                    return;
+                }
+                
                 const data = await response.json();
+                console.log('Login response data:', data);
                 
                 if (data.success) {
                     // Save auth state
@@ -4830,12 +4892,34 @@
                     closeAuthModal();
                     showToast('✅ Welcome back, ' + data.user.username + '!');
                 } else {
-                    showAuthError('login-password', data.error || 'Login failed');
+                    // Format user-friendly error messages
+                    let errorMsg = data.error || 'Login failed';
+                    if (errorMsg.includes('Invalid username/email or password')) {
+                        errorMsg = 'Incorrect username/email or password';
+                    } else if (errorMsg.includes('Invalid password')) {
+                        errorMsg = data.error; // Keep the attempts remaining message
+                    } else if (errorMsg.includes('Account is locked')) {
+                        errorMsg = data.error;
+                    } else if (errorMsg.includes('Account is deactivated')) {
+                        errorMsg = 'This account has been deactivated';
+                    }
+                    showAuthError('login-password', errorMsg);
                 }
             } catch (error) {
-                showAuthError('login-password', 'Connection error. Please try again.');
+                console.error('Login error:', error);
+                // More specific error handling
+                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                    showAuthError('login-password', 'Cannot connect to server. Please ensure the server is running.');
+                } else if (error instanceof SyntaxError) {
+                    showAuthError('login-password', 'Server returned invalid response. Please try again.');
+                } else {
+                    showAuthError('login-password', 'Connection error. Please check your internet connection.');
+                }
             }
-            showLoading(false);
+            
+            // Hide loading state
+            loginBtn.classList.remove('loading');
+            loginBtn.disabled = false;
         }
         
         async function handleSignup() {
@@ -4845,6 +4929,7 @@
             const email = document.getElementById('signup-email').value.trim();
             const password = document.getElementById('signup-password').value;
             const confirm = document.getElementById('signup-confirm').value;
+            const signupBtn = document.getElementById('signup-btn');
             
             // Validation
             if (!username) {
@@ -4876,15 +4961,34 @@
                 return;
             }
             
-            showLoading(true);
+            // Show loading state
+            signupBtn.classList.add('loading');
+            signupBtn.disabled = true;
+            
             try {
+                console.log('Attempting signup to:', `${API_BASE}/auth/signup`);
+                
                 const response = await fetch(`${API_BASE}/auth/signup`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
                     body: JSON.stringify({ username, email, password })
                 });
                 
+                console.log('Signup response status:', response.status);
+                
+                // Check if response is ok before parsing JSON
+                if (!response.ok && response.status === 404) {
+                    showAuthError('signup-password', 'Server not available. Please try again later.');
+                    signupBtn.classList.remove('loading');
+                    signupBtn.disabled = false;
+                    return;
+                }
+                
                 const data = await response.json();
+                console.log('Signup response data:', data);
                 
                 if (data.success) {
                     authState = {
@@ -4899,22 +5003,39 @@
                     closeAuthModal();
                     showToast('🎉 Account created! Welcome, ' + data.user.username + '!');
                 } else {
-                    // Show specific field errors
-                    const error = data.error.toLowerCase();
-                    if (error.includes('username')) {
-                        showAuthError('signup-username', data.error);
-                    } else if (error.includes('email')) {
-                        showAuthError('signup-email', data.error);
-                    } else if (error.includes('password')) {
-                        showAuthError('signup-password', data.error);
+                    // Show specific field errors with user-friendly messages
+                    let errorMsg = data.error || 'Signup failed';
+                    const errorLower = errorMsg.toLowerCase();
+                    
+                    if (errorLower.includes('username') && errorLower.includes('exists')) {
+                        showAuthError('signup-username', 'This username is already taken');
+                    } else if (errorLower.includes('email') && errorLower.includes('exists')) {
+                        showAuthError('signup-email', 'An account with this email already exists');
+                    } else if (errorLower.includes('username')) {
+                        showAuthError('signup-username', errorMsg);
+                    } else if (errorLower.includes('email')) {
+                        showAuthError('signup-email', errorMsg);
+                    } else if (errorLower.includes('password')) {
+                        showAuthError('signup-password', errorMsg);
                     } else {
-                        showAuthError('signup-password', data.error);
+                        showAuthError('signup-password', errorMsg);
                     }
                 }
             } catch (error) {
-                showAuthError('signup-password', 'Connection error. Please try again.');
+                console.error('Signup error:', error);
+                // More specific error handling
+                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                    showAuthError('signup-password', 'Cannot connect to server. Please ensure the server is running.');
+                } else if (error instanceof SyntaxError) {
+                    showAuthError('signup-password', 'Server returned invalid response. Please try again.');
+                } else {
+                    showAuthError('signup-password', 'Connection error. Please check your internet connection.');
+                }
             }
-            showLoading(false);
+            
+            // Hide loading state
+            signupBtn.classList.remove('loading');
+            signupBtn.disabled = false;
         }
         
         async function handleLogout() {
@@ -5508,6 +5629,9 @@ Thank you for your cooperation.`;
 
         // Initialize auth and chart when page loads
         document.addEventListener('DOMContentLoaded', () => {
+            // Check server connectivity first
+            checkServerConnection();
+            
             // Restore auth state from localStorage
             const savedAuth = localStorage.getItem('auth');
             if (savedAuth) {
@@ -5529,6 +5653,24 @@ Thank you for your cooperation.`;
             // Initialize chart
             setTimeout(initChart, 500);
         });
+        
+        // Check if server is reachable
+        async function checkServerConnection() {
+            try {
+                const response = await fetch(`${API_BASE.replace('/api', '')}/ping`, {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (response.ok) {
+                    console.log('✅ Server connection OK');
+                } else {
+                    console.warn('⚠️ Server responded with status:', response.status);
+                }
+            } catch (error) {
+                console.error('❌ Server connection failed:', error);
+                showToast('⚠️ Server may be unavailable');
+            }
+        }
 
         // Navigation
         // Tutorial System
