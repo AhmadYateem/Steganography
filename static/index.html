@@ -20,6 +20,7 @@
         :root {
             /* Light theme (default) */
             --purple-900: #3b0764;
+            --purple-800: #5b21b6;
             --purple-700: #7c3aed;
             --purple-600: #8b5cf6;
             --purple-500: #a855f7;
@@ -59,6 +60,7 @@
         /* Dark theme */
         [data-theme="dark"] {
             --purple-900: #e9d5ff;
+            --purple-800: #d8b4fe;
             --purple-700: #a855f7;
             --purple-600: #c084fc;
             --purple-500: #d8b4fe;
@@ -2138,6 +2140,147 @@
         .challenge-desc { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 16px; }
         .challenge-meta { display: flex; justify-content: space-between; align-items: center; }
         .challenge-solved { font-size: 0.85rem; color: var(--text-muted); }
+
+        /* ============== POINTS BANNER ============== */
+        .points-banner {
+            background: linear-gradient(135deg, var(--purple-600) 0%, var(--purple-800) 100%);
+            border-radius: 16px;
+            padding: 20px 32px;
+            margin-bottom: 24px;
+            color: white;
+        }
+        .points-info {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+        }
+        .points-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .points-value {
+            font-size: 2rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+        .points-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        /* ============== CHALLENGES LAYOUT ============== */
+        .challenges-layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 24px;
+        }
+        @media (max-width: 1024px) {
+            .challenges-layout {
+                grid-template-columns: 1fr;
+            }
+            .leaderboard-card {
+                order: -1;
+            }
+        }
+        .challenges-main {
+            min-width: 0;
+        }
+
+        /* ============== LEADERBOARD CARD ============== */
+        .leaderboard-card {
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        .leaderboard-entry {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            transition: background 0.2s;
+        }
+        .leaderboard-entry:hover {
+            background: var(--bg-tertiary);
+        }
+        .leaderboard-entry.top-1 {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        }
+        .leaderboard-entry.top-2 {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+        }
+        .leaderboard-entry.top-3 {
+            background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+        }
+        .leaderboard-rank {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 0.9rem;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            flex-shrink: 0;
+        }
+        .leaderboard-entry.top-1 .leaderboard-rank { background: #f59e0b; color: white; }
+        .leaderboard-entry.top-2 .leaderboard-rank { background: #9ca3af; color: white; }
+        .leaderboard-entry.top-3 .leaderboard-rank { background: #f97316; color: white; }
+        
+        /* Current user highlighting */
+        .leaderboard-entry.current-user {
+            background: linear-gradient(135deg, var(--purple-100) 0%, var(--purple-200) 100%);
+            border: 2px solid var(--purple-500);
+            box-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
+        }
+        .leaderboard-entry.current-user .leaderboard-username {
+            color: var(--purple-700);
+        }
+        .leaderboard-entry.current-user .leaderboard-username::after {
+            content: " (You)";
+            font-weight: 500;
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        
+        .leaderboard-user {
+            flex: 1;
+            min-width: 0;
+        }
+        .leaderboard-username {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .leaderboard-solved {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .leaderboard-points {
+            font-weight: 900;
+            font-size: 1.1rem;
+            color: var(--purple-700);
+            flex-shrink: 0;
+        }
+        .leaderboard-empty {
+            text-align: center;
+            padding: 32px;
+            color: var(--text-muted);
+        }
+        .leaderboard-empty-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
 
         /* ============== RESULT BOX ============== */
         .result-box {
@@ -4816,9 +4959,6 @@
                         <a class="nav-dropdown-item" onclick="navigate('scanner')">
                             <span class="item-icon">🔬</span> Stego Scanner
                         </a>
-                        <a class="nav-dropdown-item" onclick="navigate('burn')">
-                            <span class="item-icon">🔥</span> Burn Messages
-                        </a>
                         <a class="nav-dropdown-item" onclick="navigate('challenges')">
                             <span class="item-icon">🏆</span> Challenges
                         </a>
@@ -5214,20 +5354,54 @@
              CHALLENGES PAGE
         ======================================== -->
         <section id="page-challenges" class="page-section">
-            <div class="workspace-card">
-                <div class="card-header">
-                    <h2 class="card-title">🏆 Stego Challenges</h2>
-                    <p class="card-subtitle">Test your steganography skills! Find hidden messages in puzzles and earn points.</p>
-                </div>
-                <div class="card-body">
-                    <div class="challenge-filters">
-                        <button class="btn-filter active" onclick="filterChallenges('')">All</button>
-                        <button class="btn-filter" onclick="filterChallenges('easy')">🌱 Easy</button>
-                        <button class="btn-filter" onclick="filterChallenges('medium')">🔥 Medium</button>
-                        <button class="btn-filter" onclick="filterChallenges('hard')">💀 Hard</button>
+            <!-- User Points Banner (shown when logged in) -->
+            <div id="user-points-banner" class="points-banner" style="display: none;">
+                <div class="points-info">
+                    <div class="points-stat">
+                        <span class="points-value" id="user-total-points">0</span>
+                        <span class="points-label">Total Points</span>
                     </div>
-                    <div id="challenges-grid" class="challenges-grid">
-                        <!-- Challenges loaded dynamically -->
+                    <div class="points-stat">
+                        <span class="points-value" id="user-challenges-solved">0</span>
+                        <span class="points-label">Challenges Solved</span>
+                    </div>
+                    <div class="points-stat">
+                        <span class="points-value" id="user-rank">#-</span>
+                        <span class="points-label">Your Rank</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="challenges-layout">
+                <!-- Challenges Section -->
+                <div class="workspace-card challenges-main">
+                    <div class="card-header">
+                        <h2 class="card-title">🏆 Stego Challenges</h2>
+                        <p class="card-subtitle">Test your steganography skills! Find hidden messages in puzzles and earn points.</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="challenge-filters">
+                            <button class="btn-filter active" onclick="filterChallenges('')">All</button>
+                            <button class="btn-filter" onclick="filterChallenges('easy')">🌱 Easy</button>
+                            <button class="btn-filter" onclick="filterChallenges('medium')">🔥 Medium</button>
+                            <button class="btn-filter" onclick="filterChallenges('hard')">💀 Hard</button>
+                        </div>
+                        <div id="challenges-grid" class="challenges-grid">
+                            <!-- Challenges loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leaderboard Sidebar -->
+                <div class="workspace-card leaderboard-card">
+                    <div class="card-header">
+                        <h2 class="card-title">🥇 Leaderboard</h2>
+                        <p class="card-subtitle">Top cryptographers</p>
+                    </div>
+                    <div class="card-body">
+                        <div id="leaderboard-container">
+                            <!-- Leaderboard loaded dynamically -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -5384,69 +5558,6 @@
                         </button>
                         <div id="scanner-output"></div>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ========================================
-             BURN MESSAGE PAGE
-        ======================================== -->
-        <section id="page-burn" class="page-section">
-            <div class="workspace-card">
-                <div class="card-header">
-                    <h2 class="card-title">🔥 Self-Destructing Stego Messages</h2>
-                    <p class="card-subtitle">Create steganographic messages hidden in cover text that automatically destroy themselves after viewing</p>
-                </div>
-                <div class="card-body">
-                    <div class="step-container">
-                        <div class="step-header">
-                            <div class="step-number">1</div>
-                            <div class="step-title">Your Secret Message</div>
-                        </div>
-                        <p class="step-description">This message will be hidden using zero-width steganography and permanently destroyed after viewing. No recovery possible.</p>
-                        <textarea id="burn-data" class="input-field" rows="4" placeholder="Enter your secret message to hide..."></textarea>
-                    </div>
-                    
-                    <div class="step-container">
-                        <div class="step-header">
-                            <div class="step-number">2</div>
-                            <div class="step-title">Cover Text (Optional)</div>
-                        </div>
-                        <p class="step-description">The innocent-looking text that will carry your hidden message. Leave blank for default cover.</p>
-                        <textarea id="burn-cover" class="input-field" rows="2" placeholder="The weather is nice today. Hope you're doing well!"></textarea>
-                    </div>
-                    
-                    <div class="step-container">
-                        <div class="step-header">
-                            <div class="step-number">3</div>
-                            <div class="step-title">Destruction Rules</div>
-                        </div>
-                        <div class="burn-settings">
-                            <div class="burn-setting">
-                                <label class="input-label">👁️ Max Views</label>
-                                <div class="setting-control">
-                                    <button class="setting-btn" onclick="adjustBurnSetting('views', -1)">−</button>
-                                    <input id="burn-views" type="number" min="1" max="100" value="1" class="setting-input" readonly />
-                                    <button class="setting-btn" onclick="adjustBurnSetting('views', 1)">+</button>
-                                </div>
-                                <p class="setting-hint">Burns after this many views</p>
-                            </div>
-                            <div class="burn-setting">
-                                <label class="input-label">⏳ Expire After</label>
-                                <div class="setting-control">
-                                    <button class="setting-btn" onclick="adjustBurnSetting('hours', -1)">−</button>
-                                    <input id="burn-hours" type="number" min="1" max="720" value="24" class="setting-input" readonly />
-                                    <button class="setting-btn" onclick="adjustBurnSetting('hours', 1)">+</button>
-                                </div>
-                                <p class="setting-hint">Hours until auto-destruct</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <button class="btn-primary btn-burn" onclick="createBurn()">
-                        <span>🔥 Create Hidden Burn Link</span>
-                    </button>
-                    <div id="burn-result"></div>
                 </div>
             </div>
         </section>
@@ -7166,19 +7277,6 @@
             if (scannerPreview) scannerPreview.innerHTML = '';
             if (scannerText) scannerText.value = '';
             if (scannerTextOutput) scannerTextOutput.innerHTML = '';
-            
-            // Clear burn messages
-            const burnStego = document.getElementById('burn-stego-data');
-            const burnAlgorithm = document.getElementById('burn-algorithm');
-            const burnPassword = document.getElementById('burn-password');
-            const burnResult = document.getElementById('burn-result');
-            const burnAccessResult = document.getElementById('burn-access-result');
-            
-            if (burnStego) burnStego.value = '';
-            if (burnAlgorithm) burnAlgorithm.value = 'zwc';
-            if (burnPassword) burnPassword.value = '';
-            if (burnResult) burnResult.innerHTML = '';
-            if (burnAccessResult) burnAccessResult.innerHTML = '';
             
             // Hide result sections
             document.getElementById('text-encode-result')?.classList.add('hidden');

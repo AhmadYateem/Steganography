@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl:*)",
+      "Bash(timeout /t 3)",
+      "Bash(ping:*)",
+      "Bash(python test_new_features.py:*)",
+      "Bash(findstr:*)",
+      "Bash(python test_detector.py:*)",
+      "Bash(python test_api_detector.py:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

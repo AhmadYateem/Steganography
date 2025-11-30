@@ -50,3 +50,6 @@ test_images/
 *.png
 *.bmp
 *.tiff
+
+steganography.db
+nul

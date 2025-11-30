@@ -1,6 +1,6 @@
 /**
  * SteganographyPro - Advanced Features Module
- * Handles: Challenges, Multi-File Stego, Scanner/Detector, Burn Messages
+ * Handles: Challenges, Multi-File Stego, Scanner/Detector
  */
 
 // ============================================
@@ -264,25 +264,6 @@ function refreshMfCustomPreview() {
 }
 
 // ============================================
-// BURN SETTINGS ADJUSTER
-// ============================================
-function adjustBurnSetting(type, delta) {
-    const input = document.getElementById(type === 'views' ? 'burn-views' : 'burn-hours');
-    if (!input) return;
-    
-    let val = parseInt(input.value) || (type === 'views' ? 1 : 24);
-    val += delta;
-    
-    if (type === 'views') {
-        val = Math.max(1, Math.min(100, val));
-    } else {
-        val = Math.max(1, Math.min(720, val));
-    }
-    
-    input.value = val;
-}
-
-// ============================================
 // CHALLENGES SYSTEM
 // ============================================
 let currentFilter = '';
@@ -292,6 +273,9 @@ async function loadChallenges(difficulty = '') {
     currentFilter = difficulty;
     const container = document.getElementById('challenges-grid');
     if (!container) return;
+    
+    // Load leaderboard and user points when challenges page loads
+    refreshPointsDisplay();
     
     // Update filter button states
     document.querySelectorAll('.btn-filter').forEach(btn => {
@@ -479,25 +463,57 @@ async function submitChallenge(id) {
     
     result.innerHTML = `<div class="result-loading">Checking your answer...</div>`;
     
+    // Get auth token from localStorage (stored as JSON object)
+    let token = null;
+    try {
+        const authData = localStorage.getItem('auth');
+        if (authData) {
+            const parsed = JSON.parse(authData);
+            token = parsed.accessToken;
+        }
+    } catch (e) {
+        console.error('Error parsing auth data:', e);
+    }
+    
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+    
     try {
         const res = await fetch(`/api/challenges/${id}/solve`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: headers,
             body: JSON.stringify({ solution, start_time: Date.now() / 1000 })
         });
         const data = await res.json();
         
         if (data.correct) {
+            // Build the success message based on whether points were awarded
+            let pointsMessage = '';
+            if (data.already_solved) {
+                pointsMessage = `<p>You already solved this challenge before.</p>`;
+            } else if (token && data.points > 0) {
+                pointsMessage = `<p>You earned <strong>${data.points} points</strong>!</p>`;
+            } else if (!token) {
+                pointsMessage = `<p style="font-size: 0.9rem; color: var(--text-muted);">Log in to save your points!</p>`;
+            } else {
+                pointsMessage = `<p>${data.message}</p>`;
+            }
+            
             result.innerHTML = `
                 <div class="result-success">
                     <div class="result-icon">🎉</div>
                     <div class="result-content">
                         <strong>Correct!</strong>
-                        <p>${data.message} You earned <strong>${data.points} points</strong>!</p>
+                        ${pointsMessage}
                     </div>
                 </div>
             `;
             showToast('Challenge completed! 🎉', 'success');
+            
+            // Refresh leaderboard and user points after solving
+            refreshPointsDisplay();
         } else {
             result.innerHTML = `
                 <div class="result-error">
@@ -514,6 +530,140 @@ async function submitChallenge(id) {
     } catch (err) {
         result.innerHTML = `<div class="result-error">Submission failed. Please try again.</div>`;
     }
+}
+
+// ============================================
+// LEADERBOARD AND POINTS SYSTEM
+// ============================================
+
+// Get the current user's username from localStorage
+function getCurrentUsername() {
+    try {
+        const authData = localStorage.getItem('auth');
+        if (authData) {
+            const parsed = JSON.parse(authData);
+            return parsed.username || null;
+        }
+    } catch (e) {
+        console.error('Error getting username:', e);
+    }
+    return null;
+}
+
+// Load the leaderboard from the server
+// Shows top users ranked by total points earned from challenges
+async function loadLeaderboard() {
+    const container = document.getElementById('leaderboard-container');
+    if (!container) return;
+    
+    container.innerHTML = `
+        <div style="text-align: center; padding: 20px;">
+            <div class="loading-spinner"></div>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Loading...</p>
+        </div>
+    `;
+    
+    // Get current user's username for highlighting
+    const currentUsername = getCurrentUsername();
+    
+    try {
+        const res = await fetch('/api/leaderboard?limit=10');
+        const data = await res.json();
+        
+        if (!data.leaderboard || data.leaderboard.length === 0) {
+            container.innerHTML = `
+                <div class="leaderboard-empty">
+                    <div class="leaderboard-empty-icon">🏆</div>
+                    <p>No one on the leaderboard yet.</p>
+                    <p style="font-size: 0.85rem;">Complete challenges to be the first!</p>
+                </div>
+            `;
+            return;
+        }
+        
+        container.innerHTML = data.leaderboard.map((user, index) => {
+            const rank = index + 1;
+            const topClass = rank <= 3 ? `top-${rank}` : '';
+            const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
+            // Highlight if this is the current logged-in user
+            const isCurrentUser = currentUsername && user.username.toLowerCase() === currentUsername.toLowerCase();
+            const currentUserClass = isCurrentUser ? 'current-user' : '';
+            
+            return `
+                <div class="leaderboard-entry ${topClass} ${currentUserClass}">
+                    <div class="leaderboard-rank">${medal || rank}</div>
+                    <div class="leaderboard-user">
+                        <div class="leaderboard-username">${escapeHtml(user.username)}</div>
+                    </div>
+                    <div class="leaderboard-points">${user.total_points}</div>
+                </div>
+            `;
+        }).join('');
+        
+    } catch (err) {
+        console.error('Error loading leaderboard:', err);
+        container.innerHTML = `
+            <div class="leaderboard-empty">
+                <p style="color: var(--text-muted);">Could not load leaderboard.</p>
+                <button class="btn-small" onclick="loadLeaderboard()">Retry</button>
+            </div>
+        `;
+    }
+}
+
+// Load the current user's points and show the points banner
+// Only shows when the user is logged in
+async function loadUserPoints() {
+    const banner = document.getElementById('user-points-banner');
+    if (!banner) return;
+    
+    // Get auth token from localStorage (stored as JSON object)
+    let token = null;
+    try {
+        const authData = localStorage.getItem('auth');
+        if (authData) {
+            const parsed = JSON.parse(authData);
+            token = parsed.accessToken;
+        }
+    } catch (e) {
+        console.error('Error parsing auth data:', e);
+    }
+    
+    if (!token) {
+        banner.style.display = 'none';
+        return;
+    }
+    
+    try {
+        const res = await fetch('/api/points', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (!res.ok) {
+            banner.style.display = 'none';
+            return;
+        }
+        
+        const data = await res.json();
+        
+        // Update the points display
+        document.getElementById('user-total-points').textContent = data.total_points || 0;
+        document.getElementById('user-challenges-solved').textContent = data.challenges_solved || 0;
+        document.getElementById('user-rank').textContent = data.rank ? `#${data.rank}` : '#-';
+        
+        banner.style.display = 'block';
+        
+    } catch (err) {
+        console.error('Error loading user points:', err);
+        banner.style.display = 'none';
+    }
+}
+
+// Refresh both leaderboard and user points
+// Called after solving a challenge or when challenges page loads
+function refreshPointsDisplay() {
+    loadLeaderboard();
+    loadUserPoints();
 }
 
 // ============================================
@@ -981,125 +1131,6 @@ function clearScannerImage() {
     document.getElementById('scanner-preview').innerHTML = '';
     document.getElementById('scanner-output').innerHTML = '';
     document.getElementById('scanner-dropzone')?.classList.remove('has-file');
-}
-
-// ============================================
-// BURN AFTER READING MESSAGES (with Steganography)
-// ============================================
-async function createBurn() {
-    const secretMessage = document.getElementById('burn-data')?.value?.trim() || '';
-    const coverText = document.getElementById('burn-cover')?.value?.trim() || 'The weather is quite nice today. I hope you are doing well and having a great time. Looking forward to catching up soon!';
-    const views = parseInt(document.getElementById('burn-views')?.value) || 1;
-    const hours = parseInt(document.getElementById('burn-hours')?.value) || 24;
-    const results = document.getElementById('burn-result');
-    
-    if (!secretMessage) {
-        results.innerHTML = `<div class="result-error">Please enter a secret message to hide.</div>`;
-        return;
-    }
-    
-    results.innerHTML = `
-        <div class="result-loading">
-            <div class="loading-spinner"></div>
-            <span>Encoding with steganography & creating burn link...</span>
-        </div>
-    `;
-    
-    try {
-        // First, encode the secret message using steganography
-        const encodeRes = await fetch('/api/encode', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                algorithm: 'zwc',
-                cover_text: coverText,
-                secret_message: secretMessage
-            })
-        });
-        
-        const encodeData = await encodeRes.json();
-        
-        if (!encodeData.success || !encodeData.stego_text) {
-            throw new Error('Failed to encode message with steganography');
-        }
-        
-        // Now create the burn message with the stego text
-        const res = await fetch('/api/burn/create', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                stego_data: encodeData.stego_text,
-                algorithm: 'zwc',
-                max_views: views,
-                expire_hours: hours
-            })
-        });
-        
-        const json = await res.json();
-        
-        if (json.burn_id) {
-            results.innerHTML = `
-                <div class="burn-success">
-                    <div class="burn-success-header">
-                        <span class="burn-icon">🔥</span>
-                        <div>
-                            <strong>Steganographic Burn Message Created!</strong>
-                            <p>Your secret is hidden in innocent-looking text. Share the link securely.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="burn-link-box">
-                        <input type="text" readonly value="${json.burn_url}" id="burn-url-copy" />
-                        <button class="btn-copy" onclick="copyBurnLink()">📋 Copy</button>
-                    </div>
-                    
-                    <div class="burn-preview">
-                        <label>📝 Cover Text Preview (what they'll see):</label>
-                        <div class="burn-preview-text">${coverText.substring(0, 100)}${coverText.length > 100 ? '...' : ''}</div>
-                    </div>
-                    
-                    <div class="burn-details">
-                        <div class="burn-detail">
-                            <span class="detail-icon">🔐</span>
-                            <span>Hidden with ZWC steganography</span>
-                        </div>
-                        <div class="burn-detail">
-                            <span class="detail-icon">👁️</span>
-                            <span>Max ${views} view${views > 1 ? 's' : ''}</span>
-                        </div>
-                        <div class="burn-detail">
-                            <span class="detail-icon">⏳</span>
-                            <span>Expires in ${hours} hour${hours > 1 ? 's' : ''}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="burn-warning">
-                        <strong>⚠️ Important:</strong> Save this link now. The recipient must decode the text to reveal your secret!
-                    </div>
-                </div>
-            `;
-        } else {
-            results.innerHTML = `<div class="result-error">${json.error || 'Failed to create burn message'}</div>`;
-        }
-    } catch (err) {
-        results.innerHTML = `<div class="result-error">Error: ${err.message}</div>`;
-    }
-}
-
-function copyBurnLink() {
-    const input = document.getElementById('burn-url-copy');
-    if (input) {
-        navigator.clipboard.writeText(input.value).then(() => {
-            showToast('Link copied to clipboard!', 'success');
-        });
-    }
-}
-
-function clearBurnForm() {
-    document.getElementById('burn-data').value = '';
-    document.getElementById('burn-views').value = '1';
-    document.getElementById('burn-hours').value = '24';
-    document.getElementById('burn-result').innerHTML = '';
 }
 
 // ============================================
@@ -1659,102 +1690,6 @@ featureStyles.textContent = `
         font-size: 0.85rem;
     }
     
-    /* Burn message success */
-    .burn-success {
-        background: rgba(16, 185, 129, 0.05);
-        border: 2px solid rgba(16, 185, 129, 0.3);
-        border-radius: 16px;
-        padding: 24px;
-    }
-    
-    .burn-success-header {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        margin-bottom: 20px;
-    }
-    
-    .burn-icon {
-        font-size: 2.5rem;
-    }
-    
-    .burn-success-header strong {
-        display: block;
-        font-size: 1.2rem;
-        color: #059669;
-    }
-    
-    .burn-success-header p {
-        margin: 4px 0 0 0;
-        color: var(--text-secondary);
-        font-size: 0.9rem;
-    }
-    
-    .burn-link-box {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 20px;
-    }
-    
-    .burn-link-box input {
-        flex: 1;
-        padding: 12px 16px;
-        border: 2px solid var(--border-color);
-        border-radius: 8px;
-        font-size: 0.9rem;
-        background: var(--card-bg);
-        color: var(--text-primary);
-    }
-    
-    .burn-details {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 16px;
-        margin-bottom: 16px;
-    }
-    
-    .burn-detail {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        color: var(--text-secondary);
-        font-size: 0.9rem;
-    }
-    
-    .detail-icon {
-        font-size: 1.2rem;
-    }
-    
-    .burn-preview {
-        background: var(--bg-tertiary);
-        border-radius: 12px;
-        padding: 16px;
-        margin-bottom: 16px;
-    }
-    
-    .burn-preview label {
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: var(--text-secondary);
-        display: block;
-        margin-bottom: 8px;
-    }
-    
-    .burn-preview-text {
-        color: var(--text-primary);
-        font-style: italic;
-        line-height: 1.5;
-    }
-    
-    .burn-warning {
-        background: rgba(245, 158, 11, 0.1);
-        border: 1px solid rgba(245, 158, 11, 0.3);
-        border-radius: 8px;
-        padding: 12px 16px;
-        color: #b45309;
-        font-size: 0.9rem;
-    }
-    
     /* Mode toggle buttons */
     .mode-toggle {
         display: flex;
@@ -1824,69 +1759,6 @@ featureStyles.textContent = `
         background: var(--purple-600);
         color: white;
         border-color: var(--purple-600);
-    }
-    
-    /* Burn settings */
-    .burn-settings {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 24px;
-    }
-    
-    .burn-setting {
-        text-align: center;
-    }
-    
-    .setting-control {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
-        margin: 8px 0;
-    }
-    
-    .setting-btn {
-        width: 40px;
-        height: 40px;
-        border: 2px solid var(--border-color);
-        background: var(--card-bg);
-        color: var(--text-primary);
-        font-size: 1.2rem;
-        font-weight: 700;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-    
-    .setting-btn:hover {
-        border-color: var(--purple-400);
-        background: var(--purple-100);
-    }
-    
-    .setting-input {
-        width: 60px;
-        height: 40px;
-        text-align: center;
-        border: 2px solid var(--border-color);
-        border-radius: 8px;
-        font-size: 1.1rem;
-        font-weight: 700;
-        background: var(--bg-tertiary);
-        color: var(--text-primary);
-    }
-    
-    .setting-hint {
-        font-size: 0.85rem;
-        color: var(--text-muted);
-        margin: 0;
-    }
-    
-    .btn-burn {
-        background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
-    }
-    
-    .btn-burn:hover {
-        background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);
     }
     
     /* Scanner tabs */
