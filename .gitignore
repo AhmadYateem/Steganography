@@ -53,3 +53,5 @@ test_images/
 
 steganography.db
 nul
+
+instance/steganography.db
